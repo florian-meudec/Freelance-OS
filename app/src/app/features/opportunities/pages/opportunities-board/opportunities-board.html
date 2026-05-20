@@ -1,7 +1,53 @@
 <h1>Opportunités</h1>
 
-<div class="opportunities-list">
-  @for (opportunity of opportunities; track opportunity.id) {
-    <app-opportunity-card [opportunity]="opportunity" />
+<div class="board">
+  @for (column of activeColumns(); track column.status) {
+    <div class="column">
+      <div class="column-header">
+        <h2>
+          {{ column.label }}
+        </h2>
+
+        <span>
+          {{ column.opportunities.length }}
+        </span>
+      </div>
+
+      <div class="column-content">
+        @for (opportunity of column.opportunities; track opportunity.id) {
+          <app-opportunity-card [opportunity]="opportunity" />
+        }
+      </div>
+    </div>
   }
 </div>
+
+<button type="button" class="archived-toggle" (click)="toggleArchived()">
+  @if (showArchived()) {
+    Masquer les opportunités clôturées
+  } @else {
+    Afficher les opportunités clôturées
+  }
+</button>
+
+@if (showArchived()) {
+  <div class="archived-section">
+    <h2 class="archived-title">Opportunités perdues</h2>
+
+    <div class="archived-board">
+      @for (opportunity of lostOpportunities(); track opportunity.id) {
+        <app-opportunity-card class="compact-card" [opportunity]="opportunity" />
+      }
+    </div>
+  </div>
+
+  <div class="archived-section">
+    <h2 class="archived-title">Opportunités gagnées</h2>
+
+    <div class="archived-board">
+      @for (opportunity of wonOpportunities(); track opportunity.id) {
+        <app-opportunity-card class="compact-card" [opportunity]="opportunity" />
+      }
+    </div>
+  </div>
+}

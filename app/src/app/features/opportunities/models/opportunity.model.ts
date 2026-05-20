@@ -26,7 +26,7 @@ export interface Opportunity {
 
 type ValueOf<T> = T[keyof T];
 
-export type OpportunityStatus = ValueOf<typeof OPPORTUNITY_STATUSES>;
+export type OpportunityStatus = ValueOf<typeof OPPORTUNITY_STATUSES>['value'];
 
 export type OpportunityModality = ValueOf<typeof OPPORTUNITY_MODALITIES>['value'];
 

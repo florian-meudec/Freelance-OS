@@ -1,11 +1,45 @@
 export const OPPORTUNITY_STATUSES = {
-  LEAD: 'lead',
-  CONTACTED: 'contacted',
-  INTERVIEW: 'interview',
-  PROPOSAL: 'proposal',
-  NEGOTIATION: 'negotiation',
-  WON: 'won',
-  LOST: 'lost',
+  LEAD: {
+    value: 'lead',
+    label: 'Lead',
+    order: 1,
+  },
+
+  CONTACTED: {
+    value: 'contacted',
+    label: 'Contacté',
+    order: 2,
+  },
+
+  INTERVIEW: {
+    value: 'interview',
+    label: 'Entretien',
+    order: 3,
+  },
+
+  PROPOSAL: {
+    value: 'proposal',
+    label: 'Proposition',
+    order: 4,
+  },
+
+  NEGOTIATION: {
+    value: 'negotiation',
+    label: 'Négociation',
+    order: 5,
+  },
+
+  WON: {
+    value: 'won',
+    label: 'Gagné',
+    order: 6,
+  },
+
+  LOST: {
+    value: 'lost',
+    label: 'Perdu',
+    order: 7,
+  },
 } as const;
 
 export const OPPORTUNITY_MODALITIES = {

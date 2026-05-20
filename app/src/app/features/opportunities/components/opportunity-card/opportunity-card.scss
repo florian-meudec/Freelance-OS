@@ -69,3 +69,24 @@
     color: $text-secondary;
   }
 }
+
+:host(.compact-card) {
+  .card-header {
+    padding: $spacing-sm;
+
+    h3 {
+      font-size: $text-md;
+    }
+  }
+
+  .card-content {
+    padding: $spacing-sm;
+
+    gap: $spacing-sm;
+  }
+
+  .card-section,
+  .card-follow-up {
+    font-size: $text-sm;
+  }
+}

@@ -1,8 +1,80 @@
+@use '../../../../../styles/colors' as *;
+@use '../../../../../styles/radius' as *;
 @use '../../../../../styles/spacing' as *;
+@use '../../../../../styles/typography' as *;
 
-.opportunities-list {
+.board {
+  display: flex;
+
+  gap: $spacing-md;
+
+  overflow-x: auto;
+
+  align-items: flex-start;
+
+  padding-bottom: $spacing-md;
+}
+
+.column {
   display: flex;
   flex-direction: column;
+
+  flex: 0 0 320px;
+
   gap: $spacing-md;
+
+  min-height: 200px;
+}
+
+.column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: $spacing-md;
+
+  border-radius: $radius-md;
+
+  background: $surface-secondary;
+
+  h2 {
+    margin: 0;
+
+    font-size: $text-md;
+  }
+
+  span {
+    font-size: $text-sm;
+    font-weight: 600;
+  }
+}
+
+.column-content {
+  display: flex;
+  flex-direction: column;
+
+  gap: $spacing-md;
+}
+
+.archived-toggle {
   margin-top: $spacing-lg;
+}
+
+.archived-title {
+  margin-top: $spacing-lg;
+  margin-bottom: $spacing-md;
+}
+
+.archived-board {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: $spacing-md;
+
+  margin-top: $spacing-md;
+}
+
+.archived-section {
+  margin-top: $spacing-xl;
 }
