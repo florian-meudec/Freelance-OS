@@ -1,0 +1,71 @@
+@use '../../../../../styles/colors' as *;
+@use '../../../../../styles/spacing' as *;
+@use '../../../../../styles/typography' as *;
+@use '../../../../../styles/radius' as *;
+
+.opportunity-card {
+  border: 1px solid #e5e7eb;
+  border-radius: $radius-md;
+  overflow: hidden;
+  background: $surface-primary;
+}
+
+.card-header {
+  padding: $spacing-md;
+  color: white;
+
+  h3 {
+    margin: 0 0 $spacing-xs;
+    font-size: $text-lg;
+  }
+
+  p {
+    margin: 0;
+    opacity: 0.9;
+  }
+
+  &.urgency-late {
+    background-color: $urgency-late;
+  }
+
+  &.urgency-today {
+    background-color: $urgency-today;
+  }
+
+  &.urgency-this-week {
+    background-color: $urgency-this-week;
+  }
+
+  &.urgency-waiting {
+    background-color: $urgency-waiting;
+  }
+}
+
+.card-content {
+  padding: $spacing-md;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.card-section {
+  display: flex;
+  justify-content: space-between;
+  font-size: $text-md;
+}
+
+.card-follow-up {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-sm;
+
+  strong {
+    font-size: $text-md;
+  }
+
+  span {
+    font-size: $text-sm;
+    color: $text-secondary;
+  }
+}

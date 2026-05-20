@@ -1,1 +1,7 @@
-<h1>Opportunities</h1>
+<h1>Opportunités</h1>
+
+<div class="opportunities-list">
+  @for (opportunity of opportunities; track opportunity.id) {
+    <app-opportunity-card [opportunity]="opportunity" />
+  }
+</div>

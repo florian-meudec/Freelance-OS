@@ -1,0 +1,8 @@
+@use '../../../../../styles/spacing' as *;
+
+.opportunities-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  margin-top: $spacing-lg;
+}
