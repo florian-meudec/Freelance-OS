@@ -4,10 +4,37 @@
 @use '../../../../../styles/radius' as *;
 
 .opportunity-card {
-  border: 1px solid #e5e7eb;
-  border-radius: $radius-md;
+  background: white;
+
+  border: 1px solid $border-color;
+
+  width: 100%;
+
+  text-align: left;
+
+  color: inherit;
+
+  cursor: pointer;
+
+  border-radius: $radius-lg;
+
   overflow: hidden;
-  background: $surface-primary;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #2563eb;
+
+    outline-offset: 2px;
+  }
 }
 
 .card-header {

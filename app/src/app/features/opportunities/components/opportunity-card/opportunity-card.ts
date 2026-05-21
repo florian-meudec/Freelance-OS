@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import { Opportunity } from '../../models/opportunity.model';
 
 import { DateFormatPipe } from '../../../../shared/pipes/date-format-pipe';
@@ -33,4 +33,10 @@ export class OpportunityCard {
 
     return Object.values(this.modalities).find((item) => item.value === modality)?.label;
   });
+
+  readonly cardClick = output<Opportunity>();
+
+  onCardClick(): void {
+    this.cardClick.emit(this.opportunity());
+  }
 }

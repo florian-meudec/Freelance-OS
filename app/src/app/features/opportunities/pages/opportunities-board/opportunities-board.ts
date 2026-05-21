@@ -1,6 +1,8 @@
 import { Component, computed, signal } from '@angular/core';
 
+import { Opportunity } from '../../models/opportunity.model';
 import { OpportunityCard } from '../../components/opportunity-card/opportunity-card';
+import { OpportunityDetailsPanel } from '../../components/opportunity-details-panel/opportunity-details-panel';
 import { OPPORTUNITY_STATUSES } from '../../constants/opportunity.constants';
 
 import { MOCK_OPPORTUNITIES } from '../../mocks/mock-opportunities';
@@ -8,7 +10,7 @@ import { MOCK_OPPORTUNITIES } from '../../mocks/mock-opportunities';
 @Component({
   selector: 'app-opportunities-board',
   standalone: true,
-  imports: [OpportunityCard],
+  imports: [OpportunityCard, OpportunityDetailsPanel],
   templateUrl: './opportunities-board.html',
   styleUrl: './opportunities-board.scss',
 })
@@ -53,4 +55,10 @@ export class OpportunitiesBoard {
       (opportunity) => opportunity.status === OPPORTUNITY_STATUSES.WON.value,
     );
   });
+
+  readonly selectedOpportunity = signal<Opportunity | null>(null);
+
+  selectOpportunity(opportunity: Opportunity): void {
+    this.selectedOpportunity.set(opportunity);
+  }
 }

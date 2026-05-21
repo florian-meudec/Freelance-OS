@@ -78,3 +78,21 @@
 .archived-section {
   margin-top: $spacing-xl;
 }
+
+.details-backdrop {
+  position: fixed;
+
+  inset: 0;
+
+  border: none;
+
+  padding: 0;
+
+  background: $overlay-backdrop;
+
+  backdrop-filter: blur(2px);
+
+  cursor: pointer;
+
+  z-index: 90;
+}

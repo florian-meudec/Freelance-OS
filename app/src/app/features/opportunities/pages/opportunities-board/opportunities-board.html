@@ -15,7 +15,10 @@
 
       <div class="column-content">
         @for (opportunity of column.opportunities; track opportunity.id) {
-          <app-opportunity-card [opportunity]="opportunity" />
+          <app-opportunity-card
+            [opportunity]="opportunity"
+            (cardClick)="selectOpportunity($event)"
+          />
         }
       </div>
     </div>
@@ -36,7 +39,11 @@
 
     <div class="archived-board">
       @for (opportunity of lostOpportunities(); track opportunity.id) {
-        <app-opportunity-card class="compact-card" [opportunity]="opportunity" />
+        <app-opportunity-card
+          class="compact-card"
+          [opportunity]="opportunity"
+          (cardClick)="selectOpportunity($event)"
+        />
       }
     </div>
   </div>
@@ -46,8 +53,25 @@
 
     <div class="archived-board">
       @for (opportunity of wonOpportunities(); track opportunity.id) {
-        <app-opportunity-card class="compact-card" [opportunity]="opportunity" />
+        <app-opportunity-card
+          class="compact-card"
+          [opportunity]="opportunity"
+          (cardClick)="selectOpportunity($event)"
+        />
       }
     </div>
   </div>
+}
+
+@if (selectedOpportunity(); as opportunity) {
+  <button
+    type="button"
+    class="details-backdrop"
+    (click)="selectedOpportunity.set(null)"
+    aria-label="Fermer le panneau"
+  ></button>
+  <app-opportunity-details-panel
+    [opportunity]="opportunity"
+    (panelClose)="selectedOpportunity.set(null)"
+  />
 }

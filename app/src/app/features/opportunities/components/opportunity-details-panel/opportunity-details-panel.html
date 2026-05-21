@@ -1,0 +1,81 @@
+<aside class="details-panel">
+  <div class="details-header">
+    <div>
+      <h2>
+        {{ opportunity().companyName }}
+      </h2>
+
+      <p>
+        {{ opportunity().missionTitle }}
+      </p>
+    </div>
+
+    <button type="button" class="close-button" (click)="closePanel()">Fermer</button>
+  </div>
+
+  <div class="details-section">
+    <h3>Business</h3>
+
+    <div class="details-grid">
+      <div>
+        <span>TJM</span>
+
+        <strong>
+          {{ opportunity().tjm | tjm }}
+        </strong>
+      </div>
+
+      <div>
+        <span>Charge</span>
+
+        <strong>
+          {{ opportunity().workload | workload }}
+        </strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="details-section">
+    <h3>Conditions</h3>
+
+    <div class="details-grid">
+      <div>
+        <span>Localisation</span>
+
+        <strong>
+          {{ opportunity().location }}
+        </strong>
+      </div>
+
+      <div>
+        <span>Modalité</span>
+
+        <strong>
+          {{ opportunity().modality }}
+        </strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="details-section">
+    <h3>Suivi</h3>
+
+    <div class="details-follow-up">
+      <div>
+        <span>Prochaine action</span>
+
+        <strong>
+          {{ opportunity().nextAction }}
+        </strong>
+      </div>
+
+      <div>
+        <span>Date</span>
+
+        <strong>
+          {{ opportunity().nextActionDate | dateFormat: 'date' }}
+        </strong>
+      </div>
+    </div>
+  </div>
+</aside>

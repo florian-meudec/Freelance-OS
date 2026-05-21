@@ -1,4 +1,11 @@
-<div class="opportunity-card">
+<div
+  class="opportunity-card"
+  role="button"
+  tabindex="0"
+  (click)="onCardClick()"
+  (keydown.enter)="onCardClick()"
+  (keydown.space)="onCardClick()"
+>
   <div class="card-header" [class]="headerClass()">
     <h3>{{ opportunity().companyName }}</h3>
 
