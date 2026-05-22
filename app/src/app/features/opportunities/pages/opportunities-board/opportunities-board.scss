@@ -95,4 +95,16 @@
   cursor: pointer;
 
   z-index: 90;
+
+  animation: fade-in 0.2s ease-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }

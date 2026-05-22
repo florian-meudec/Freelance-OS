@@ -17,6 +17,7 @@
         @for (opportunity of column.opportunities; track opportunity.id) {
           <app-opportunity-card
             [opportunity]="opportunity"
+            [selected]="selectedOpportunity()?.id === opportunity.id"
             (cardClick)="selectOpportunity($event)"
           />
         }
@@ -42,6 +43,7 @@
         <app-opportunity-card
           class="compact-card"
           [opportunity]="opportunity"
+          [selected]="selectedOpportunity()?.id === opportunity.id"
           (cardClick)="selectOpportunity($event)"
         />
       }
@@ -56,6 +58,7 @@
         <app-opportunity-card
           class="compact-card"
           [opportunity]="opportunity"
+          [selected]="selectedOpportunity()?.id === opportunity.id"
           (cardClick)="selectOpportunity($event)"
         />
       }
@@ -67,7 +70,7 @@
   <button
     type="button"
     class="details-backdrop"
-    (click)="selectedOpportunity.set(null)"
+    (click)="closeDetailsPanel()"
     aria-label="Fermer le panneau"
   ></button>
   <app-opportunity-details-panel

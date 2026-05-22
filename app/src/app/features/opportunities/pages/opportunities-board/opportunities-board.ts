@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core';
 
 import { Opportunity } from '../../models/opportunity.model';
 import { OpportunityCard } from '../../components/opportunity-card/opportunity-card';
@@ -40,10 +40,6 @@ export class OpportunitiesBoard {
 
   readonly showArchived = signal(false);
 
-  toggleArchived(): void {
-    this.showArchived.update((value) => !value);
-  }
-
   readonly lostOpportunities = computed(() => {
     return this.opportunities.filter(
       (opportunity) => opportunity.status === OPPORTUNITY_STATUSES.LOST.value,
@@ -58,7 +54,43 @@ export class OpportunitiesBoard {
 
   readonly selectedOpportunity = signal<Opportunity | null>(null);
 
+  constructor() {
+    effect((onCleanup) => {
+      const selectedOpportunity = this.selectedOpportunity();
+
+      if (!selectedOpportunity) {
+        document.body.style.overflow = '';
+
+        return;
+      }
+
+      document.body.style.overflow = 'hidden';
+
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === 'Escape') {
+          this.closeDetailsPanel();
+        }
+      };
+
+      globalThis.addEventListener('keydown', handleKeyDown);
+
+      onCleanup(() => {
+        document.body.style.overflow = '';
+
+        globalThis.removeEventListener('keydown', handleKeyDown);
+      });
+    });
+  }
+
+  toggleArchived(): void {
+    this.showArchived.update((value) => !value);
+  }
+
   selectOpportunity(opportunity: Opportunity): void {
     this.selectedOpportunity.set(opportunity);
+  }
+
+  closeDetailsPanel(): void {
+    this.selectedOpportunity.set(null);
   }
 }

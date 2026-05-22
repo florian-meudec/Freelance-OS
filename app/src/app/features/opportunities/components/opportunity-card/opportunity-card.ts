@@ -36,6 +36,8 @@ export class OpportunityCard {
 
   readonly cardClick = output<Opportunity>();
 
+  readonly selected = input(false);
+
   onCardClick(): void {
     this.cardClick.emit(this.opportunity());
   }

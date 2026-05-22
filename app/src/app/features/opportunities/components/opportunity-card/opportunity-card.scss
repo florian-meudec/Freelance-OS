@@ -35,6 +35,12 @@
 
     outline-offset: 2px;
   }
+
+  &.selected {
+    border-color: $interactive-primary;
+
+    box-shadow: 0 0 0 2px $interactive-primary-muted;
+  }
 }
 
 .card-header {
