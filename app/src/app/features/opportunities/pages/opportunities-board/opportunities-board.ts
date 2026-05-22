@@ -17,19 +17,30 @@ import { MOCK_OPPORTUNITIES } from '../../mocks/mock-opportunities';
 export class OpportunitiesBoard {
   readonly opportunities = MOCK_OPPORTUNITIES;
 
+  /*
+    Statuses are sorted once to keep the kanban
+    pipeline order centralized in the constants layer.
+  */
   readonly statuses = Object.values(OPPORTUNITY_STATUSES).sort((a, b) => a.order - b.order);
 
+  /*
+    Build kanban columns dynamically from statuses
+    so the board structure stays configuration-driven.
+  */
   readonly columns = computed(() => {
     return this.statuses.map((status) => ({
       status: status.value,
       label: status.label,
-
       opportunities: this.opportunities.filter(
         (opportunity) => opportunity.status === status.value,
       ),
     }));
   });
 
+  /*
+    Closed opportunities are intentionally hidden
+    from the main board to keep focus on active work.
+  */
   readonly activeColumns = computed(() => {
     return this.columns().filter(
       (column) =>
@@ -40,6 +51,10 @@ export class OpportunitiesBoard {
 
   readonly showArchived = signal(false);
 
+  /*
+    Archived sections stay separated to help analyze
+    wins and losses independently.
+  */
   readonly lostOpportunities = computed(() => {
     return this.opportunities.filter(
       (opportunity) => opportunity.status === OPPORTUNITY_STATUSES.LOST.value,
@@ -52,9 +67,17 @@ export class OpportunitiesBoard {
     );
   });
 
+  /*
+    Selected opportunity state is managed here
+    so both the board and side panel stay synchronized.
+  */
   readonly selectedOpportunity = signal<Opportunity | null>(null);
 
   constructor() {
+    /*
+      Lock body scroll and register ESC closing
+      while the details panel is opened.
+    */
     effect((onCleanup) => {
       const selectedOpportunity = this.selectedOpportunity();
 

@@ -1,5 +1,9 @@
 <h1>Opportunités</h1>
 
+<!--
+  Active opportunities stay separated from archived ones
+  to keep the board focused on actionable pipeline stages.
+-->
 <div class="board">
   @for (column of activeColumns(); track column.status) {
     <div class="column">
@@ -35,6 +39,10 @@
 </button>
 
 @if (showArchived()) {
+  <!--
+    Lost opportunities remain visible for analysis
+    and future prospecting improvements.
+  -->
   <div class="archived-section">
     <h2 class="archived-title">Opportunités perdues</h2>
 
@@ -50,6 +58,10 @@
     </div>
   </div>
 
+  <!--
+    Won opportunities are displayed separately since
+    they require less day-to-day monitoring.
+  -->
   <div class="archived-section">
     <h2 class="archived-title">Opportunités gagnées</h2>
 
@@ -67,12 +79,17 @@
 }
 
 @if (selectedOpportunity(); as opportunity) {
+  <!--
+    Backdrop visually isolates the details panel
+    and allows quick closing through outside clicks.
+  -->
   <button
     type="button"
     class="details-backdrop"
     (click)="closeDetailsPanel()"
     aria-label="Fermer le panneau"
   ></button>
+
   <app-opportunity-details-panel
     [opportunity]="opportunity"
     (panelClose)="selectedOpportunity.set(null)"

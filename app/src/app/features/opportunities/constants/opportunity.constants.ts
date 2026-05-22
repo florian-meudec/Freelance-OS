@@ -1,3 +1,7 @@
+/*
+  Kanban statuses define both the business workflow
+  and the visual order of board columns.
+*/
 export const OPPORTUNITY_STATUSES = {
   LEAD: {
     value: 'lead',
@@ -42,6 +46,10 @@ export const OPPORTUNITY_STATUSES = {
   },
 } as const;
 
+/*
+  Modalities stay centralized to keep labels,
+  filters and future business rules consistent.
+*/
 export const OPPORTUNITY_MODALITIES = {
   REMOTE: {
     value: 'remote',
@@ -59,6 +67,10 @@ export const OPPORTUNITY_MODALITIES = {
   },
 } as const;
 
+/*
+  Urgency levels drive visual prioritization
+  based on upcoming follow-up deadlines.
+*/
 export const OPPORTUNITY_URGENCIES = {
   LATE: {
     value: 'late',

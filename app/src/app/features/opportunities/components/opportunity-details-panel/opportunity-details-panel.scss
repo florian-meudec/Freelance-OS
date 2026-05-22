@@ -3,52 +3,41 @@
 @use '../../../../../styles/spacing' as *;
 @use '../../../../../styles/typography' as *;
 
+/*
+  Fixed side panel used to inspect opportunity details
+  without leaving the kanban context.
+*/
 .details-panel {
   position: fixed;
-
   top: 0;
   right: 0;
-
   width: 420px;
   height: 100vh;
-
   display: flex;
   flex-direction: column;
-
   gap: $spacing-xl;
-
   padding: $spacing-xl;
-
   background: $surface-primary;
-
   border-left: 1px solid $border-color;
-
   box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08);
-
   overflow-y: auto;
-
   z-index: 100;
-
   animation: slide-in 0.2s ease-out;
 }
 
 .details-header {
   display: flex;
-
   justify-content: space-between;
   align-items: flex-start;
-
   gap: $spacing-md;
 
   h2 {
     margin: 0;
-
     font-size: $text-xl;
   }
 
   p {
     margin-top: $spacing-xs;
-
     color: $text-secondary;
   }
 }
@@ -56,33 +45,31 @@
 .details-section {
   display: flex;
   flex-direction: column;
-
   gap: $spacing-md;
 
   h3 {
     margin: 0;
-
     font-size: $text-md;
   }
 }
 
+/*
+  Grid layout keeps business and condition fields
+  compact and easy to scan.
+*/
 .details-grid {
   display: grid;
-
   grid-template-columns: repeat(2, 1fr);
-
   gap: $spacing-md;
 
   div {
     display: flex;
     flex-direction: column;
-
     gap: $spacing-xs;
   }
 
   span {
     font-size: $text-sm;
-
     color: $text-secondary;
   }
 
@@ -94,19 +81,16 @@
 .details-follow-up {
   display: flex;
   flex-direction: column;
-
   gap: $spacing-md;
 
   div {
     display: flex;
     flex-direction: column;
-
     gap: $spacing-xs;
   }
 
   span {
     font-size: $text-sm;
-
     color: $text-secondary;
   }
 
@@ -115,16 +99,18 @@
   }
 }
 
+/*
+  Lightweight slide animation improves perceived fluidity
+  when opening the details panel.
+*/
 @keyframes slide-in {
   from {
     transform: translateX(100%);
-
     opacity: 0;
   }
 
   to {
     transform: translateX(0);
-
     opacity: 1;
   }
 }

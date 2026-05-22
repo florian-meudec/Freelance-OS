@@ -3,7 +3,9 @@ import { Component, input, output } from '@angular/core';
 import { Opportunity } from '../../models/opportunity.model';
 
 import { DateFormatPipe } from '../../../../shared/pipes/date-format-pipe';
+
 import { TjmPipe } from '../../../../shared/pipes/tjm-pipe';
+
 import { WorkloadPipe } from '../../../../shared/pipes/workload-pipe';
 
 @Component({
@@ -18,8 +20,16 @@ import { WorkloadPipe } from '../../../../shared/pipes/workload-pipe';
   styleUrl: './opportunity-details-panel.scss',
 })
 export class OpportunityDetailsPanel {
+  /*
+    The selected opportunity is controlled
+    by the board container component.
+  */
   readonly opportunity = input.required<Opportunity>();
 
+  /*
+    Closing logic stays in the parent container
+    to keep this component presentation-focused.
+  */
   readonly panelClose = output<void>();
 
   closePanel(): void {

@@ -5,19 +5,12 @@
 
 .opportunity-card {
   background: white;
-
   border: 1px solid $border-color;
-
   width: 100%;
-
   text-align: left;
-
   color: inherit;
-
   cursor: pointer;
-
   border-radius: $radius-lg;
-
   overflow: hidden;
 
   transition:
@@ -26,19 +19,24 @@
 
   &:hover {
     transform: translateY(-2px);
-
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
   }
 
+  /*
+    Keep keyboard navigation visible without showing
+    focus styles after mouse interactions.
+  */
   &:focus-visible {
     outline: 2px solid #2563eb;
-
     outline-offset: 2px;
   }
 
+  /*
+    Selected cards stay visually linked to the
+    currently opened details panel.
+  */
   &.selected {
     border-color: $interactive-primary;
-
     box-shadow: 0 0 0 2px $interactive-primary-muted;
   }
 }
@@ -57,6 +55,10 @@
     opacity: 0.9;
   }
 
+  /*
+    Urgency colors provide quick visual prioritization
+    directly from the board overview.
+  */
   &.urgency-late {
     background-color: $urgency-late;
   }
@@ -103,6 +105,10 @@
   }
 }
 
+/*
+  Compact cards are used for archived opportunities
+  to keep the historical sections denser and easier to scan.
+*/
 :host(.compact-card) {
   .card-header {
     padding: $spacing-sm;
@@ -114,7 +120,6 @@
 
   .card-content {
     padding: $spacing-sm;
-
     gap: $spacing-sm;
   }
 

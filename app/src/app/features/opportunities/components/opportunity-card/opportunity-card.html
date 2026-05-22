@@ -1,3 +1,7 @@
+<!--
+  Cards use a div with role="button" instead of a native button
+  to stay compatible with drag & drop interactions.
+-->
 <div
   class="opportunity-card"
   [class.selected]="selected()"
@@ -7,6 +11,10 @@
   (keydown.enter)="onCardClick()"
   (keydown.space)="onCardClick()"
 >
+  <!--
+    Header color reflects the urgency level
+    of the next follow-up action.
+  -->
   <div class="card-header" [class]="headerClass()">
     <h3>{{ opportunity().companyName }}</h3>
 
@@ -24,6 +32,10 @@
       <span>{{ opportunity().location }}</span>
     </div>
 
+    <!--
+      Follow-up section highlights the next actionable step
+      to keep the board focused on ongoing opportunities.
+    -->
     <div class="card-follow-up">
       <strong>{{ opportunity().nextAction }}</strong>
 

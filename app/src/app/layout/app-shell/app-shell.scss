@@ -1,5 +1,13 @@
+/*
+  Global application layout shared across all pages.
+*/
 .app-shell {
-  display: flex; //
+  display: flex;
+
+  /*
+    Full viewport height keeps the sidebar
+    permanently attached to the application shell.
+  */
   height: 100vh;
 }
 
@@ -26,6 +34,10 @@
   }
 }
 
+/*
+  Main content area grows dynamically
+  depending on the active feature page.
+*/
 .content {
   flex: 1;
   padding: 24px;

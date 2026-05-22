@@ -1,12 +1,24 @@
 import { OpportunityUrgency } from '../models/opportunity.model';
 import { OPPORTUNITY_URGENCIES } from '../constants/opportunity.constants';
 
+/*
+  Time calculations are normalized to full days
+  to avoid timezone and hour precision issues.
+*/
 const MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
 
+/*
+  Removes time information from dates so urgency
+  calculations stay consistent across the whole app.
+*/
 const normalizeDateOnly = (date: Date): Date => {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 };
 
+/*
+  Converts follow-up dates into urgency levels
+  used by the board visual prioritization system.
+*/
 export const calculateOpportunityUrgency = (nextActionDate: string): OpportunityUrgency => {
   const nextActionDateNormalized = normalizeDateOnly(new Date(nextActionDate));
 

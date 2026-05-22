@@ -1,15 +1,27 @@
+<!--
+  Main application shell shared across all feature pages.
+-->
 <div class="app-shell">
   <aside class="sidebar">
     <h2>FreelanceOS</h2>
 
+    <!--
+      Sidebar navigation will progressively become
+      the central entry point of the CRM workflow.
+    -->
     <nav>
-      <a routerLink="/opportunities">Opportunitées</a>
+      <a routerLink="/opportunities"> Opportunitées </a>
+
       <a>Clients</a>
       <a>Missions</a>
       <a>Factures</a>
     </nav>
   </aside>
 
+  <!--
+    Router outlet renders the currently active feature module
+    while keeping the global layout persistent.
+  -->
   <main class="content">
     <router-outlet />
   </main>
