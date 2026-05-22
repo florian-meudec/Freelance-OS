@@ -7,15 +7,20 @@
   [class.selected]="selected()"
   role="button"
   tabindex="0"
+  cdkDrag
+  [cdkDragData]="opportunity()"
+  [cdkDragDisabled]="!draggable()"
   (click)="onCardClick()"
   (keydown.enter)="onCardClick()"
-  (keydown.space)="onCardClick()"
+  (keydown.space)="$event.preventDefault(); onCardClick()"
+  (cdkDragStarted)="onDragStarted()"
+  (cdkDragEnded)="onDragEnded()"
 >
   <!--
-    Header color reflects the urgency level
-    of the next follow-up action.
+    The header combines urgency visualization
+    and drag interactions for active opportunities.
   -->
-  <div class="card-header" [class]="headerClass()">
+  <div class="card-header" [class]="headerClass()" cdkDragHandle>
     <h3>{{ opportunity().companyName }}</h3>
 
     <p>{{ opportunity().missionTitle }}</p>

@@ -4,7 +4,7 @@
 @use '../../../../../styles/radius' as *;
 
 .opportunity-card {
-  background: white;
+  background: $surface-primary;
   border: 1px solid $border-color;
   width: 100%;
   text-align: left;
@@ -12,12 +12,13 @@
   cursor: pointer;
   border-radius: $radius-lg;
   overflow: hidden;
+  user-select: none;
 
   transition:
     transform 0.15s ease,
     box-shadow 0.15s ease;
 
-  &:hover {
+  &:not(.cdk-drag-dragging):hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
   }
@@ -27,7 +28,7 @@
     focus styles after mouse interactions.
   */
   &:focus-visible {
-    outline: 2px solid #2563eb;
+    outline: 2px solid $interactive-primary;
     outline-offset: 2px;
   }
 
@@ -39,6 +40,18 @@
     border-color: $interactive-primary;
     box-shadow: 0 0 0 2px $interactive-primary-muted;
   }
+}
+
+/*
+  Active opportunity cards use the header
+  as the kanban drag interaction area.
+*/
+.opportunity-card:not(.cdk-drag-disabled) .card-header {
+  cursor: grab;
+}
+
+.cdk-drag-dragging .card-header {
+  cursor: grabbing;
 }
 
 .card-header {
@@ -127,4 +140,36 @@
   .card-follow-up {
     font-size: $text-sm;
   }
+}
+
+/* Drag & drop states */
+
+/*
+  Drag preview keeps the lifted card visually
+  consistent while moving across columns.
+*/
+.cdk-drag-preview {
+  border-radius: $radius-lg;
+
+  overflow: hidden;
+
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+
+  transform: rotate(2deg);
+}
+
+/*
+  Placeholder preserves layout stability
+  while dragging cards inside the board.
+*/
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+/*
+  Animate cards smoothly after drag operations
+  to avoid abrupt layout snapping.
+*/
+.cdk-drag-animating {
+  transition: transform 0.2s ease;
 }

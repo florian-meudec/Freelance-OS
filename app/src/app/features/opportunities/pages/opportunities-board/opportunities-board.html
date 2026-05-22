@@ -1,10 +1,11 @@
 <h1>Opportunités</h1>
 
 <!--
-  Active opportunities stay separated from archived ones
-  to keep the board focused on actionable pipeline stages.
+  Active opportunities are organized into
+  interactive kanban columns to keep the
+  pipeline focused on ongoing actions.
 -->
-<div class="board">
+<div class="board" cdkDropListGroup>
   @for (column of activeColumns(); track column.status) {
     <div class="column">
       <div class="column-header">
@@ -17,13 +18,23 @@
         </span>
       </div>
 
-      <div class="column-content">
+      <div
+        class="column-content"
+        cdkDropList
+        [id]="'column-' + column.status"
+        [cdkDropListData]="column.opportunities"
+        [cdkDropListEnterPredicate]="canDrop"
+        (cdkDropListDropped)="moveOpportunity($event, column.status)"
+      >
         @for (opportunity of column.opportunities; track opportunity.id) {
           <app-opportunity-card
             [opportunity]="opportunity"
             [selected]="selectedOpportunity()?.id === opportunity.id"
             (cardClick)="selectOpportunity($event)"
           />
+        }
+        @if (!column.opportunities.length) {
+          <div class="empty-column">Déposer une opportunité ici</div>
         }
       </div>
     </div>
@@ -53,6 +64,7 @@
           [opportunity]="opportunity"
           [selected]="selectedOpportunity()?.id === opportunity.id"
           (cardClick)="selectOpportunity($event)"
+          [draggable]="false"
         />
       }
     </div>
@@ -72,6 +84,7 @@
           [opportunity]="opportunity"
           [selected]="selectedOpportunity()?.id === opportunity.id"
           (cardClick)="selectOpportunity($event)"
+          [draggable]="false"
         />
       }
     </div>
@@ -90,8 +103,5 @@
     aria-label="Fermer le panneau"
   ></button>
 
-  <app-opportunity-details-panel
-    [opportunity]="opportunity"
-    (panelClose)="selectedOpportunity.set(null)"
-  />
+  <app-opportunity-details-panel [opportunity]="opportunity" (panelClose)="closeDetailsPanel()" />
 }

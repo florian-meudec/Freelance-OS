@@ -13,6 +13,22 @@
   overflow-x: auto;
   align-items: flex-start;
   padding-bottom: $spacing-md;
+
+  /*
+    Prevent accidental vertical scrolling
+    while interacting with the kanban board.
+  */
+  overscroll-behavior-x: contain;
+}
+
+.board::-webkit-scrollbar {
+  height: 10px;
+}
+
+.board::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+
+  border-radius: 999px;
 }
 
 .column {
@@ -26,6 +42,7 @@
   flex: 0 0 320px;
   gap: $spacing-md;
   min-height: 200px;
+  height: 100%;
 }
 
 .column-header {
@@ -47,10 +64,35 @@
   }
 }
 
+/*
+  Columns keep a large drop area even when empty
+  to improve drag & drop usability.
+*/
 .column-content {
   display: flex;
   flex-direction: column;
   gap: $spacing-md;
+  flex: 1;
+  min-height: 200px;
+}
+
+/*
+  Smoothly animate cards returning to their
+  final position after drag operations.
+*/
+.column-content.cdk-drop-list-dragging .opportunity-card {
+  transition: transform 0.2s ease;
+}
+
+/*
+  Highlight active drop zones during drag interactions
+  to improve spatial feedback inside the board.
+*/
+.column-content.cdk-drop-list-receiving {
+  background: rgba(37, 99, 235, 0.04);
+  border-radius: $radius-md;
+  outline: 2px dashed $interactive-primary;
+  outline-offset: 4px;
 }
 
 .archived-toggle {
@@ -60,6 +102,10 @@
 .archived-title {
   margin-top: $spacing-lg;
   margin-bottom: $spacing-md;
+}
+
+.archived-section {
+  margin-top: $spacing-xl;
 }
 
 /*
@@ -73,8 +119,29 @@
   margin-top: $spacing-md;
 }
 
-.archived-section {
-  margin-top: $spacing-xl;
+/*
+  Empty states keep drop zones understandable
+  and encourage drag interactions.
+*/
+.empty-column {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  flex: 1;
+
+  min-height: 120px;
+
+  border: 2px dashed rgba(0, 0, 0, 0.12);
+
+  border-radius: $radius-md;
+
+  color: $text-secondary;
+
+  font-size: $text-sm;
+
+  text-align: center;
 }
 
 /*

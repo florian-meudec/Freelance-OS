@@ -1,21 +1,29 @@
 import { Component, computed, effect, signal } from '@angular/core';
+import { CdkDragDrop, CdkDropList, CdkDropListGroup } from '@angular/cdk/drag-drop';
 
-import { Opportunity } from '../../models/opportunity.model';
+import { Opportunity, OpportunityStatus } from '../../models/opportunity.model';
 import { OpportunityCard } from '../../components/opportunity-card/opportunity-card';
 import { OpportunityDetailsPanel } from '../../components/opportunity-details-panel/opportunity-details-panel';
 import { OPPORTUNITY_STATUSES } from '../../constants/opportunity.constants';
 
 import { MOCK_OPPORTUNITIES } from '../../mocks/mock-opportunities';
 
+/*
+  Columns act as drop zones for kanban interactions.
+*/
 @Component({
   selector: 'app-opportunities-board',
   standalone: true,
-  imports: [OpportunityCard, OpportunityDetailsPanel],
+  imports: [CdkDropList, CdkDropListGroup, OpportunityCard, OpportunityDetailsPanel],
   templateUrl: './opportunities-board.html',
   styleUrl: './opportunities-board.scss',
 })
 export class OpportunitiesBoard {
-  readonly opportunities = MOCK_OPPORTUNITIES;
+  /*
+    Opportunities are stored in a signal
+    so the board can react to drag & drop updates.
+  */
+  readonly opportunities = signal([...MOCK_OPPORTUNITIES]);
 
   /*
     Statuses are sorted once to keep the kanban
@@ -31,7 +39,7 @@ export class OpportunitiesBoard {
     return this.statuses.map((status) => ({
       status: status.value,
       label: status.label,
-      opportunities: this.opportunities.filter(
+      opportunities: this.opportunities().filter(
         (opportunity) => opportunity.status === status.value,
       ),
     }));
@@ -49,6 +57,10 @@ export class OpportunitiesBoard {
     );
   });
 
+  /*
+    Archived opportunities remain collapsible
+    to keep the main board focused and compact.
+  */
   readonly showArchived = signal(false);
 
   /*
@@ -56,13 +68,13 @@ export class OpportunitiesBoard {
     wins and losses independently.
   */
   readonly lostOpportunities = computed(() => {
-    return this.opportunities.filter(
+    return this.opportunities().filter(
       (opportunity) => opportunity.status === OPPORTUNITY_STATUSES.LOST.value,
     );
   });
 
   readonly wonOpportunities = computed(() => {
-    return this.opportunities.filter(
+    return this.opportunities().filter(
       (opportunity) => opportunity.status === OPPORTUNITY_STATUSES.WON.value,
     );
   });
@@ -105,6 +117,10 @@ export class OpportunitiesBoard {
     });
   }
 
+  /*
+    Archived sections can be expanded on demand
+    without cluttering the active pipeline.
+  */
   toggleArchived(): void {
     this.showArchived.update((value) => !value);
   }
@@ -115,5 +131,48 @@ export class OpportunitiesBoard {
 
   closeDetailsPanel(): void {
     this.selectedOpportunity.set(null);
+  }
+
+  /*
+    Moving a card between columns updates
+    the underlying opportunity status.
+  */
+  moveOpportunity(event: CdkDragDrop<Opportunity[]>, status: OpportunityStatus): void {
+    const opportunity = event.item.data as Opportunity;
+
+    if (opportunity.status === status) {
+      return;
+    }
+
+    this.opportunities.update((opportunities) =>
+      opportunities.map((item) =>
+        item.id === opportunity.id
+          ? {
+              ...item,
+              status,
+            }
+          : item,
+      ),
+    );
+  }
+
+  /*
+    Prevent invalid workflow transitions
+    between archived and active states.
+  */
+  canDrop(drag: { data: Opportunity }, drop: CdkDropList<Opportunity[]>): boolean {
+    const opportunity = drag.data;
+
+    const targetStatus = drop.id.replace('column-', '');
+
+    const isArchived =
+      opportunity.status === OPPORTUNITY_STATUSES.WON.value ||
+      opportunity.status === OPPORTUNITY_STATUSES.LOST.value;
+
+    if (isArchived) {
+      return false;
+    }
+
+    return targetStatus !== 'won' && targetStatus !== 'lost';
   }
 }

@@ -1,19 +1,22 @@
-import { Component, computed, input, output } from '@angular/core';
+import { Component, computed, input, output, signal } from '@angular/core';
 import { Opportunity } from '../../models/opportunity.model';
+
+import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 
 import { DateFormatPipe } from '../../../../shared/pipes/date-format-pipe';
 import { TjmPipe } from '../../../../shared/pipes/tjm-pipe';
 import { WorkloadPipe } from '../../../../shared/pipes/workload-pipe';
-import {
-  OPPORTUNITY_MODALITIES,
-  OPPORTUNITY_URGENCIES,
-} from '../../constants/opportunity.constants';
+import { OPPORTUNITY_MODALITIES } from '../../constants/opportunity.constants';
 import { calculateOpportunityUrgency } from '../../utils/opportunity-urgency.util';
 
+/*
+  Cards are draggable to support kanban-style
+  opportunity workflow management.
+*/
 @Component({
   selector: 'app-opportunity-card',
   standalone: true,
-  imports: [DateFormatPipe, TjmPipe, WorkloadPipe],
+  imports: [CdkDrag, CdkDragHandle, DateFormatPipe, TjmPipe, WorkloadPipe],
   templateUrl: './opportunity-card.html',
   styleUrl: './opportunity-card.scss',
 })
@@ -26,9 +29,16 @@ export class OpportunityCard {
   */
   readonly selected = input(false);
 
-  readonly modalities = OPPORTUNITY_MODALITIES;
-
-  readonly urgencies = OPPORTUNITY_URGENCIES;
+  /*
+    Archived opportunities disable drag interactions
+    to preserve historical pipeline integrity.
+  */
+  readonly draggable = input(true);
+  /*
+    Prevent accidental panel openings
+    while dragging cards.
+  */
+  readonly isDragging = signal(false);
 
   /*
     Urgency is derived from the next follow-up date
@@ -49,7 +59,7 @@ export class OpportunityCard {
   readonly modalityLabel = computed(() => {
     const modality = this.opportunity().modality;
 
-    return Object.values(this.modalities).find((item) => item.value === modality)?.label;
+    return Object.values(OPPORTUNITY_MODALITIES).find((item) => item.value === modality)?.label;
   });
 
   /*
@@ -59,6 +69,24 @@ export class OpportunityCard {
   readonly cardClick = output<Opportunity>();
 
   onCardClick(): void {
+    if (this.isDragging()) {
+      return;
+    }
+
     this.cardClick.emit(this.opportunity());
+  }
+
+  onDragStarted(): void {
+    this.isDragging.set(true);
+  }
+
+  onDragEnded(): void {
+    /*
+    Delay drag cleanup slightly to prevent
+    click events firing immediately after drops.
+  */
+    setTimeout(() => {
+      this.isDragging.set(false);
+    });
   }
 }
