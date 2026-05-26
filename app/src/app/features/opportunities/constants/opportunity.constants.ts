@@ -157,3 +157,29 @@ export const DURATION_UNITS = {
     label: 'Années',
   },
 } as const;
+
+/*
+  Timeline events describe important
+  opportunity lifecycle actions.
+*/
+export const OPPORTUNITY_EVENT_TYPES = {
+  CREATED: {
+    value: 'created',
+    label: 'Création',
+  },
+
+  STATUS_CHANGED: {
+    value: 'status-changed',
+    label: 'Changement de statut',
+  },
+
+  FOLLOW_UP: {
+    value: 'follow-up',
+    label: 'Prochaine action',
+  },
+
+  NOTE: {
+    value: 'note',
+    label: 'Note',
+  },
+} as const;

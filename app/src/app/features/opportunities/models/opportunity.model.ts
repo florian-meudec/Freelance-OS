@@ -7,6 +7,8 @@ import {
   OPPORTUNITY_URGENCIES,
 } from '../constants/opportunity.constants';
 
+import { OpportunityEvent } from './opportunity-event.model';
+
 /*
   Central business model representing a freelance opportunity
   tracked inside the kanban pipeline.
@@ -61,6 +63,12 @@ export interface Opportunity {
 
   nextAction: string;
   nextActionDate: string;
+
+  /*
+    Timeline history centralizes important
+    business and workflow events.
+  */
+  events: OpportunityEvent[];
 }
 
 /*

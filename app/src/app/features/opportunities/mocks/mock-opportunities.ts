@@ -1,6 +1,7 @@
 import {
   COMPANY_TYPES,
   DURATION_UNITS,
+  OPPORTUNITY_EVENT_TYPES,
   OPPORTUNITY_MODALITIES,
   OPPORTUNITY_SENIORITIES,
   OPPORTUNITY_STATUSES,
@@ -10,16 +11,16 @@ import { Opportunity } from '../models/opportunity.model';
 export const MOCK_OPPORTUNITIES: Opportunity[] = [
   {
     id: '1',
-    companyName: 'UBS',
 
+    companyName: 'UBS',
     companyType: COMPANY_TYPES.CLIENT_FINAL.value,
     industry: 'Banque',
+
+    source: 'LinkedIn',
 
     contactName: 'Sophie Meier',
     contactRole: 'Engineering Manager',
     contactEmail: 'sophie.meier@ubs.com',
-
-    source: 'LinkedIn',
 
     missionTitle: 'Angular Migration',
 
@@ -45,20 +46,50 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     nextAction: 'Premier contact LinkedIn',
     nextActionDate: '2026-05-20',
+
+    events: [
+      {
+        id: 'event-1',
+
+        type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
+
+        createdAt: '2026-05-10T09:00:00',
+      },
+
+      {
+        id: 'event-2',
+
+        type: OPPORTUNITY_EVENT_TYPES.STATUS_CHANGED.value,
+
+        status: OPPORTUNITY_STATUSES.CONTACTED.value,
+
+        createdAt: '2026-05-11T14:00:00',
+      },
+
+      {
+        id: 'event-3',
+
+        type: OPPORTUNITY_EVENT_TYPES.FOLLOW_UP.value,
+
+        createdAt: '2026-05-15T10:00:00',
+
+        note: 'Premier message LinkedIn envoyé.',
+      },
+    ],
   },
 
   {
     id: '2',
-    companyName: 'Swisscom',
 
+    companyName: 'Swisscom',
     companyType: COMPANY_TYPES.CLIENT_FINAL.value,
     industry: 'Télécom',
+
+    source: 'Malt',
 
     contactName: 'Thomas Keller',
     contactRole: 'Tech Recruiter',
     contactEmail: 'thomas.keller@swisscom.com',
-
-    source: 'Malt',
 
     missionTitle: 'Spring Boot API',
 
@@ -73,7 +104,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     durationValue: 6,
     durationUnit: DURATION_UNITS.MONTHS.value,
 
-    status: OPPORTUNITY_STATUSES.CONTACTED.value,
+    status: OPPORTUNITY_STATUSES.PROPOSAL.value,
 
     tjm: 820,
     workload: 4,
@@ -81,22 +112,52 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     modality: OPPORTUNITY_MODALITIES.REMOTE.value,
     location: 'Berne',
 
-    nextAction: 'Relance email',
+    nextAction: 'Envoyer proposition commerciale',
     nextActionDate: '2026-05-22',
+
+    events: [
+      {
+        id: 'event-4',
+
+        type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
+
+        createdAt: '2026-05-05T08:30:00',
+      },
+
+      {
+        id: 'event-5',
+
+        type: OPPORTUNITY_EVENT_TYPES.FOLLOW_UP.value,
+
+        createdAt: '2026-05-09T16:00:00',
+
+        note: 'Relance email effectuée.',
+      },
+
+      {
+        id: 'event-6',
+
+        type: OPPORTUNITY_EVENT_TYPES.STATUS_CHANGED.value,
+
+        status: OPPORTUNITY_STATUSES.PROPOSAL.value,
+
+        createdAt: '2026-05-18T11:30:00',
+      },
+    ],
   },
 
   {
     id: '3',
-    companyName: 'Doctolib',
 
+    companyName: 'Doctolib',
     companyType: COMPANY_TYPES.STARTUP.value,
     industry: 'Santé',
+
+    source: 'LinkedIn',
 
     contactName: 'Emma Laurent',
     contactRole: 'Talent Partner',
     contactEmail: 'emma.laurent@doctolib.com',
-
-    source: 'LinkedIn',
 
     missionTitle: 'Frontend Platform',
 
@@ -120,22 +181,52 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     modality: OPPORTUNITY_MODALITIES.REMOTE.value,
     location: 'Paris',
 
-    nextAction: 'Négociation budget',
+    nextAction: 'Validation budget',
     nextActionDate: '2026-05-21',
+
+    events: [
+      {
+        id: 'event-7',
+
+        type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
+
+        createdAt: '2026-05-01T09:00:00',
+      },
+
+      {
+        id: 'event-8',
+
+        type: OPPORTUNITY_EVENT_TYPES.STATUS_CHANGED.value,
+
+        status: OPPORTUNITY_STATUSES.INTERVIEW.value,
+
+        createdAt: '2026-05-08T15:00:00',
+      },
+
+      {
+        id: 'event-9',
+
+        type: OPPORTUNITY_EVENT_TYPES.STATUS_CHANGED.value,
+
+        status: OPPORTUNITY_STATUSES.NEGOTIATION.value,
+
+        createdAt: '2026-05-15T17:00:00',
+      },
+    ],
   },
 
   {
     id: '4',
-    companyName: 'SNCF Connect',
 
+    companyName: 'SNCF Connect',
     companyType: COMPANY_TYPES.CLIENT_FINAL.value,
     industry: 'Transport',
+
+    source: 'Meetup',
 
     contactName: 'Antoine Mercier',
     contactRole: 'Engineering Manager',
     contactEmail: 'antoine.mercier@sncf-connect.com',
-
-    source: 'Meetup',
 
     missionTitle: 'Design System Angular',
 
@@ -161,82 +252,35 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     nextAction: 'Entretien technique',
     nextActionDate: '2026-05-20',
-  },
 
-  {
-    id: '5',
-    companyName: 'Alan',
+    events: [
+      {
+        id: 'event-10',
 
-    companyType: COMPANY_TYPES.STARTUP.value,
-    industry: 'Assurance santé',
+        type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
 
-    contactName: 'Lucas Martin',
-    contactRole: 'Talent Partner',
-    contactEmail: 'lucas.martin@alan.com',
+        createdAt: '2026-05-12T10:00:00',
+      },
 
-    source: 'LinkedIn',
+      {
+        id: 'event-11',
 
-    missionTitle: 'Refonte espace admin',
+        type: OPPORTUNITY_EVENT_TYPES.FOLLOW_UP.value,
 
-    description:
-      'Développement de nouvelles fonctionnalités pour l’espace d’administration interne.',
+        createdAt: '2026-05-14T13:00:00',
 
-    stack: ['Angular', 'TypeScript', 'Node.js', 'Playwright'],
+        note: 'Premier call RH effectué.',
+      },
 
-    seniority: OPPORTUNITY_SENIORITIES.CONFIRMED.value,
+      {
+        id: 'event-12',
 
-    estimatedStartDate: '2026-06-10',
+        type: OPPORTUNITY_EVENT_TYPES.STATUS_CHANGED.value,
 
-    durationValue: 4,
-    durationUnit: DURATION_UNITS.MONTHS.value,
+        status: OPPORTUNITY_STATUSES.INTERVIEW.value,
 
-    status: OPPORTUNITY_STATUSES.LEAD.value,
-
-    tjm: 820,
-    workload: 4,
-
-    modality: OPPORTUNITY_MODALITIES.REMOTE.value,
-    location: 'Paris',
-
-    nextAction: 'Envoyer candidature',
-    nextActionDate: '2026-05-21',
-  },
-
-  {
-    id: '6',
-    companyName: 'Orange',
-
-    companyType: COMPANY_TYPES.ESN.value,
-    industry: 'Télécom',
-
-    contactName: 'Claire Bernard',
-    contactRole: 'Business Manager',
-    contactEmail: 'claire.bernard@orange.com',
-
-    source: 'Email entrant',
-
-    missionTitle: 'Angular Migration',
-
-    description: 'Migration progressive d’un portail client AngularJS vers Angular moderne.',
-
-    stack: ['Angular', 'RxJS', 'NgRx', 'Jasmine'],
-
-    seniority: OPPORTUNITY_SENIORITIES.SENIOR.value,
-
-    estimatedStartDate: '2026-07-15',
-
-    durationValue: 220,
-    durationUnit: DURATION_UNITS.DAYS.value,
-
-    status: OPPORTUNITY_STATUSES.PROPOSAL.value,
-
-    tjm: 720,
-    workload: 5,
-
-    modality: OPPORTUNITY_MODALITIES.HYBRID.value,
-    location: 'Paris',
-
-    nextAction: 'Envoyer proposition finale',
-    nextActionDate: '2026-05-24',
+        createdAt: '2026-05-16T09:30:00',
+      },
+    ],
   },
 ];

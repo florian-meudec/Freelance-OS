@@ -257,6 +257,44 @@
   </div>
 
   <!--
+  Timeline centralizes the opportunity lifecycle
+  and important business interactions.
+-->
+  <div class="details-section">
+    <div class="timeline-header">
+      <h3>Timeline</h3>
+
+      <button type="button" class="timeline-add-button">Ajouter un évènement</button>
+    </div>
+
+    <div class="timeline">
+      @for (event of sortedEvents(); track event.id) {
+        <div class="timeline-event">
+          <div class="timeline-marker"></div>
+
+          <div class="timeline-content">
+            <div class="timeline-meta">
+              <strong>
+                {{ getEventLabel(event) }}
+              </strong>
+
+              <span>
+                {{ event.createdAt | dateFormat: 'date' }}
+              </span>
+            </div>
+
+            @if (event.note) {
+              <p>
+                {{ event.note }}
+              </p>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!--
     Destructive actions stay isolated from
     the main workflow to reduce accidental clicks.
   -->
