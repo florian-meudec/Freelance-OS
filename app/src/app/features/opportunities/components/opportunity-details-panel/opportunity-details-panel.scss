@@ -19,7 +19,7 @@
   padding: $spacing-xl;
   background: $surface-primary;
   border-left: 1px solid $border-color;
-  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08);
+  box-shadow: $shadow-panel;
   overflow-y: auto;
   z-index: 100;
   animation: slide-in 0.2s ease-out;
@@ -113,4 +113,85 @@
     transform: translateX(0);
     opacity: 1;
   }
+}
+
+/*
+  Actions are organized into compact horizontal
+  rows to maximize space efficiency inside the panel.
+*/
+.actions-groups {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.actions-row {
+  display: flex;
+  gap: $spacing-sm;
+}
+
+/*
+  Action buttons use a lightweight neutral style
+  to avoid overwhelming the details panel.
+*/
+.action-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  padding: $spacing-xs $spacing-sm;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  background: $surface-primary;
+  cursor: pointer;
+  font-size: $text-sm;
+  min-height: 36px;
+  text-align: center;
+  white-space: nowrap;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+
+  &:hover {
+    background: $surface-secondary;
+  }
+}
+
+/*
+  Primary actions receive stronger emphasis
+  to guide the main workflow.
+*/
+.action-button-primary {
+  border-color: $interactive-primary;
+  background: $interactive-primary;
+  color: white;
+
+  &:hover {
+    background: $interactive-primary;
+    opacity: 0.95;
+  }
+}
+
+/*
+  Destructive actions stay visually separated
+  to reduce accidental interactions.
+*/
+.action-button-danger {
+  border-color: $urgency-late;
+  color: $urgency-late;
+
+  &:hover {
+    background: $surface-danger-muted;
+  }
+}
+
+/*
+  The danger zone stays visually separated
+  from the primary workflow actions.
+*/
+.panel-danger-zone {
+  margin-top: $spacing-xl;
+  padding-top: $spacing-lg;
+  border-top: 1px solid $border-color;
 }

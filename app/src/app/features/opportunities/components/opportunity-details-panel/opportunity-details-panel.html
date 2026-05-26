@@ -18,6 +18,32 @@
   </div>
 
   <!--
+    Quick actions centralize the most common
+    workflow operations directly inside the panel.
+  -->
+  <div class="details-section">
+    <h3>Actions rapides</h3>
+
+    <div class="actions-groups">
+      <div class="actions-row">
+        <button type="button" class="action-button action-button-primary">Modifier</button>
+
+        <button type="button" class="action-button">Ajouter note</button>
+
+        <button type="button" class="action-button">Planifier action</button>
+      </div>
+
+      <div class="actions-row">
+        <button type="button" class="action-button">Changer statut</button>
+
+        <button type="button" class="action-button">Marquer perdu</button>
+
+        <button type="button" class="action-button">Créer mission</button>
+      </div>
+    </div>
+  </div>
+
+  <!--
     Business information highlights the commercial
     value and workload of the opportunity.
   -->
@@ -89,5 +115,14 @@
         </strong>
       </div>
     </div>
+  </div>
+  <!--
+    Destructive actions stay isolated from
+    the main workflow to reduce accidental clicks.
+  -->
+  <div class="panel-danger-zone">
+    <button type="button" class="action-button action-button-danger">
+      Supprimer l'opportunité
+    </button>
   </div>
 </aside>
