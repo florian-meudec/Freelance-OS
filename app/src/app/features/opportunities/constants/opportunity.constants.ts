@@ -91,3 +91,69 @@ export const OPPORTUNITY_URGENCIES = {
     value: 'waiting',
   },
 } as const;
+
+export const COMPANY_TYPES = {
+  CLIENT_FINAL: {
+    value: 'client-final',
+    label: 'Client final',
+  },
+
+  ESN: {
+    value: 'esn',
+    label: 'ESN',
+  },
+
+  CABINET: {
+    value: 'cabinet',
+    label: 'Cabinet',
+  },
+
+  STARTUP: {
+    value: 'startup',
+    label: 'Startup',
+  },
+} as const;
+
+export const OPPORTUNITY_SENIORITIES = {
+  JUNIOR: {
+    value: 'junior',
+    label: 'Junior',
+  },
+
+  CONFIRMED: {
+    value: 'confirmed',
+    label: 'Confirmé',
+  },
+
+  SENIOR: {
+    value: 'senior',
+    label: 'Senior',
+  },
+
+  LEAD: {
+    value: 'lead',
+    label: 'Lead',
+  },
+} as const;
+
+export const DURATION_UNITS = {
+  DAYS: {
+    value: 'days',
+    label: 'Jours',
+  },
+
+  WEEKS: {
+    value: 'weeks',
+    label: 'Semaines',
+  },
+
+  MONTHS: {
+    value: 'months',
+    label: 'Mois',
+  },
+
+  YEARS: {
+    value: 'years',
+    label: 'Années',
+  },
+} as const;

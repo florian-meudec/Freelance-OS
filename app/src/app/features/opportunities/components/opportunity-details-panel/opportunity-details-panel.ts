@@ -2,10 +2,12 @@ import { Component, input, output } from '@angular/core';
 
 import { Opportunity } from '../../models/opportunity.model';
 
+import { CompanyTypePipe } from '../../../../shared/pipes/company-type-pipe';
+import { DurationUnitPipe } from '../../../../shared/pipes/duration-unit-pipe';
 import { DateFormatPipe } from '../../../../shared/pipes/date-format-pipe';
-
+import { OpportunityModalityPipe } from '../../../../shared/pipes/opportunity-modality-pipe';
+import { OpportunitySeniorityPipe } from '../../../../shared/pipes/opportunity-seniority-pipe';
 import { TjmPipe } from '../../../../shared/pipes/tjm-pipe';
-
 import { WorkloadPipe } from '../../../../shared/pipes/workload-pipe';
 
 @Component({
@@ -13,7 +15,15 @@ import { WorkloadPipe } from '../../../../shared/pipes/workload-pipe';
 
   standalone: true,
 
-  imports: [DateFormatPipe, TjmPipe, WorkloadPipe],
+  imports: [
+    CompanyTypePipe,
+    DurationUnitPipe,
+    DateFormatPipe,
+    OpportunityModalityPipe,
+    OpportunitySeniorityPipe,
+    TjmPipe,
+    WorkloadPipe,
+  ],
 
   templateUrl: './opportunity-details-panel.html',
 

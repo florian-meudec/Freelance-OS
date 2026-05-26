@@ -4,9 +4,9 @@ import { Opportunity } from '../../models/opportunity.model';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 
 import { DateFormatPipe } from '../../../../shared/pipes/date-format-pipe';
+import { OpportunityModalityPipe } from '../../../../shared/pipes/opportunity-modality-pipe';
 import { TjmPipe } from '../../../../shared/pipes/tjm-pipe';
 import { WorkloadPipe } from '../../../../shared/pipes/workload-pipe';
-import { OPPORTUNITY_MODALITIES } from '../../constants/opportunity.constants';
 import { calculateOpportunityUrgency } from '../../utils/opportunity-urgency.util';
 
 /*
@@ -16,7 +16,7 @@ import { calculateOpportunityUrgency } from '../../utils/opportunity-urgency.uti
 @Component({
   selector: 'app-opportunity-card',
   standalone: true,
-  imports: [CdkDrag, CdkDragHandle, DateFormatPipe, TjmPipe, WorkloadPipe],
+  imports: [CdkDrag, CdkDragHandle, DateFormatPipe, OpportunityModalityPipe, TjmPipe, WorkloadPipe],
   templateUrl: './opportunity-card.html',
   styleUrl: './opportunity-card.scss',
 })
@@ -34,6 +34,7 @@ export class OpportunityCard {
     to preserve historical pipeline integrity.
   */
   readonly draggable = input(true);
+
   /*
     Prevent accidental panel openings
     while dragging cards.
@@ -51,16 +52,6 @@ export class OpportunityCard {
     used by the colored card header.
   */
   readonly headerClass = computed(() => `urgency-${this.urgency()}`);
-
-  /*
-    Converts modality values into user-facing labels
-    to keep display logic independent from raw data.
-  */
-  readonly modalityLabel = computed(() => {
-    const modality = this.opportunity().modality;
-
-    return Object.values(OPPORTUNITY_MODALITIES).find((item) => item.value === modality)?.label;
-  });
 
   /*
     The board container handles selection state
@@ -82,9 +73,9 @@ export class OpportunityCard {
 
   onDragEnded(): void {
     /*
-    Delay drag cleanup slightly to prevent
-    click events firing immediately after drops.
-  */
+      Delay drag cleanup slightly to prevent
+      click events firing immediately after drops.
+    */
     setTimeout(() => {
       this.isDragging.set(false);
     });

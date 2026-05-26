@@ -44,78 +44,218 @@
   </div>
 
   <!--
-    Business information highlights the commercial
-    value and workload of the opportunity.
+    General information centralizes company
+    and contact details for quick CRM access.
   -->
   <div class="details-section">
-    <h3>Business</h3>
+    <h3>Informations générales</h3>
 
-    <div class="details-grid">
-      <div>
-        <span>TJM</span>
+    <div class="details-subsection">
+      <h4>Entreprise</h4>
 
-        <strong>
-          {{ opportunity().tjm | tjm }}
-        </strong>
-      </div>
+      <div class="details-grid">
+        <div>
+          <span>Entreprise</span>
 
-      <div>
-        <span>Charge</span>
+          <strong>
+            {{ opportunity().companyName }}
+          </strong>
+        </div>
 
-        <strong>
-          {{ opportunity().workload | workload }}
-        </strong>
+        <div>
+          <span>Type</span>
+
+          <strong>
+            {{ opportunity().companyType | companyType }}
+          </strong>
+        </div>
+
+        <div>
+          <span>Secteur</span>
+
+          <strong>
+            {{ opportunity().industry }}
+          </strong>
+        </div>
+
+        <div>
+          <span>Source</span>
+
+          <strong>
+            {{ opportunity().source }}
+          </strong>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="details-section">
-    <h3>Conditions</h3>
+    <div class="details-subsection">
+      <h4>Contact</h4>
 
-    <div class="details-grid">
-      <div>
-        <span>Localisation</span>
+      <div class="details-grid">
+        <div>
+          <span>Contact principal</span>
 
-        <strong>
-          {{ opportunity().location }}
-        </strong>
-      </div>
+          <strong>
+            {{ opportunity().contactName }}
+          </strong>
+        </div>
 
-      <div>
-        <span>Modalité</span>
+        <div>
+          <span>Poste</span>
 
-        <strong>
-          {{ opportunity().modality }}
-        </strong>
+          <strong>
+            {{ opportunity().contactRole }}
+          </strong>
+        </div>
+
+        <div>
+          <span>Email</span>
+
+          <div class="copy-field">
+            <span class="copy-value">
+              {{ opportunity().contactEmail }}
+            </span>
+
+            <button type="button" class="copy-button">Copier</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <!--
-    Follow-up information keeps the next action
-    immediately visible while navigating the board.
+    Business information centralizes the mission
+    scope, technical expectations and delivery conditions.
   -->
   <div class="details-section">
-    <h3>Suivi</h3>
+    <h3>Mission</h3>
 
-    <div class="details-follow-up">
-      <div>
-        <span>Prochaine action</span>
+    <!--
+      Mission details receive stronger visual emphasis
+      since they represent the core business context.
+    -->
+    <div class="mission-highlight">
+      <h4>{{ opportunity().missionTitle }}</h4>
 
-        <strong>
-          {{ opportunity().nextAction }}
-        </strong>
+      <p class="mission-description">
+        {{ opportunity().description }}
+      </p>
+    </div>
+
+    <!--
+      Follow-up information stays near the mission
+      context to keep the workflow actionable.
+    -->
+    <div class="details-subsection">
+      <h4>Suivi</h4>
+
+      <div class="details-grid">
+        <div>
+          <span>Prochaine action</span>
+
+          <strong>
+            {{ opportunity().nextAction }}
+          </strong>
+        </div>
+
+        <div>
+          <span>Date</span>
+
+          <strong>
+            {{ opportunity().nextActionDate | dateFormat: 'date' }}
+          </strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="details-subsection">
+      <h4>Conditions</h4>
+
+      <div class="details-grid">
+        <div>
+          <span>TJM</span>
+
+          <strong>
+            {{ opportunity().tjm | tjm }}
+          </strong>
+        </div>
+
+        <div>
+          <span>Charge</span>
+
+          <strong>
+            {{ opportunity().workload | workload }}
+          </strong>
+        </div>
+
+        <div>
+          <span>Modalité</span>
+
+          <strong>
+            {{ opportunity().modality | opportunityModality }}
+          </strong>
+        </div>
+
+        <div>
+          <span>Localisation</span>
+
+          <strong>
+            {{ opportunity().location }}
+          </strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="details-subsection">
+      <h4>Planning</h4>
+
+      <div class="details-grid">
+        <div>
+          <span>Début estimé</span>
+
+          <strong>
+            @if (opportunity().estimatedStartDate; as estimatedStartDate) {
+              {{ estimatedStartDate | dateFormat: 'date' }}
+            } @else {
+              Non défini
+            }
+          </strong>
+        </div>
+
+        <div>
+          <span>Durée</span>
+
+          <strong>
+            {{ opportunity().durationValue }}
+            {{ opportunity().durationUnit | durationUnit }}
+          </strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="details-subsection">
+      <h4>Expertise</h4>
+
+      <div class="details-grid">
+        <div>
+          <span>Séniorité</span>
+
+          <strong>
+            {{ opportunity().seniority | opportunitySeniority }}
+          </strong>
+        </div>
       </div>
 
-      <div>
-        <span>Date</span>
-
-        <strong>
-          {{ opportunity().nextActionDate | dateFormat: 'date' }}
-        </strong>
+      <div class="stack-tags">
+        @for (technology of opportunity().stack; track technology) {
+          <span class="stack-tag">
+            {{ technology }}
+          </span>
+        }
       </div>
     </div>
   </div>
+
   <!--
     Destructive actions stay isolated from
     the main workflow to reduce accidental clicks.

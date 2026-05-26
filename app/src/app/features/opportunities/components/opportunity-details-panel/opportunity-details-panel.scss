@@ -42,15 +42,26 @@
   }
 }
 
+/*
+  Main sections structure the panel into
+  distinct business-oriented areas.
+*/
 .details-section {
   display: flex;
   flex-direction: column;
-  gap: $spacing-md;
+  gap: $spacing-lg;
+  padding-top: $spacing-xl;
+  border-top: 1px solid $border-color;
 
   h3 {
     margin: 0;
     font-size: $text-md;
   }
+}
+
+.details-section:first-of-type {
+  padding-top: 0;
+  border-top: none;
 }
 
 /*
@@ -62,7 +73,7 @@
   grid-template-columns: repeat(2, 1fr);
   gap: $spacing-md;
 
-  div {
+  > div {
     display: flex;
     flex-direction: column;
     gap: $spacing-xs;
@@ -74,28 +85,9 @@
   }
 
   strong {
-    font-size: $text-md;
-  }
-}
-
-.details-follow-up {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-md;
-
-  div {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-xs;
-  }
-
-  span {
     font-size: $text-sm;
-    color: $text-secondary;
-  }
 
-  strong {
-    font-size: $text-md;
+    font-weight: 600;
   }
 }
 
@@ -122,7 +114,7 @@
 .actions-groups {
   display: flex;
   flex-direction: column;
-  gap: $spacing-sm;
+  gap: $spacing-xs;
 }
 
 .actions-row {
@@ -139,13 +131,13 @@
   justify-content: center;
   align-items: center;
   flex: 1;
+  min-height: 32px;
   padding: $spacing-xs $spacing-sm;
   border: 1px solid $border-color;
   border-radius: $radius-md;
   background: $surface-primary;
   cursor: pointer;
   font-size: $text-sm;
-  min-height: 36px;
   text-align: center;
   white-space: nowrap;
 
@@ -194,4 +186,106 @@
   margin-top: $spacing-xl;
   padding-top: $spacing-lg;
   border-top: 1px solid $border-color;
+}
+
+/*
+  Subsections improve readability inside
+  dense CRM information blocks.
+*/
+.details-subsection {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.details-subsection h4 {
+  margin: 0;
+  font-size: $text-sm;
+  color: $text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/*
+  Mission details receive stronger visual emphasis
+  to improve business context readability.
+*/
+.mission-highlight {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  padding: $spacing-lg;
+  border-radius: $radius-lg;
+  background: $surface-secondary;
+
+  h4 {
+    margin: 0;
+    font-size: $text-lg;
+  }
+}
+
+/*
+  Copy fields combine displayed values
+  with quick utility actions.
+*/
+.copy-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-sm;
+  min-width: 0;
+}
+
+/*
+  Lightweight utility button used for
+  inline quick-copy interactions.
+*/
+.copy-button {
+  border: none;
+  padding: 0;
+  background: transparent;
+  color: $interactive-primary;
+  cursor: pointer;
+  font-size: $text-sm;
+  font-weight: 500;
+  white-space: nowrap;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.copy-value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/*
+  Stack tags provide a compact overview
+  of the technical environment.
+*/
+.stack-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.stack-tag {
+  padding: $spacing-xs $spacing-sm;
+  border: 1px solid $border-color;
+  border-radius: 999px;
+  background: $surface-secondary;
+  font-size: $text-sm;
+  font-weight: 500;
+}
+
+/*
+  Mission descriptions remain lightweight
+  while preserving readability.
+*/
+.mission-description {
+  margin: 0;
+  line-height: 1.6;
+  color: $text-secondary;
 }
