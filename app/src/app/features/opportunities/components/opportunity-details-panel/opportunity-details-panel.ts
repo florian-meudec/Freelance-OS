@@ -79,4 +79,14 @@ export class OpportunityDetailsPanel {
       event.type
     );
   }
+
+  /*
+    Notes are sorted from newest
+    to oldest for faster scanning.
+  */
+  readonly sortedNotes = computed(() =>
+    [...this.opportunity().notes].sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    ),
+  );
 }

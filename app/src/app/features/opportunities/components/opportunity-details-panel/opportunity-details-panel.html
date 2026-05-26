@@ -295,6 +295,38 @@
   </div>
 
   <!--
+    Notes centralize qualitative business context
+    and recruiter interactions.
+  -->
+  <div class="details-section">
+    <div class="notes-header">
+      <h3>Notes</h3>
+
+      <button type="button" class="notes-add-button">Ajouter une note</button>
+    </div>
+
+    <div class="notes-list">
+      @for (note of sortedNotes(); track note.id) {
+        <div class="note-card">
+          <div class="note-meta">
+            <strong>
+              {{ note.title }}
+            </strong>
+
+            <span>
+              {{ note.createdAt | dateFormat: 'date' }}
+            </span>
+          </div>
+
+          <p class="note-content">
+            {{ note.content }}
+          </p>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!--
     Destructive actions stay isolated from
     the main workflow to reduce accidental clicks.
   -->

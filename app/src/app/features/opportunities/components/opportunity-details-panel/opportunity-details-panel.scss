@@ -23,6 +23,7 @@
   overflow-y: auto;
   z-index: 100;
   animation: slide-in 0.2s ease-out;
+  box-sizing: border-box;
 }
 
 .details-header {
@@ -386,4 +387,87 @@
     font-size: $text-xs;
     color: $text-secondary;
   }
+}
+
+/*
+  Notes header keeps quick actions accessible
+  while preserving compact section density.
+*/
+.notes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/*
+  Lightweight notes action button stays visually
+  discreet inside dense CRM layouts.
+*/
+.notes-add-button {
+  border: none;
+  padding: 0;
+  background: transparent;
+  color: $interactive-primary;
+  cursor: pointer;
+  font-size: $text-sm;
+  font-weight: 500;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/*
+  Notes are displayed vertically to preserve
+  chronological reading and contextual scanning.
+*/
+.notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+/*
+  Individual note cards visually isolate
+  contextual business observations.
+*/
+.note-card {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  padding: $spacing-md;
+  border: 1px solid $border-color;
+  border-radius: $radius-lg;
+  background: $surface-secondary;
+}
+
+/*
+  Note metadata separates authorship
+  and timestamp information from content.
+*/
+.note-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-md;
+
+  strong {
+    font-size: $text-sm;
+  }
+
+  span {
+    font-size: $text-xs;
+    color: $text-secondary;
+    white-space: nowrap;
+  }
+}
+
+/*
+  Notes preserve comfortable readability
+  for dense business context.
+*/
+.note-content {
+  margin: 0;
+  line-height: 1.6;
+  color: $text-secondary;
 }

@@ -76,6 +76,28 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
         note: 'Premier message LinkedIn envoyé.',
       },
     ],
+
+    notes: [
+      {
+        id: 'note-1',
+
+        title: 'Validation budget',
+
+        createdAt: '2026-05-18T14:00:00',
+
+        content: 'Le client semble vouloir démarrer rapidement après validation budget.',
+      },
+
+      {
+        id: 'note-2',
+
+        title: 'Entretien technique',
+
+        createdAt: '2026-05-20T09:30:00',
+
+        content: 'Très bon échange technique avec le lead frontend.',
+      },
+    ],
   },
 
   {
@@ -142,6 +164,18 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
         status: OPPORTUNITY_STATUSES.PROPOSAL.value,
 
         createdAt: '2026-05-18T11:30:00',
+      },
+    ],
+
+    notes: [
+      {
+        id: 'note-3',
+
+        title: 'Négociation TJM',
+
+        createdAt: '2026-05-17T18:00:00',
+
+        content: 'Le TJM proposé semble acceptable pour le client.',
       },
     ],
   },
@@ -213,6 +247,28 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
         createdAt: '2026-05-15T17:00:00',
       },
     ],
+
+    notes: [
+      {
+        id: 'note-4',
+
+        title: 'Premier entretien',
+
+        createdAt: '2026-05-16T11:00:00',
+
+        content: 'Très bon feeling avec l’équipe produit pendant l’entretien.',
+      },
+
+      {
+        id: 'note-5',
+
+        title: 'Process validation',
+
+        createdAt: '2026-05-19T08:45:00',
+
+        content: 'Attention au délai de validation interne qui semble long.',
+      },
+    ],
   },
 
   {
@@ -280,6 +336,18 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
         status: OPPORTUNITY_STATUSES.INTERVIEW.value,
 
         createdAt: '2026-05-16T09:30:00',
+      },
+    ],
+
+    notes: [
+      {
+        id: 'note-6',
+
+        title: 'Scope technique',
+
+        createdAt: '2026-05-17T12:15:00',
+
+        content: 'Le scope semble très intéressant techniquement.',
       },
     ],
   },

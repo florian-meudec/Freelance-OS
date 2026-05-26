@@ -8,6 +8,7 @@ import {
 } from '../constants/opportunity.constants';
 
 import { OpportunityEvent } from './opportunity-event.model';
+import { OpportunityNote } from './opportunity-note.model';
 
 /*
   Central business model representing a freelance opportunity
@@ -69,6 +70,12 @@ export interface Opportunity {
     business and workflow events.
   */
   events: OpportunityEvent[];
+
+  /*
+    Notes centralize human context and
+    qualitative follow-up information.
+  */
+  notes: OpportunityNote[];
 }
 
 /*
