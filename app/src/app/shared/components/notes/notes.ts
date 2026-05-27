@@ -170,4 +170,14 @@ export class Notes {
 
     this.cancelNoteEdit();
   }
+
+  /*
+    Public trigger allows external quick actions
+    to open the lightweight note workflow.
+  */
+  openNoteForm(): void {
+    if (!this.showNoteForm()) {
+      this.toggleNoteForm();
+    }
+  }
 }

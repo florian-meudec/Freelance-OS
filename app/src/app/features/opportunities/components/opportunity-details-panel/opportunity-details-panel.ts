@@ -1,4 +1,4 @@
-import { Component, computed, input, output, signal } from '@angular/core';
+import { Component, computed, input, output, signal, viewChild } from '@angular/core';
 
 import { Opportunity, OpportunityStatus } from '../../models/opportunity.model';
 
@@ -68,6 +68,8 @@ export class OpportunityDetailsPanel {
   */
   readonly showStatusMenu = signal(false);
 
+  readonly notesComponent = viewChild(Notes);
+
   /*
     Notes are created by the board container
     to centralize opportunity state mutations.
@@ -134,5 +136,13 @@ export class OpportunityDetailsPanel {
       Object.values(OPPORTUNITY_EVENT_TYPES).find((type) => type.value === event.type)?.label ??
       event.type
     );
+  }
+
+  /*
+    Quick actions can directly trigger
+    contextual note creation workflows.
+  */
+  openQuickNoteForm(): void {
+    this.notesComponent()?.openNoteForm();
   }
 }
