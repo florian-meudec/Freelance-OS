@@ -8,7 +8,7 @@ import {
 } from '../constants/opportunity.constants';
 
 import { OpportunityEvent } from './opportunity-event.model';
-import { OpportunityNote } from './opportunity-note.model';
+import { Note } from '../../../shared/models/note.model';
 
 /*
   Central business model representing a freelance opportunity
@@ -17,11 +17,11 @@ import { OpportunityNote } from './opportunity-note.model';
 export interface Opportunity {
   id: string;
 
+  companyName: string;
   /*
     Company classification helps segment
     opportunities by business type.
   */
-  companyName: string;
   companyType?: CompanyType;
   industry?: string;
   /*
@@ -75,7 +75,7 @@ export interface Opportunity {
     Notes centralize human context and
     qualitative follow-up information.
   */
-  notes: OpportunityNote[];
+  notes: Note[];
 }
 
 /*
