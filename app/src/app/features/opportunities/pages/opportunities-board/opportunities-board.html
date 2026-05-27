@@ -103,5 +103,9 @@
     aria-label="Fermer le panneau"
   ></button>
 
-  <app-opportunity-details-panel [opportunity]="opportunity" (panelClose)="closeDetailsPanel()" />
+  <app-opportunity-details-panel
+    [opportunity]="opportunity"
+    (panelClose)="closeDetailsPanel()"
+    (statusChange)="onOpportunityStatusChange($event)"
+  />
 }

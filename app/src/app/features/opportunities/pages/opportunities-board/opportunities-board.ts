@@ -4,7 +4,10 @@ import { CdkDragDrop, CdkDropList, CdkDropListGroup } from '@angular/cdk/drag-dr
 import { Opportunity, OpportunityStatus } from '../../models/opportunity.model';
 import { OpportunityCard } from '../../components/opportunity-card/opportunity-card';
 import { OpportunityDetailsPanel } from '../../components/opportunity-details-panel/opportunity-details-panel';
-import { OPPORTUNITY_STATUSES } from '../../constants/opportunity.constants';
+import {
+  OPPORTUNITY_EVENT_TYPES,
+  OPPORTUNITY_STATUSES,
+} from '../../constants/opportunity.constants';
 
 import { MOCK_OPPORTUNITIES } from '../../mocks/mock-opportunities';
 
@@ -134,9 +137,9 @@ export class OpportunitiesBoard {
   }
 
   /*
-    Moving a card between columns updates
-    the underlying opportunity status.
-  */
+  Moving a card between columns updates
+  the underlying opportunity workflow state.
+*/
   moveOpportunity(event: CdkDragDrop<Opportunity[]>, status: OpportunityStatus): void {
     const opportunity = event.item.data as Opportunity;
 
@@ -144,16 +147,7 @@ export class OpportunitiesBoard {
       return;
     }
 
-    this.opportunities.update((opportunities) =>
-      opportunities.map((item) =>
-        item.id === opportunity.id
-          ? {
-              ...item,
-              status,
-            }
-          : item,
-      ),
-    );
+    this.updateOpportunityStatus(opportunity.id, status);
   }
 
   /*
@@ -174,5 +168,69 @@ export class OpportunitiesBoard {
     }
 
     return targetStatus !== 'won' && targetStatus !== 'lost';
+  }
+
+  /*
+    Status changes triggered from the details
+    panel reuse the centralized workflow logic.
+  */
+  onOpportunityStatusChange(status: OpportunityStatus): void {
+    const selected = this.selectedOpportunity();
+
+    if (!selected) {
+      return;
+    }
+
+    this.updateOpportunityStatus(selected.id, status);
+  }
+
+  /*
+    Centralize workflow status updates so all
+    interactions share identical business behavior.
+  */
+  private updateOpportunityStatus(opportunityId: string, status: OpportunityStatus): void {
+    this.opportunities.update((opportunities) =>
+      opportunities.map((opportunity) => {
+        if (opportunity.id !== opportunityId) {
+          return opportunity;
+        }
+
+        return {
+          ...opportunity,
+
+          status,
+
+          events: [
+            ...opportunity.events,
+
+            {
+              id: crypto.randomUUID(),
+
+              type: OPPORTUNITY_EVENT_TYPES.STATUS_CHANGED.value,
+
+              status,
+
+              createdAt: new Date().toISOString(),
+            },
+          ],
+        };
+      }),
+    );
+
+    /*
+    Keep the details panel synchronized
+    with the updated workflow state.
+  */
+    const updatedOpportunity = this.opportunities().find(
+      (opportunity) => opportunity.id === opportunityId,
+    );
+
+    if (!updatedOpportunity) {
+      return;
+    }
+
+    if (this.selectedOpportunity()?.id === updatedOpportunity.id) {
+      this.selectedOpportunity.set(updatedOpportunity);
+    }
   }
 }

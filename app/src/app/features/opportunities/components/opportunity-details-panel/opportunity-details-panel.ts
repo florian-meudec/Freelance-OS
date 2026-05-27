@@ -1,6 +1,6 @@
-import { Component, computed, input, output } from '@angular/core';
+import { Component, computed, input, output, signal } from '@angular/core';
 
-import { Opportunity } from '../../models/opportunity.model';
+import { Opportunity, OpportunityStatus } from '../../models/opportunity.model';
 
 import { CompanyTypePipe } from '../../../../shared/pipes/company-type-pipe';
 import { DurationUnitPipe } from '../../../../shared/pipes/duration-unit-pipe';
@@ -47,9 +47,23 @@ export class OpportunityDetailsPanel {
   */
   readonly panelClose = output<void>();
 
-  closePanel(): void {
-    this.panelClose.emit();
-  }
+  /*
+    Status updates are delegated to the board
+    container to keep state mutations centralized.
+  */
+  readonly statusChange = output<OpportunityStatus>();
+
+  /*
+    Status options are generated directly from
+    business constants to preserve consistency.
+  */
+  readonly statuses = Object.values(OPPORTUNITY_STATUSES);
+
+  /*
+    Status menu visibility is handled locally
+    to keep workflow interactions lightweight.
+  */
+  readonly showStatusMenu = signal(false);
 
   /*
     Timeline events are sorted from newest
@@ -60,6 +74,30 @@ export class OpportunityDetailsPanel {
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     ),
   );
+
+  /*
+    Notes are sorted from newest
+    to oldest for faster scanning.
+  */
+  readonly sortedNotes = computed(() =>
+    [...this.opportunity().notes].sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    ),
+  );
+
+  closePanel(): void {
+    this.panelClose.emit();
+  }
+
+  toggleStatusMenu(): void {
+    this.showStatusMenu.update((value) => !value);
+  }
+
+  selectStatus(status: OpportunityStatus): void {
+    this.statusChange.emit(status);
+
+    this.showStatusMenu.set(false);
+  }
 
   /*
     Generate user-facing event labels
@@ -79,14 +117,4 @@ export class OpportunityDetailsPanel {
       event.type
     );
   }
-
-  /*
-    Notes are sorted from newest
-    to oldest for faster scanning.
-  */
-  readonly sortedNotes = computed(() =>
-    [...this.opportunity().notes].sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-    ),
-  );
 }

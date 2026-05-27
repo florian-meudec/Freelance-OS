@@ -28,17 +28,33 @@
       <div class="actions-row">
         <button type="button" class="action-button action-button-primary">Modifier</button>
 
-        <button type="button" class="action-button">Ajouter note</button>
+        <div class="status-menu">
+          <button type="button" class="action-button" (click)="toggleStatusMenu()">
+            Changer statut
+          </button>
 
-        <button type="button" class="action-button">Planifier action</button>
+          @if (showStatusMenu()) {
+            <div class="status-dropdown">
+              @for (status of statuses; track status.value) {
+                <button
+                  type="button"
+                  class="status-option"
+                  [class.status-option-active]="status.value === opportunity().status"
+                  [disabled]="status.value === opportunity().status"
+                  (click)="selectStatus(status.value)"
+                >
+                  {{ status.label }}
+                </button>
+              }
+            </div>
+          }
+        </div>
       </div>
 
       <div class="actions-row">
-        <button type="button" class="action-button">Changer statut</button>
+        <button type="button" class="action-button">Ajouter note</button>
 
-        <button type="button" class="action-button">Marquer perdu</button>
-
-        <button type="button" class="action-button">Créer mission</button>
+        <button type="button" class="action-button">Ajouter action</button>
       </div>
     </div>
   </div>
