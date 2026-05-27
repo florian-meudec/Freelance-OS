@@ -125,62 +125,6 @@
 }
 
 /*
-  Action buttons use a lightweight neutral style
-  to avoid overwhelming the details panel.
-*/
-.action-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 32px;
-  padding: $spacing-xs $spacing-sm;
-  border: 1px solid $border-color;
-  border-radius: $radius-md;
-  background: $surface-primary;
-  cursor: pointer;
-  font-size: $text-sm;
-  text-align: center;
-  white-space: nowrap;
-  width: 100%;
-
-  transition:
-    background 0.15s ease,
-    border-color 0.15s ease;
-
-  &:hover {
-    background: $surface-secondary;
-  }
-}
-
-/*
-  Primary actions receive stronger emphasis
-  to guide the main workflow.
-*/
-.action-button-primary {
-  border-color: $interactive-primary;
-  background: $interactive-primary;
-  color: white;
-
-  &:hover {
-    background: $interactive-primary;
-    opacity: 0.95;
-  }
-}
-
-/*
-  Destructive actions stay visually separated
-  to reduce accidental interactions.
-*/
-.action-button-danger {
-  border-color: $urgency-late;
-  color: $urgency-late;
-
-  &:hover {
-    background: $surface-danger-muted;
-  }
-}
-
-/*
   The danger zone stays visually separated
   from the primary workflow actions.
 */
