@@ -401,6 +401,27 @@
 }
 
 /*
+  Note metadata separates titles
+  from timestamps while preserving density.
+*/
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-md;
+
+  strong {
+    font-size: $text-sm;
+  }
+
+  span {
+    font-size: $text-xs;
+    color: $text-secondary;
+    white-space: nowrap;
+  }
+}
+
+/*
   Lightweight notes action button stays visually
   discreet inside dense CRM layouts.
 */
@@ -437,37 +458,12 @@
   flex-direction: column;
   gap: $spacing-sm;
   padding: $spacing-md;
-  border: 1px solid $border-color;
   border-radius: $radius-lg;
   background: $surface-secondary;
-}
-
-/*
-  Note metadata separates authorship
-  and timestamp information from content.
-*/
-.note-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: $spacing-md;
-
-  strong {
-    font-size: $text-sm;
-  }
-
-  span {
-    font-size: $text-xs;
-    color: $text-secondary;
-    white-space: nowrap;
-  }
-}
-
-/*
-  Notes preserve comfortable readability
-  for dense business context.
-*/
-.note-content {
+  width: 100%;
+  border: 1px solid $border-color;
+  text-align: left;
+  font: inherit;
   margin: 0;
   line-height: 1.6;
   color: $text-secondary;
@@ -547,4 +543,76 @@
 
 .status-option:disabled {
   opacity: 1;
+}
+
+/*
+  Inline note creation keeps lightweight CRM
+  interactions inside the current context.
+*/
+.note-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  padding: $spacing-md;
+  border: 1px solid $border-color;
+  border-radius: $radius-lg;
+  background: $surface-secondary;
+}
+
+/*
+  Lightweight CRM inputs stay visually aligned
+  with the surrounding panel density.
+*/
+.note-input,
+.note-textarea {
+  width: 100%;
+  padding: $spacing-sm;
+
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+
+  background: $surface-primary;
+
+  font: inherit;
+
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $interactive-primary;
+  }
+}
+
+/*
+  Note actions remain compact to preserve
+  panel readability and workflow density.
+*/
+.note-form-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: $spacing-sm;
+}
+
+/*
+  Interactive notes provide lightweight
+  inline editing without additional UI noise.
+*/
+.note-card-interactive {
+  cursor: pointer;
+
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    transform 0.15s ease;
+
+  &:hover {
+    border-color: $interactive-primary;
+    background: $surface-secondary;
+
+    transform: translateY(-1px);
+  }
 }

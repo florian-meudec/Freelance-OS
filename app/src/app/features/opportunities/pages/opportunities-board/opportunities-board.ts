@@ -137,9 +137,9 @@ export class OpportunitiesBoard {
   }
 
   /*
-  Moving a card between columns updates
-  the underlying opportunity workflow state.
-*/
+    Moving a card between columns updates
+    the underlying opportunity workflow state.
+  */
   moveOpportunity(event: CdkDragDrop<Opportunity[]>, status: OpportunityStatus): void {
     const opportunity = event.item.data as Opportunity;
 
@@ -218,9 +218,9 @@ export class OpportunitiesBoard {
     );
 
     /*
-    Keep the details panel synchronized
-    with the updated workflow state.
-  */
+      Keep the details panel synchronized
+      with the updated workflow state.
+    */
     const updatedOpportunity = this.opportunities().find(
       (opportunity) => opportunity.id === opportunityId,
     );
@@ -232,5 +232,105 @@ export class OpportunitiesBoard {
     if (this.selectedOpportunity()?.id === updatedOpportunity.id) {
       this.selectedOpportunity.set(updatedOpportunity);
     }
+  }
+
+  /*
+    Notes are added centrally so the board
+    remains the single source of truth.
+  */
+  onOpportunityNoteAdd(note: { title: string; content: string }): void {
+    const selected = this.selectedOpportunity();
+
+    if (!selected) {
+      return;
+    }
+
+    const updatedOpportunity = {
+      ...selected,
+
+      notes: [
+        ...selected.notes,
+
+        {
+          id: crypto.randomUUID(),
+
+          title: note.title,
+
+          content: note.content,
+
+          createdAt: new Date().toISOString(),
+        },
+      ],
+    };
+
+    this.opportunities.update((opportunities) =>
+      opportunities.map((opportunity) =>
+        opportunity.id === updatedOpportunity.id ? updatedOpportunity : opportunity,
+      ),
+    );
+
+    this.selectedOpportunity.set(updatedOpportunity);
+  }
+
+  /*
+    Note updates stay centralized so all
+    opportunity mutations share the same flow.
+  */
+  onOpportunityNoteUpdate(note: { noteId: string; title: string; content: string }): void {
+    const selected = this.selectedOpportunity();
+
+    if (!selected) {
+      return;
+    }
+
+    const updatedOpportunity = {
+      ...selected,
+
+      notes: selected.notes.map((item) =>
+        item.id === note.noteId
+          ? {
+              ...item,
+
+              title: note.title,
+
+              content: note.content,
+            }
+          : item,
+      ),
+    };
+
+    this.opportunities.update((opportunities) =>
+      opportunities.map((opportunity) =>
+        opportunity.id === updatedOpportunity.id ? updatedOpportunity : opportunity,
+      ),
+    );
+
+    this.selectedOpportunity.set(updatedOpportunity);
+  }
+
+  /*
+    Note deletions remain centralized to keep
+    board state synchronized across the UI.
+  */
+  onOpportunityNoteDelete(noteId: string): void {
+    const selected = this.selectedOpportunity();
+
+    if (!selected) {
+      return;
+    }
+
+    const updatedOpportunity = {
+      ...selected,
+
+      notes: selected.notes.filter((note) => note.id !== noteId),
+    };
+
+    this.opportunities.update((opportunities) =>
+      opportunities.map((opportunity) =>
+        opportunity.id === updatedOpportunity.id ? updatedOpportunity : opportunity,
+      ),
+    );
+
+    this.selectedOpportunity.set(updatedOpportunity);
   }
 }

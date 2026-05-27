@@ -52,7 +52,7 @@
       </div>
 
       <div class="actions-row">
-        <button type="button" class="action-button">Ajouter note</button>
+        <button type="button" class="action-button" (click)="toggleNoteForm()">Ajouter note</button>
 
         <button type="button" class="action-button">Ajouter action</button>
       </div>
@@ -318,26 +318,105 @@
     <div class="notes-header">
       <h3>Notes</h3>
 
-      <button type="button" class="notes-add-button">Ajouter une note</button>
+      <button type="button" class="notes-add-button" (click)="toggleNoteForm()">
+        Ajouter une note
+      </button>
     </div>
+    @if (showNoteForm()) {
+      <!--
+        Inline note creation keeps CRM interactions
+        lightweight and contextual.
+      -->
+      <div class="note-form" #noteForm>
+        <input #noteTitleInput #noteTitle type="text" placeholder="Titre" class="note-input" />
+
+        <textarea #noteContent rows="4" placeholder="Contenu" class="note-textarea"></textarea>
+
+        <div class="note-form-actions">
+          <button
+            type="button"
+            class="action-button action-button-primary"
+            (click)="addNote(noteTitle.value, noteContent.value)"
+          >
+            Ajouter
+          </button>
+
+          <button type="button" class="action-button" (click)="toggleNoteForm()">Annuler</button>
+        </div>
+      </div>
+    }
 
     <div class="notes-list">
       @for (note of sortedNotes(); track note.id) {
-        <div class="note-card">
-          <div class="note-meta">
-            <strong>
-              {{ note.title }}
-            </strong>
+        @if (editingNoteId() === note.id) {
+          <!--
+            Inline note editing preserves context
+            while keeping CRM interactions lightweight.
+          -->
+          <div class="note-form">
+            <input #editTitle type="text" class="note-input" [value]="note.title" />
 
-            <span>
-              {{ note.createdAt | dateFormat: 'date' }}
-            </span>
+            <textarea #editContent rows="4" class="note-textarea" [value]="note.content"></textarea>
+
+            <div class="note-form-actions">
+              <button
+                type="button"
+                class="action-button action-button-primary"
+                (click)="updateNote(note.id, editTitle.value, editContent.value)"
+              >
+                Sauvegarder
+              </button>
+
+              <button type="button" class="action-button" (click)="cancelNoteEdit()">
+                Annuler
+              </button>
+            </div>
+
+            @if (deletingNoteId() === note.id) {
+              <div class="note-delete-confirmation">
+                <p>Confirmer suppression ?</p>
+
+                <div class="note-form-actions">
+                  <button
+                    type="button"
+                    class="action-button action-button-danger"
+                    (click)="deleteNote(note.id)"
+                  >
+                    Supprimer
+                  </button>
+
+                  <button type="button" class="action-button" (click)="deletingNoteId.set(null)">
+                    Annuler
+                  </button>
+                </div>
+              </div>
+            } @else {
+              <button type="button" class="note-delete-button" (click)="confirmNoteDelete(note.id)">
+                Supprimer
+              </button>
+            }
           </div>
+        } @else {
+          <button
+            type="button"
+            class="note-card note-card-interactive"
+            (click)="startNoteEdit(note.id)"
+          >
+            <div class="note-header">
+              <strong>
+                {{ note.title }}
+              </strong>
 
-          <p class="note-content">
-            {{ note.content }}
-          </p>
-        </div>
+              <span>
+                {{ note.createdAt | dateFormat: 'datetime' }}
+              </span>
+            </div>
+
+            <p>
+              {{ note.content }}
+            </p>
+          </button>
+        }
       }
     </div>
   </div>

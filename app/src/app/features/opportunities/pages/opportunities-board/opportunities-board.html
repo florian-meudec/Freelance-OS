@@ -107,5 +107,8 @@
     [opportunity]="opportunity"
     (panelClose)="closeDetailsPanel()"
     (statusChange)="onOpportunityStatusChange($event)"
+    (noteAdd)="onOpportunityNoteAdd($event)"
+    (noteUpdate)="onOpportunityNoteUpdate($event)"
+    (noteDelete)="onOpportunityNoteDelete($event)"
   />
 }
