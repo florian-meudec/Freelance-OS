@@ -12,11 +12,11 @@
         lightweight and contextual.
       -->
     <div class="note-form" #noteForm>
-      <input #noteTitleInput type="text" placeholder="Titre" class="note-input" />
+      <input #noteTitleInput type="text" placeholder="Titre" class="form-input" />
 
-      <textarea #noteContent rows="4" placeholder="Contenu" class="note-textarea"></textarea>
+      <textarea #noteContent rows="4" placeholder="Contenu" class="form-textarea"></textarea>
 
-      <div class="note-form-actions">
+      <div class="form-actions">
         <button
           type="button"
           class="action-button action-button-primary"
@@ -38,11 +38,11 @@
             while keeping CRM interactions lightweight.
           -->
         <div class="note-form">
-          <input #editTitle type="text" class="note-input" [value]="note.title" />
+          <input #editTitle type="text" class="form-input" [value]="note.title" />
 
-          <textarea #editContent rows="4" class="note-textarea" [value]="note.content"></textarea>
+          <textarea #editContent rows="4" class="form-textarea" [value]="note.content"></textarea>
 
-          <div class="note-form-actions">
+          <div class="form-actions">
             <button
               type="button"
               class="action-button action-button-primary"
@@ -58,7 +58,7 @@
             <div class="note-delete-confirmation">
               <p>Confirmer suppression ?</p>
 
-              <div class="note-form-actions">
+              <div class="form-actions">
                 <button
                   type="button"
                   class="action-button action-button-danger"

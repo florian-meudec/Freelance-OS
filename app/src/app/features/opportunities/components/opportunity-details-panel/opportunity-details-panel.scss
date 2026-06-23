@@ -2,6 +2,7 @@
 @use '../../../../../styles/radius' as *;
 @use '../../../../../styles/spacing' as *;
 @use '../../../../../styles/typography' as *;
+@use '../../../../../styles/forms' as *;
 
 /*
   Fixed side panel used to inspect opportunity details
@@ -408,4 +409,24 @@
 
 .status-option:disabled {
   opacity: 1;
+}
+
+/*
+  Timeline event creation remains visually
+  separated from historical activity.
+*/
+.event-form {
+  display: flex;
+  flex-direction: column;
+
+  gap: $spacing-md;
+
+  margin-bottom: $spacing-lg;
+
+  padding: $spacing-md;
+
+  border: 1px solid $border-color;
+  border-radius: $radius-lg;
+
+  background: $surface-secondary;
 }

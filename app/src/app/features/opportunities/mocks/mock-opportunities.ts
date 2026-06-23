@@ -69,11 +69,11 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
       {
         id: 'event-3',
 
-        type: OPPORTUNITY_EVENT_TYPES.FOLLOW_UP.value,
+        type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
 
         createdAt: '2026-05-15T10:00:00',
 
-        note: 'Premier message LinkedIn envoyé.',
+        comment: 'Premier message LinkedIn envoyé.',
       },
     ],
 
@@ -149,11 +149,11 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
       {
         id: 'event-5',
 
-        type: OPPORTUNITY_EVENT_TYPES.FOLLOW_UP.value,
+        type: OPPORTUNITY_EVENT_TYPES.CALL.value,
 
         createdAt: '2026-05-09T16:00:00',
 
-        note: 'Relance email effectuée.',
+        comment: 'Relance email effectuée.',
       },
 
       {
@@ -321,11 +321,11 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
       {
         id: 'event-11',
 
-        type: OPPORTUNITY_EVENT_TYPES.FOLLOW_UP.value,
+        type: OPPORTUNITY_EVENT_TYPES.CALL.value,
 
         createdAt: '2026-05-14T13:00:00',
 
-        note: 'Premier call RH effectué.',
+        comment: 'Premier call RH effectué.',
       },
 
       {

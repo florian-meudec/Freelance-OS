@@ -10,6 +10,7 @@ import {
 } from '../../constants/opportunity.constants';
 
 import { MOCK_OPPORTUNITIES } from '../../mocks/mock-opportunities';
+import { OpportunityEventType } from '../../models/opportunity-event.model';
 
 /*
   Columns act as drop zones for kanban interactions.
@@ -323,6 +324,44 @@ export class OpportunitiesBoard {
       ...selected,
 
       notes: selected.notes.filter((note) => note.id !== noteId),
+    };
+
+    this.opportunities.update((opportunities) =>
+      opportunities.map((opportunity) =>
+        opportunity.id === updatedOpportunity.id ? updatedOpportunity : opportunity,
+      ),
+    );
+
+    this.selectedOpportunity.set(updatedOpportunity);
+  }
+
+  /*
+    Timeline events are added centrally so
+    opportunity history remains synchronized.
+  */
+  onOpportunityEventAdd(event: { type: OpportunityEventType; comment?: string }): void {
+    const selected = this.selectedOpportunity();
+
+    if (!selected) {
+      return;
+    }
+
+    const updatedOpportunity = {
+      ...selected,
+
+      events: [
+        ...selected.events,
+
+        {
+          id: crypto.randomUUID(),
+
+          type: event.type,
+
+          comment: event.comment,
+
+          createdAt: new Date().toISOString(),
+        },
+      ],
     };
 
     this.opportunities.update((opportunities) =>

@@ -56,6 +56,11 @@
           Ajouter note
         </button>
 
+        <!--
+          Future workflow action creation will allow
+          scheduling dated follow-up actions directly
+          from the opportunity panel.
+        -->
         <button type="button" class="action-button">Ajouter action</button>
       </div>
     </div>
@@ -282,8 +287,60 @@
     <div class="timeline-header">
       <h3>Timeline</h3>
 
-      <button type="button" class="timeline-add-button">Ajouter un évènement</button>
+      <button type="button" class="timeline-add-button" (click)="toggleEventForm()">
+        Ajouter un évènement
+      </button>
     </div>
+
+    @if (showEventForm()) {
+      <!--
+      Inline timeline event creation keeps
+      workflow history contextual and lightweight.
+    -->
+      <div class="event-form">
+        <div class="form-field">
+          <span>Type d'évènement</span>
+
+          <div class="status-menu">
+            <button type="button" class="action-button" (click)="toggleEventTypeMenu()">
+              {{ selectedEventTypeLabel() }}
+            </button>
+
+            @if (showEventTypeMenu()) {
+              <div class="status-dropdown">
+                @for (eventType of manualEventTypes; track eventType.value) {
+                  <button
+                    type="button"
+                    class="status-option"
+                    [class.status-option-active]="selectedEventType() === eventType.value"
+                    (click)="selectEventType(eventType.value)"
+                  >
+                    {{ eventType.label }}
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        <label class="form-field">
+          <span>Commentaire</span>
+
+          <textarea #eventComment rows="4" class="form-textarea"></textarea>
+        </label>
+        <div class="form-actions">
+          <button
+            type="button"
+            class="action-button action-button-primary"
+            (click)="addEvent(selectedEventType(), eventComment.value)"
+          >
+            Ajouter
+          </button>
+
+          <button type="button" class="action-button" (click)="toggleEventForm()">Annuler</button>
+        </div>
+      </div>
+    }
 
     <div class="timeline">
       @for (event of sortedEvents(); track event.id) {
@@ -301,9 +358,9 @@
               </span>
             </div>
 
-            @if (event.note) {
+            @if (event.comment) {
               <p>
-                {{ event.note }}
+                {{ event.comment }}
               </p>
             }
           </div>

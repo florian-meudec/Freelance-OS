@@ -173,13 +173,18 @@ export const OPPORTUNITY_EVENT_TYPES = {
     label: 'Changement de statut',
   },
 
-  FOLLOW_UP: {
-    value: 'follow-up',
-    label: 'Prochaine action',
+  CALL: {
+    value: 'call',
+    label: 'Appel',
   },
 
-  NOTE: {
-    value: 'note',
-    label: 'Note',
+  EMAIL: {
+    value: 'email',
+    label: 'Email',
+  },
+
+  MEETING: {
+    value: 'meeting',
+    label: 'Entretien',
   },
 } as const;

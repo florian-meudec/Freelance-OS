@@ -11,7 +11,7 @@ import { OpportunityModalityPipe } from '../../../../shared/pipes/opportunity-mo
 import { OpportunitySeniorityPipe } from '../../../../shared/pipes/opportunity-seniority-pipe';
 import { TjmPipe } from '../../../../shared/pipes/tjm-pipe';
 import { WorkloadPipe } from '../../../../shared/pipes/workload-pipe';
-import { OpportunityEvent } from '../../models/opportunity-event.model';
+import { OpportunityEvent, OpportunityEventType } from '../../models/opportunity-event.model';
 import {
   OPPORTUNITY_EVENT_TYPES,
   OPPORTUNITY_STATUSES,
@@ -57,10 +57,29 @@ export class OpportunityDetailsPanel {
   readonly statusChange = output<OpportunityStatus>();
 
   /*
+    Timeline events are created by the board
+    container to centralize state mutations.
+  */
+  readonly eventAdd = output<{
+    type: OpportunityEventType;
+    comment?: string;
+  }>();
+
+  /*
     Status options are generated directly from
     business constants to preserve consistency.
   */
   readonly statuses = Object.values(OPPORTUNITY_STATUSES);
+
+  /*
+    Only user-generated event types are exposed
+    through the manual timeline workflow.
+  */
+  readonly manualEventTypes = [
+    OPPORTUNITY_EVENT_TYPES.CALL,
+    OPPORTUNITY_EVENT_TYPES.EMAIL,
+    OPPORTUNITY_EVENT_TYPES.MEETING,
+  ];
 
   /*
     Status menu visibility is handled locally
@@ -105,12 +124,43 @@ export class OpportunityDetailsPanel {
     ),
   );
 
+  /*
+    Lightweight timeline event creation
+    stays contextual inside the panel.
+  */
+  readonly showEventForm = signal(false);
+
+  readonly showEventTypeMenu = signal(false);
+
+  readonly selectedEventType = signal<OpportunityEventType>(OPPORTUNITY_EVENT_TYPES.CALL.value);
+
+  readonly selectedEventTypeLabel = computed(
+    () =>
+      this.manualEventTypes.find((eventType) => eventType.value === this.selectedEventType())
+        ?.label ?? '',
+  );
+
   closePanel(): void {
     this.panelClose.emit();
   }
 
   toggleStatusMenu(): void {
     this.showStatusMenu.update((value) => !value);
+  }
+
+  /*
+    Timeline events can be created directly
+    from the opportunity workflow.
+  */
+  toggleEventForm(): void {
+    const nextValue = !this.showEventForm();
+
+    this.showEventForm.set(nextValue);
+
+    if (!nextValue) {
+      this.selectedEventType.set(this.manualEventTypes[0].value);
+      this.showEventTypeMenu.set(false);
+    }
   }
 
   selectStatus(status: OpportunityStatus): void {
@@ -144,5 +194,31 @@ export class OpportunityDetailsPanel {
   */
   openQuickNoteForm(): void {
     this.notesComponent()?.openNoteForm();
+  }
+
+  /*
+    Event creation requests are emitted upward
+    so workflow history remains centralized.
+  */
+  addEvent(type: OpportunityEventType, comment?: string): void {
+    this.eventAdd.emit({
+      type,
+      comment,
+    });
+
+    this.selectedEventType.set(this.manualEventTypes[0].value);
+    this.showEventTypeMenu.set(false);
+
+    this.showEventForm.set(false);
+  }
+
+  selectEventType(type: OpportunityEventType): void {
+    this.selectedEventType.set(type);
+
+    this.showEventTypeMenu.set(false);
+  }
+
+  toggleEventTypeMenu(): void {
+    this.showEventTypeMenu.update((value) => !value);
   }
 }

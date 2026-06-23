@@ -2,8 +2,8 @@ import { OPPORTUNITY_EVENT_TYPES } from '../constants/opportunity.constants';
 import { OpportunityStatus } from './opportunity.model';
 
 /*
-  Timeline events track important lifecycle
-  actions and follow-up history.
+  Timeline events track important
+  opportunity lifecycle history.
 */
 export interface OpportunityEvent {
   id: string;
@@ -15,7 +15,7 @@ export interface OpportunityEvent {
   */
   status?: OpportunityStatus;
   createdAt: string;
-  note?: string;
+  comment?: string;
 }
 
 /*

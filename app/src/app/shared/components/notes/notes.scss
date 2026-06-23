@@ -2,6 +2,7 @@
 @use '../../../../styles/radius' as *;
 @use '../../../../styles/spacing' as *;
 @use '../../../../styles/typography' as *;
+@use '../../../../styles/forms' as *;
 
 /*
   Notes remain visually integrated inside
@@ -115,44 +116,6 @@
   border: 1px solid $border-color;
   border-radius: $radius-lg;
   background: $surface-secondary;
-}
-
-/*
-  Lightweight CRM inputs stay visually aligned
-  with the surrounding panel density.
-*/
-.note-input,
-.note-textarea {
-  width: 100%;
-  padding: $spacing-sm;
-
-  border: 1px solid $border-color;
-  border-radius: $radius-md;
-
-  background: $surface-primary;
-
-  font: inherit;
-
-  box-sizing: border-box;
-
-  transition:
-    border-color 0.15s ease,
-    background 0.15s ease;
-
-  &:focus {
-    outline: none;
-    border-color: $interactive-primary;
-  }
-}
-
-/*
-  Note actions remain compact to preserve
-  panel readability and workflow density.
-*/
-.note-form-actions {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: $spacing-sm;
 }
 
 /*
