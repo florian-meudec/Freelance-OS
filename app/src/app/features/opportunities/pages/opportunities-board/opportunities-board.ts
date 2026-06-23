@@ -408,4 +408,26 @@ export class OpportunitiesBoard {
 
     this.selectedOpportunity.set(updatedOpportunity);
   }
+
+  onOpportunityEventDelete(eventId: string): void {
+    const selected = this.selectedOpportunity();
+
+    if (!selected) {
+      return;
+    }
+
+    const updatedOpportunity = {
+      ...selected,
+
+      events: selected.events.filter((event) => event.id !== eventId),
+    };
+
+    this.opportunities.update((opportunities) =>
+      opportunities.map((opportunity) =>
+        opportunity.id === updatedOpportunity.id ? updatedOpportunity : opportunity,
+      ),
+    );
+
+    this.selectedOpportunity.set(updatedOpportunity);
+  }
 }

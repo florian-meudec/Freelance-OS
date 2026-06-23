@@ -52,3 +52,17 @@
     font-weight: 500;
   }
 }
+
+.delete-confirmation {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  padding-top: $spacing-sm;
+
+  p {
+    margin: 0;
+    font-size: $text-sm;
+    color: $text-secondary;
+  }
+}

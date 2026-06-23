@@ -156,6 +156,10 @@ export class OpportunityDetailsPanel {
         ?.label ?? '',
   );
 
+  readonly eventDelete = output<string>();
+
+  readonly deletingEventId = signal<string | null>(null);
+
   closePanel(): void {
     this.panelClose.emit();
   }
@@ -259,6 +263,8 @@ export class OpportunityDetailsPanel {
     the compact timeline presentation.
   */
   cancelEventEdit(): void {
+    this.deletingEventId.set(null);
+
     this.editingEventId.set(null);
   }
 
@@ -278,5 +284,21 @@ export class OpportunityDetailsPanel {
 
   isEditableEvent(event: OpportunityEvent): boolean {
     return this.manualEventTypes.some((eventType) => eventType.value === event.type);
+  }
+
+  confirmEventDelete(eventId: string): void {
+    this.deletingEventId.set(eventId);
+  }
+
+  cancelEventDelete(): void {
+    this.deletingEventId.set(null);
+  }
+
+  deleteEvent(eventId: string): void {
+    this.eventDelete.emit(eventId);
+
+    this.deletingEventId.set(null);
+
+    this.cancelEventEdit();
   }
 }

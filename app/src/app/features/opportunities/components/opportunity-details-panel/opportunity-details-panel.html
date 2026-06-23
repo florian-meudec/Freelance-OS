@@ -395,6 +395,33 @@
                 Annuler
               </button>
             </div>
+            @if (deletingEventId() === event.id) {
+              <div class="delete-confirmation">
+                <p>Confirmer suppression ?</p>
+
+                <div class="form-actions">
+                  <button
+                    type="button"
+                    class="action-button action-button-danger"
+                    (click)="deleteEvent(event.id)"
+                  >
+                    Supprimer
+                  </button>
+
+                  <button type="button" class="action-button" (click)="cancelEventDelete()">
+                    Annuler
+                  </button>
+                </div>
+              </div>
+            } @else {
+              <button
+                type="button"
+                class="action-button action-button-danger"
+                (click)="confirmEventDelete(event.id)"
+              >
+                Supprimer
+              </button>
+            }
           </div>
         } @else {
           @if (isEditableEvent(event)) {
