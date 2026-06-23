@@ -115,6 +115,16 @@ export class OpportunityDetailsPanel {
   readonly noteDelete = output<string>();
 
   /*
+    Event updates are delegated upward
+    to centralize state mutations.
+  */
+  readonly eventUpdate = output<{
+    eventId: string;
+    type: OpportunityEventType;
+    comment?: string;
+  }>();
+
+  /*
     Timeline events are sorted from newest
     to oldest to prioritize recent activity.
   */
@@ -130,13 +140,19 @@ export class OpportunityDetailsPanel {
   */
   readonly showEventForm = signal(false);
 
-  readonly showEventTypeMenu = signal(false);
+  readonly showEventTypeSelector = signal(false);
 
-  readonly selectedEventType = signal<OpportunityEventType>(OPPORTUNITY_EVENT_TYPES.CALL.value);
+  readonly currentEventType = signal<OpportunityEventType>(OPPORTUNITY_EVENT_TYPES.CALL.value);
+
+  /*
+    Inline event editing preserves context
+    while keeping timeline interactions lightweight.
+  */
+  readonly editingEventId = signal<string | null>(null);
 
   readonly selectedEventTypeLabel = computed(
     () =>
-      this.manualEventTypes.find((eventType) => eventType.value === this.selectedEventType())
+      this.manualEventTypes.find((eventType) => eventType.value === this.currentEventType())
         ?.label ?? '',
   );
 
@@ -153,13 +169,15 @@ export class OpportunityDetailsPanel {
     from the opportunity workflow.
   */
   toggleEventForm(): void {
+    this.editingEventId.set(null);
+
     const nextValue = !this.showEventForm();
 
     this.showEventForm.set(nextValue);
 
     if (!nextValue) {
-      this.selectedEventType.set(this.manualEventTypes[0].value);
-      this.showEventTypeMenu.set(false);
+      this.currentEventType.set(this.manualEventTypes[0].value);
+      this.showEventTypeSelector.set(false);
     }
   }
 
@@ -206,19 +224,59 @@ export class OpportunityDetailsPanel {
       comment,
     });
 
-    this.selectedEventType.set(this.manualEventTypes[0].value);
-    this.showEventTypeMenu.set(false);
+    this.currentEventType.set(this.manualEventTypes[0].value);
+    this.showEventTypeSelector.set(false);
 
     this.showEventForm.set(false);
   }
 
   selectEventType(type: OpportunityEventType): void {
-    this.selectedEventType.set(type);
+    this.currentEventType.set(type);
 
-    this.showEventTypeMenu.set(false);
+    this.showEventTypeSelector.set(false);
   }
 
   toggleEventTypeMenu(): void {
-    this.showEventTypeMenu.update((value) => !value);
+    this.showEventTypeSelector.update((value) => !value);
+  }
+
+  /*
+    Timeline events can be edited directly
+    from the opportunity history.
+  */
+  startEventEdit(event: OpportunityEvent): void {
+    this.showEventForm.set(false);
+
+    this.showEventTypeSelector.set(false);
+
+    this.currentEventType.set(event.type);
+
+    this.editingEventId.set(event.id);
+  }
+
+  /*
+    Cancel inline editing and restore
+    the compact timeline presentation.
+  */
+  cancelEventEdit(): void {
+    this.editingEventId.set(null);
+  }
+
+  /*
+    Event updates are emitted upward so the
+    parent remains the source of truth.
+  */
+  updateEvent(eventId: string, type: OpportunityEventType, comment?: string): void {
+    this.eventUpdate.emit({
+      eventId,
+      type,
+      comment,
+    });
+
+    this.cancelEventEdit();
+  }
+
+  isEditableEvent(event: OpportunityEvent): boolean {
+    return this.manualEventTypes.some((eventType) => eventType.value === event.type);
   }
 }

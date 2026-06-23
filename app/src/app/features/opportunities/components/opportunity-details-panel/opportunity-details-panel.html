@@ -306,13 +306,13 @@
               {{ selectedEventTypeLabel() }}
             </button>
 
-            @if (showEventTypeMenu()) {
+            @if (showEventTypeSelector()) {
               <div class="status-dropdown">
                 @for (eventType of manualEventTypes; track eventType.value) {
                   <button
                     type="button"
                     class="status-option"
-                    [class.status-option-active]="selectedEventType() === eventType.value"
+                    [class.status-option-active]="currentEventType() === eventType.value"
                     (click)="selectEventType(eventType.value)"
                   >
                     {{ eventType.label }}
@@ -332,7 +332,7 @@
           <button
             type="button"
             class="action-button action-button-primary"
-            (click)="addEvent(selectedEventType(), eventComment.value)"
+            (click)="addEvent(currentEventType(), eventComment.value)"
           >
             Ajouter
           </button>
@@ -344,27 +344,105 @@
 
     <div class="timeline">
       @for (event of sortedEvents(); track event.id) {
-        <div class="timeline-event">
-          <div class="timeline-marker"></div>
+        @if (editingEventId() === event.id) {
+          <div class="event-form">
+            <div class="form-field">
+              <span>Type d'évènement</span>
 
-          <div class="timeline-content">
-            <div class="timeline-meta">
-              <strong>
-                {{ getEventLabel(event) }}
-              </strong>
+              <div class="status-menu">
+                <button type="button" class="action-button" (click)="toggleEventTypeMenu()">
+                  {{ selectedEventTypeLabel() }}
+                </button>
 
-              <span>
-                {{ event.createdAt | dateFormat: 'date' }}
-              </span>
+                @if (showEventTypeSelector()) {
+                  <div class="status-dropdown">
+                    @for (eventType of manualEventTypes; track eventType.value) {
+                      <button
+                        type="button"
+                        class="status-option"
+                        [class.status-option-active]="currentEventType() === eventType.value"
+                        (click)="selectEventType(eventType.value)"
+                      >
+                        {{ eventType.label }}
+                      </button>
+                    }
+                  </div>
+                }
+              </div>
             </div>
 
-            @if (event.comment) {
-              <p>
-                {{ event.comment }}
-              </p>
-            }
+            <div class="form-field">
+              <span>Commentaire</span>
+
+              <textarea
+                #editComment
+                rows="4"
+                class="form-textarea"
+                [value]="event.comment"
+              ></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="button"
+                class="action-button action-button-primary"
+                (click)="updateEvent(event.id, currentEventType(), editComment.value)"
+              >
+                Sauvegarder
+              </button>
+
+              <button type="button" class="action-button" (click)="cancelEventEdit()">
+                Annuler
+              </button>
+            </div>
           </div>
-        </div>
+        } @else {
+          @if (isEditableEvent(event)) {
+            <button type="button" class="timeline-event-button" (click)="startEventEdit(event)">
+              <div class="timeline-marker"></div>
+
+              <div class="timeline-content">
+                <div class="timeline-meta">
+                  <strong>
+                    {{ getEventLabel(event) }}
+                  </strong>
+
+                  <span>
+                    {{ event.createdAt | dateFormat: 'date' }}
+                  </span>
+                </div>
+
+                @if (event.comment) {
+                  <p>
+                    {{ event.comment }}
+                  </p>
+                }
+              </div>
+            </button>
+          } @else {
+            <div class="timeline-event">
+              <div class="timeline-marker"></div>
+
+              <div class="timeline-content">
+                <div class="timeline-meta">
+                  <strong>
+                    {{ getEventLabel(event) }}
+                  </strong>
+
+                  <span>
+                    {{ event.createdAt | dateFormat: 'date' }}
+                  </span>
+                </div>
+
+                @if (event.comment) {
+                  <p>
+                    {{ event.comment }}
+                  </p>
+                }
+              </div>
+            </div>
+          }
+        }
       }
     </div>
   </div>

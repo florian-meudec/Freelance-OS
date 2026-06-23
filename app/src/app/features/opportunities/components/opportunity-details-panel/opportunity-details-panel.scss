@@ -280,7 +280,6 @@
   into a compact chronological layout.
 */
 .timeline-event {
-  position: relative;
   display: flex;
   gap: $spacing-md;
 }
@@ -429,4 +428,31 @@
   border-radius: $radius-lg;
 
   background: $surface-secondary;
+}
+
+.timeline-event-button {
+  display: flex;
+  gap: $spacing-md;
+
+  width: 100%;
+
+  padding: $spacing-md;
+
+  border: 1px solid $border-color;
+  border-radius: $radius-lg;
+
+  background: $surface-secondary;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.15s ease,
+    transform 0.15s ease;
+
+  &:hover {
+    border-color: $interactive-primary;
+    transform: translateY(-1px);
+  }
 }
