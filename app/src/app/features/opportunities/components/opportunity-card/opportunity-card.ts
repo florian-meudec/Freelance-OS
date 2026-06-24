@@ -45,7 +45,9 @@ export class OpportunityCard {
     Urgency is derived from the next follow-up date
     to keep visual prioritization centralized.
   */
-  readonly urgency = computed(() => calculateOpportunityUrgency(this.opportunity().nextActionDate));
+  readonly urgency = computed(() =>
+    calculateOpportunityUrgency(this.opportunity().nextAction?.dueDate),
+  );
 
   /*
     Maps urgency values to CSS modifier classes

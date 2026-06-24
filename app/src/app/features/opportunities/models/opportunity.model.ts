@@ -8,6 +8,7 @@ import {
 } from '../constants/opportunity.constants';
 
 import { OpportunityEvent } from './opportunity-event.model';
+import { NextAction } from './next-action.model';
 import { Note } from '../../../shared/models/note.model';
 
 /*
@@ -62,8 +63,7 @@ export interface Opportunity {
   modality: OpportunityModality;
   location: string;
 
-  nextAction: string;
-  nextActionDate: string;
+  nextAction: NextAction | null;
 
   /*
     Timeline history centralizes important

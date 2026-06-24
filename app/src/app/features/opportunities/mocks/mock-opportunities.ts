@@ -44,8 +44,11 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     modality: OPPORTUNITY_MODALITIES.HYBRID.value,
     location: 'Zürich',
 
-    nextAction: 'Premier contact LinkedIn',
-    nextActionDate: '2026-05-20',
+    nextAction: {
+      type: OPPORTUNITY_EVENT_TYPES.EMAIL.value,
+      label: 'Premier contact LinkedIn',
+      dueDate: '2026-05-20',
+    },
 
     events: [
       {
@@ -134,8 +137,11 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     modality: OPPORTUNITY_MODALITIES.REMOTE.value,
     location: 'Berne',
 
-    nextAction: 'Envoyer proposition commerciale',
-    nextActionDate: '2026-05-22',
+    nextAction: {
+      type: OPPORTUNITY_EVENT_TYPES.EMAIL.value,
+      label: 'Envoyer proposition commerciale',
+      dueDate: '2026-05-22',
+    },
 
     events: [
       {
@@ -215,8 +221,11 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     modality: OPPORTUNITY_MODALITIES.REMOTE.value,
     location: 'Paris',
 
-    nextAction: 'Validation budget',
-    nextActionDate: '2026-05-21',
+    nextAction: {
+      type: OPPORTUNITY_EVENT_TYPES.EMAIL.value,
+      label: 'Validation budget',
+      dueDate: '2026-05-21',
+    },
 
     events: [
       {
@@ -306,8 +315,11 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     modality: OPPORTUNITY_MODALITIES.HYBRID.value,
     location: 'Lyon',
 
-    nextAction: 'Entretien technique',
-    nextActionDate: '2026-05-20',
+    nextAction: {
+      type: OPPORTUNITY_EVENT_TYPES.CALL.value,
+      label: 'Entretien technique',
+      dueDate: '2026-07-01',
+    },
 
     events: [
       {

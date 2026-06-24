@@ -19,7 +19,11 @@ const normalizeDateOnly = (date: Date): Date => {
   Converts follow-up dates into urgency levels
   used by the board visual prioritization system.
 */
-export const calculateOpportunityUrgency = (nextActionDate: string): OpportunityUrgency => {
+export const calculateOpportunityUrgency = (nextActionDate?: string): OpportunityUrgency => {
+  if (!nextActionDate) {
+    return OPPORTUNITY_URGENCIES.WAITING.value;
+  }
+
   const nextActionDateNormalized = normalizeDateOnly(new Date(nextActionDate));
 
   const today = normalizeDateOnly(new Date());

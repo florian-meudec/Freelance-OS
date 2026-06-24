@@ -11,6 +11,7 @@ import {
 
 import { MOCK_OPPORTUNITIES } from '../../mocks/mock-opportunities';
 import { OpportunityEventType } from '../../models/opportunity-event.model';
+import { NextAction } from '../../models/next-action.model';
 
 /*
   Columns act as drop zones for kanban interactions.
@@ -420,6 +421,62 @@ export class OpportunitiesBoard {
       ...selected,
 
       events: selected.events.filter((event) => event.id !== eventId),
+    };
+
+    this.opportunities.update((opportunities) =>
+      opportunities.map((opportunity) =>
+        opportunity.id === updatedOpportunity.id ? updatedOpportunity : opportunity,
+      ),
+    );
+
+    this.selectedOpportunity.set(updatedOpportunity);
+  }
+
+  completeNextAction(): void {
+    const selected = this.selectedOpportunity();
+
+    if (!selected?.nextAction) {
+      return;
+    }
+
+    const updatedOpportunity = {
+      ...selected,
+
+      events: [
+        ...selected.events,
+
+        {
+          id: crypto.randomUUID(),
+
+          type: selected.nextAction.type,
+
+          comment: selected.nextAction.label,
+
+          createdAt: new Date().toISOString(),
+        },
+      ],
+    };
+
+    this.opportunities.update((opportunities) =>
+      opportunities.map((opportunity) =>
+        opportunity.id === updatedOpportunity.id ? updatedOpportunity : opportunity,
+      ),
+    );
+
+    this.selectedOpportunity.set(updatedOpportunity);
+  }
+
+  onNextActionUpdate(nextAction: NextAction): void {
+    const selected = this.selectedOpportunity();
+
+    if (!selected) {
+      return;
+    }
+
+    const updatedOpportunity = {
+      ...selected,
+
+      nextAction,
     };
 
     this.opportunities.update((opportunities) =>

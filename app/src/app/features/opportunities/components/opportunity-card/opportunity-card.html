@@ -42,11 +42,13 @@
       to keep the board focused on ongoing opportunities.
     -->
     <div class="card-follow-up">
-      <strong>{{ opportunity().nextAction }}</strong>
+      @if (opportunity().nextAction; as nextAction) {
+        <strong>{{ nextAction.label }}</strong>
 
-      <span>
-        {{ opportunity().nextActionDate | dateFormat: 'date' }}
-      </span>
+        <span>
+          {{ nextAction.dueDate | dateFormat: 'date' }}
+        </span>
+      }
     </div>
   </div>
 </div>

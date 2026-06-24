@@ -61,7 +61,7 @@
           scheduling dated follow-up actions directly
           from the opportunity panel.
         -->
-        <button type="button" class="action-button">Ajouter action</button>
+        <button type="button" class="action-button">Prochaine action</button>
       </div>
     </div>
   </div>
@@ -172,23 +172,94 @@
     <div class="details-subsection">
       <h4>Suivi</h4>
 
-      <div class="details-grid">
-        <div>
-          <span>Prochaine action</span>
+      @if (opportunity().nextAction; as nextAction) {
+        @if (editingNextAction()) {
+          <div class="event-form">
+            <div class="form-field">
+              <span>Type d'action</span>
 
-          <strong>
-            {{ opportunity().nextAction }}
-          </strong>
-        </div>
+              <div class="status-menu">
+                <button type="button" class="action-button" (click)="toggleEventTypeMenu()">
+                  {{ currentNextActionTypeLabel() }}
+                </button>
 
-        <div>
-          <span>Date</span>
+                @if (showEventTypeSelector()) {
+                  <div class="status-dropdown">
+                    @for (eventType of manualEventTypes; track eventType.value) {
+                      <button
+                        type="button"
+                        class="status-option"
+                        [class.status-option-active]="currentNextActionType() === eventType.value"
+                        (click)="selectNextActionType(eventType.value)"
+                      >
+                        {{ eventType.label }}
+                      </button>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
 
-          <strong>
-            {{ opportunity().nextActionDate | dateFormat: 'date' }}
-          </strong>
-        </div>
-      </div>
+            <label class="form-field">
+              <span>Description</span>
+
+              <input
+                #nextActionLabel
+                class="form-input"
+                [value]="creatingNextAction() ? '' : nextAction.label"
+              />
+            </label>
+
+            <label class="form-field">
+              <span>Date</span>
+
+              <input
+                #nextActionDate
+                type="date"
+                class="form-input"
+                [value]="creatingNextAction() ? '' : nextAction.dueDate"
+              />
+            </label>
+
+            <div class="form-actions">
+              <button
+                type="button"
+                class="action-button action-button-primary"
+                (click)="saveNextAction(nextActionLabel.value, nextActionDate.value)"
+              >
+                Sauvegarder
+              </button>
+              <button type="button" class="action-button" (click)="cancelNextActionEdit()">
+                Annuler
+              </button>
+            </div>
+          </div>
+        } @else {
+          <div class="next-action-card">
+            <strong>
+              {{ nextAction.label }}
+            </strong>
+
+            <span>
+              {{ nextAction.dueDate | dateFormat: 'date' }}
+            </span>
+
+            <div class="form-actions">
+              <button type="button" class="action-button" (click)="startNextActionEdit()">
+                Modifier
+              </button>
+
+              <button
+                type="button"
+                class="action-button action-button-primary"
+                (click)="completeNextAction()"
+              >
+                Terminer l'action
+              </button>
+            </div>
+          </div>
+        }
+      }
     </div>
 
     <div class="details-subsection">

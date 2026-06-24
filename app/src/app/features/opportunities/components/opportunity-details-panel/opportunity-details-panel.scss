@@ -456,3 +456,25 @@
     transform: translateY(-1px);
   }
 }
+
+.next-action-card {
+  display: flex;
+  flex-direction: column;
+
+  gap: $spacing-md;
+
+  padding: $spacing-lg;
+
+  border: 1px solid $border-color;
+  border-radius: $radius-lg;
+
+  background: $surface-secondary;
+
+  strong {
+    font-size: $text-md;
+  }
+
+  span {
+    color: $text-secondary;
+  }
+}

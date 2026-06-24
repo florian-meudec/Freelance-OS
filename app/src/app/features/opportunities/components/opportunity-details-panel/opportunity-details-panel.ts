@@ -16,6 +16,7 @@ import {
   OPPORTUNITY_EVENT_TYPES,
   OPPORTUNITY_STATUSES,
 } from '../../constants/opportunity.constants';
+import { NextAction } from '../../models/next-action.model';
 
 @Component({
   selector: 'app-opportunity-details-panel',
@@ -160,6 +161,22 @@ export class OpportunityDetailsPanel {
 
   readonly deletingEventId = signal<string | null>(null);
 
+  readonly editingNextAction = signal(false);
+
+  readonly currentNextActionType = signal<OpportunityEventType>(this.manualEventTypes[0].value);
+
+  readonly nextActionUpdate = output<NextAction>();
+
+  readonly currentNextActionTypeLabel = computed(
+    () =>
+      this.manualEventTypes.find((eventType) => eventType.value === this.currentNextActionType())
+        ?.label ?? '',
+  );
+
+  readonly nextActionComplete = output<void>();
+
+  readonly creatingNextAction = signal(false);
+
   closePanel(): void {
     this.panelClose.emit();
   }
@@ -300,5 +317,54 @@ export class OpportunityDetailsPanel {
     this.deletingEventId.set(null);
 
     this.cancelEventEdit();
+  }
+
+  startNextActionEdit(): void {
+    const nextAction = this.opportunity().nextAction;
+
+    if (!nextAction) {
+      return;
+    }
+
+    this.showEventTypeSelector.set(false);
+
+    this.creatingNextAction.set(false);
+
+    this.currentNextActionType.set(nextAction.type);
+
+    this.editingNextAction.set(true);
+  }
+
+  cancelNextActionEdit(): void {
+    this.editingNextAction.set(false);
+    this.creatingNextAction.set(false);
+    this.showEventTypeSelector.set(false);
+  }
+
+  selectNextActionType(type: OpportunityEventType): void {
+    this.currentNextActionType.set(type);
+
+    this.showEventTypeSelector.set(false);
+  }
+
+  saveNextAction(label: string, dueDate: string): void {
+    this.nextActionUpdate.emit({
+      type: this.currentNextActionType(),
+      label,
+      dueDate,
+    });
+
+    this.editingNextAction.set(false);
+    this.creatingNextAction.set(false);
+  }
+
+  completeNextAction(): void {
+    this.nextActionComplete.emit();
+
+    this.creatingNextAction.set(true);
+
+    this.editingNextAction.set(true);
+
+    this.currentNextActionType.set(this.manualEventTypes[0].value);
   }
 }
