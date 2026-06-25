@@ -61,7 +61,13 @@
           scheduling dated follow-up actions directly
           from the opportunity panel.
         -->
-        <button type="button" class="action-button">Prochaine action</button>
+        <button
+          type="button"
+          class="action-button"
+          (click)="openNextAction(opportunity().nextAction ? 'edit' : 'create')"
+        >
+          Prochaine action
+        </button>
       </div>
     </div>
   </div>
@@ -173,17 +179,17 @@
       <h4>Suivi</h4>
 
       @if (opportunity().nextAction; as nextAction) {
-        @if (editingNextAction()) {
+        @if (nextActionMode() !== 'view') {
           <div class="event-form">
             <div class="form-field">
               <span>Type d'action</span>
 
               <div class="status-menu">
-                <button type="button" class="action-button" (click)="toggleEventTypeMenu()">
+                <button type="button" class="action-button" (click)="toggleNextActionTypeMenu()">
                   {{ currentNextActionTypeLabel() }}
                 </button>
 
-                @if (showEventTypeSelector()) {
+                @if (showNextActionTypeSelector()) {
                   <div class="status-dropdown">
                     @for (eventType of manualEventTypes; track eventType.value) {
                       <button
@@ -206,7 +212,7 @@
               <input
                 #nextActionLabel
                 class="form-input"
-                [value]="creatingNextAction() ? '' : nextAction.label"
+                [value]="nextActionMode() === 'create' ? '' : nextAction.label"
               />
             </label>
 
@@ -217,7 +223,7 @@
                 #nextActionDate
                 type="date"
                 class="form-input"
-                [value]="creatingNextAction() ? '' : nextAction.dueDate"
+                [value]="nextActionMode() === 'create' ? '' : nextAction.dueDate"
               />
             </label>
 
@@ -229,7 +235,7 @@
               >
                 Sauvegarder
               </button>
-              <button type="button" class="action-button" (click)="cancelNextActionEdit()">
+              <button type="button" class="action-button" (click)="closeNextAction()">
                 Annuler
               </button>
             </div>
@@ -245,7 +251,7 @@
             </span>
 
             <div class="form-actions">
-              <button type="button" class="action-button" (click)="startNextActionEdit()">
+              <button type="button" class="action-button" (click)="openNextAction('edit')">
                 Modifier
               </button>
 

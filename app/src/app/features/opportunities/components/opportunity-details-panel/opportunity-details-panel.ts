@@ -161,9 +161,9 @@ export class OpportunityDetailsPanel {
 
   readonly deletingEventId = signal<string | null>(null);
 
-  readonly editingNextAction = signal(false);
-
   readonly currentNextActionType = signal<OpportunityEventType>(this.manualEventTypes[0].value);
+
+  readonly showNextActionTypeSelector = signal(false);
 
   readonly nextActionUpdate = output<NextAction>();
 
@@ -175,7 +175,7 @@ export class OpportunityDetailsPanel {
 
   readonly nextActionComplete = output<void>();
 
-  readonly creatingNextAction = signal(false);
+  readonly nextActionMode = signal<NextActionMode>('view');
 
   closePanel(): void {
     this.panelClose.emit();
@@ -319,32 +319,37 @@ export class OpportunityDetailsPanel {
     this.cancelEventEdit();
   }
 
-  startNextActionEdit(): void {
+  /*
+    The next action card supports several
+    workflow modes while sharing the same UI.
+  */
+  openNextAction(mode: NextActionMode): void {
+    this.showNextActionTypeSelector.set(false);
+
+    this.nextActionMode.set(mode);
+
     const nextAction = this.opportunity().nextAction;
 
-    if (!nextAction) {
-      return;
+    if (mode === 'edit' && nextAction) {
+      this.currentNextActionType.set(nextAction.type);
+    } else {
+      this.currentNextActionType.set(this.manualEventTypes[0].value);
     }
-
-    this.showEventTypeSelector.set(false);
-
-    this.creatingNextAction.set(false);
-
-    this.currentNextActionType.set(nextAction.type);
-
-    this.editingNextAction.set(true);
   }
 
-  cancelNextActionEdit(): void {
-    this.editingNextAction.set(false);
-    this.creatingNextAction.set(false);
-    this.showEventTypeSelector.set(false);
+  closeNextAction(): void {
+    this.nextActionMode.set('view');
+    this.showNextActionTypeSelector.set(false);
   }
 
   selectNextActionType(type: OpportunityEventType): void {
     this.currentNextActionType.set(type);
 
-    this.showEventTypeSelector.set(false);
+    this.showNextActionTypeSelector.set(false);
+  }
+
+  toggleNextActionTypeMenu(): void {
+    this.showNextActionTypeSelector.update((value) => !value);
   }
 
   saveNextAction(label: string, dueDate: string): void {
@@ -354,17 +359,12 @@ export class OpportunityDetailsPanel {
       dueDate,
     });
 
-    this.editingNextAction.set(false);
-    this.creatingNextAction.set(false);
+    this.closeNextAction();
   }
 
   completeNextAction(): void {
     this.nextActionComplete.emit();
 
-    this.creatingNextAction.set(true);
-
-    this.editingNextAction.set(true);
-
-    this.currentNextActionType.set(this.manualEventTypes[0].value);
+    this.openNextAction('create');
   }
 }
