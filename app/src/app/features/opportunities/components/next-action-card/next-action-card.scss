@@ -1,0 +1,137 @@
+@use '../../../../../styles/colors' as *;
+@use '../../../../../styles/radius' as *;
+@use '../../../../../styles/spacing' as *;
+@use '../../../../../styles/typography' as *;
+@use '../../../../../styles/forms' as *;
+
+.next-action-card {
+  display: flex;
+  flex-direction: column;
+
+  gap: $spacing-md;
+
+  padding: $spacing-lg;
+
+  border: 1px solid $border-color;
+  border-radius: $radius-lg;
+
+  background: $surface-secondary;
+
+  strong {
+    font-size: $text-md;
+  }
+
+  span {
+    color: $text-secondary;
+  }
+}
+
+/*
+  Subsections improve readability inside
+  dense CRM information blocks.
+*/
+.details-subsection {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.details-subsection h4 {
+  margin: 0;
+  font-size: $text-sm;
+  color: $text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/*
+  Timeline event creation remains visually
+  separated from historical activity.
+*/
+.event-form {
+  display: flex;
+  flex-direction: column;
+
+  gap: $spacing-md;
+
+  margin-bottom: $spacing-lg;
+
+  padding: $spacing-md;
+
+  border: 1px solid $border-color;
+  border-radius: $radius-lg;
+
+  background: $surface-secondary;
+}
+
+/*
+  Status menu isolates workflow actions
+  from surrounding layout constraints.
+*/
+.status-menu {
+  position: relative;
+}
+
+/*
+  Dropdown overlays the panel instead of
+  affecting surrounding action layouts.
+*/
+.status-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 10;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  width: 100%;
+  padding: $spacing-xs;
+
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+
+  background: $surface-primary;
+  box-shadow: $shadow-panel;
+}
+
+/*
+  Workflow status options remain lightweight
+  to preserve compact CRM interactions.
+*/
+.status-option {
+  border: none;
+  padding: $spacing-sm;
+
+  border-radius: $radius-sm;
+
+  background: transparent;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  font-size: $text-sm;
+
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: $surface-secondary;
+  }
+}
+
+/*
+  The current workflow status remains visible
+  while preventing redundant state changes.
+*/
+.status-option-active {
+  background: $surface-secondary;
+  color: $text-secondary;
+  cursor: default;
+  font-weight: 600;
+
+  &:hover {
+    background: $surface-secondary;
+  }
+}

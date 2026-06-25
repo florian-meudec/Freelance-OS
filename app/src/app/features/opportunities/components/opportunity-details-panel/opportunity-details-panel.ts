@@ -17,6 +17,7 @@ import {
   OPPORTUNITY_STATUSES,
 } from '../../constants/opportunity.constants';
 import { NextAction } from '../../models/next-action.model';
+import { NextActionCard } from '../next-action-card/next-action-card';
 
 @Component({
   selector: 'app-opportunity-details-panel',
@@ -32,6 +33,7 @@ import { NextAction } from '../../models/next-action.model';
     OpportunitySeniorityPipe,
     TjmPipe,
     WorkloadPipe,
+    NextActionCard,
   ],
 
   templateUrl: './opportunity-details-panel.html',
@@ -39,6 +41,12 @@ import { NextAction } from '../../models/next-action.model';
   styleUrl: './opportunity-details-panel.scss',
 })
 export class OpportunityDetailsPanel {
+  readonly manualEventTypes = [
+    OPPORTUNITY_EVENT_TYPES.CALL,
+    OPPORTUNITY_EVENT_TYPES.EMAIL,
+    OPPORTUNITY_EVENT_TYPES.MEETING,
+  ];
+
   /*
     The selected opportunity is controlled
     by the board container component.
@@ -73,22 +81,18 @@ export class OpportunityDetailsPanel {
   readonly statuses = Object.values(OPPORTUNITY_STATUSES);
 
   /*
-    Only user-generated event types are exposed
-    through the manual timeline workflow.
-  */
-  readonly manualEventTypes = [
-    OPPORTUNITY_EVENT_TYPES.CALL,
-    OPPORTUNITY_EVENT_TYPES.EMAIL,
-    OPPORTUNITY_EVENT_TYPES.MEETING,
-  ];
-
-  /*
     Status menu visibility is handled locally
     to keep workflow interactions lightweight.
   */
   readonly showStatusMenu = signal(false);
 
   readonly notesComponent = viewChild(Notes);
+
+  /*
+    The next action workflow is delegated
+    to its dedicated component.
+  */
+  readonly nextActionComponent = viewChild(NextActionCard);
 
   /*
     Notes are created by the board container
@@ -161,21 +165,9 @@ export class OpportunityDetailsPanel {
 
   readonly deletingEventId = signal<string | null>(null);
 
-  readonly currentNextActionType = signal<OpportunityEventType>(this.manualEventTypes[0].value);
-
-  readonly showNextActionTypeSelector = signal(false);
-
   readonly nextActionUpdate = output<NextAction>();
 
-  readonly currentNextActionTypeLabel = computed(
-    () =>
-      this.manualEventTypes.find((eventType) => eventType.value === this.currentNextActionType())
-        ?.label ?? '',
-  );
-
   readonly nextActionComplete = output<void>();
-
-  readonly nextActionMode = signal<NextActionMode>('view');
 
   closePanel(): void {
     this.panelClose.emit();
@@ -320,51 +312,10 @@ export class OpportunityDetailsPanel {
   }
 
   /*
-    The next action card supports several
-    workflow modes while sharing the same UI.
+    Delegate the workflow opening to the
+    dedicated next action component.
   */
-  openNextAction(mode: NextActionMode): void {
-    this.showNextActionTypeSelector.set(false);
-
-    this.nextActionMode.set(mode);
-
-    const nextAction = this.opportunity().nextAction;
-
-    if (mode === 'edit' && nextAction) {
-      this.currentNextActionType.set(nextAction.type);
-    } else {
-      this.currentNextActionType.set(this.manualEventTypes[0].value);
-    }
-  }
-
-  closeNextAction(): void {
-    this.nextActionMode.set('view');
-    this.showNextActionTypeSelector.set(false);
-  }
-
-  selectNextActionType(type: OpportunityEventType): void {
-    this.currentNextActionType.set(type);
-
-    this.showNextActionTypeSelector.set(false);
-  }
-
-  toggleNextActionTypeMenu(): void {
-    this.showNextActionTypeSelector.update((value) => !value);
-  }
-
-  saveNextAction(label: string, dueDate: string): void {
-    this.nextActionUpdate.emit({
-      type: this.currentNextActionType(),
-      label,
-      dueDate,
-    });
-
-    this.closeNextAction();
-  }
-
-  completeNextAction(): void {
-    this.nextActionComplete.emit();
-
-    this.openNextAction('create');
+  openNextAction(): void {
+    this.nextActionComponent()?.open();
   }
 }
