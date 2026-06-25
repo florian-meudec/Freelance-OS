@@ -167,13 +167,11 @@
       </p>
     </div>
 
-    <div class="details-section">
-      <app-next-action-card
-        [nextAction]="opportunity().nextAction"
-        (update)="nextActionUpdate.emit($event)"
-        (complete)="nextActionComplete.emit()"
-      />
-    </div>
+    <app-next-action-card
+      [nextAction]="opportunity().nextAction"
+      (update)="nextActionUpdate.emit($event)"
+      (complete)="nextActionComplete.emit()"
+    />
 
     <div class="details-subsection">
       <h4>Conditions</h4>
@@ -263,199 +261,13 @@
     </div>
   </div>
 
-  <!--
-  Timeline centralizes the opportunity lifecycle
-  and important business interactions.
--->
   <div class="details-section">
-    <div class="timeline-header">
-      <h3>Timeline</h3>
-
-      <button type="button" class="timeline-add-button" (click)="toggleEventForm()">
-        Ajouter un évènement
-      </button>
-    </div>
-
-    @if (showEventForm()) {
-      <!--
-      Inline timeline event creation keeps
-      workflow history contextual and lightweight.
-    -->
-      <div class="event-form">
-        <div class="form-field">
-          <span>Type d'évènement</span>
-
-          <div class="status-menu">
-            <button type="button" class="action-button" (click)="toggleEventTypeMenu()">
-              {{ selectedEventTypeLabel() }}
-            </button>
-
-            @if (showEventTypeSelector()) {
-              <div class="status-dropdown">
-                @for (eventType of manualEventTypes; track eventType.value) {
-                  <button
-                    type="button"
-                    class="status-option"
-                    [class.status-option-active]="currentEventType() === eventType.value"
-                    (click)="selectEventType(eventType.value)"
-                  >
-                    {{ eventType.label }}
-                  </button>
-                }
-              </div>
-            }
-          </div>
-        </div>
-
-        <label class="form-field">
-          <span>Commentaire</span>
-
-          <textarea #eventComment rows="4" class="form-textarea"></textarea>
-        </label>
-        <div class="form-actions">
-          <button
-            type="button"
-            class="action-button action-button-primary"
-            (click)="addEvent(currentEventType(), eventComment.value)"
-          >
-            Ajouter
-          </button>
-
-          <button type="button" class="action-button" (click)="toggleEventForm()">Annuler</button>
-        </div>
-      </div>
-    }
-
-    <div class="timeline">
-      @for (event of sortedEvents(); track event.id) {
-        @if (editingEventId() === event.id) {
-          <div class="event-form">
-            <div class="form-field">
-              <span>Type d'évènement</span>
-
-              <div class="status-menu">
-                <button type="button" class="action-button" (click)="toggleEventTypeMenu()">
-                  {{ selectedEventTypeLabel() }}
-                </button>
-
-                @if (showEventTypeSelector()) {
-                  <div class="status-dropdown">
-                    @for (eventType of manualEventTypes; track eventType.value) {
-                      <button
-                        type="button"
-                        class="status-option"
-                        [class.status-option-active]="currentEventType() === eventType.value"
-                        (click)="selectEventType(eventType.value)"
-                      >
-                        {{ eventType.label }}
-                      </button>
-                    }
-                  </div>
-                }
-              </div>
-            </div>
-
-            <div class="form-field">
-              <span>Commentaire</span>
-
-              <textarea
-                #editComment
-                rows="4"
-                class="form-textarea"
-                [value]="event.comment"
-              ></textarea>
-            </div>
-
-            <div class="form-actions">
-              <button
-                type="button"
-                class="action-button action-button-primary"
-                (click)="updateEvent(event.id, currentEventType(), editComment.value)"
-              >
-                Sauvegarder
-              </button>
-
-              <button type="button" class="action-button" (click)="cancelEventEdit()">
-                Annuler
-              </button>
-            </div>
-            @if (deletingEventId() === event.id) {
-              <div class="delete-confirmation">
-                <p>Confirmer suppression ?</p>
-
-                <div class="form-actions">
-                  <button
-                    type="button"
-                    class="action-button action-button-danger"
-                    (click)="deleteEvent(event.id)"
-                  >
-                    Supprimer
-                  </button>
-
-                  <button type="button" class="action-button" (click)="cancelEventDelete()">
-                    Annuler
-                  </button>
-                </div>
-              </div>
-            } @else {
-              <button
-                type="button"
-                class="action-button action-button-danger"
-                (click)="confirmEventDelete(event.id)"
-              >
-                Supprimer
-              </button>
-            }
-          </div>
-        } @else {
-          @if (isEditableEvent(event)) {
-            <button type="button" class="timeline-event-button" (click)="startEventEdit(event)">
-              <div class="timeline-marker"></div>
-
-              <div class="timeline-content">
-                <div class="timeline-meta">
-                  <strong>
-                    {{ getEventLabel(event) }}
-                  </strong>
-
-                  <span>
-                    {{ event.createdAt | dateFormat: 'date' }}
-                  </span>
-                </div>
-
-                @if (event.comment) {
-                  <p>
-                    {{ event.comment }}
-                  </p>
-                }
-              </div>
-            </button>
-          } @else {
-            <div class="timeline-event">
-              <div class="timeline-marker"></div>
-
-              <div class="timeline-content">
-                <div class="timeline-meta">
-                  <strong>
-                    {{ getEventLabel(event) }}
-                  </strong>
-
-                  <span>
-                    {{ event.createdAt | dateFormat: 'date' }}
-                  </span>
-                </div>
-
-                @if (event.comment) {
-                  <p>
-                    {{ event.comment }}
-                  </p>
-                }
-              </div>
-            </div>
-          }
-        }
-      }
-    </div>
+    <app-timeline
+      [events]="opportunity().events"
+      (add)="eventAdd.emit($event)"
+      (update)="eventUpdate.emit($event)"
+      (delete)="eventDelete.emit($event)"
+    />
   </div>
 
   <!--

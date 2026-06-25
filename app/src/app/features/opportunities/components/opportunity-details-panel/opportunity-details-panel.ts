@@ -1,4 +1,4 @@
-import { Component, computed, input, output, signal, viewChild } from '@angular/core';
+import { Component, input, output, signal, viewChild } from '@angular/core';
 
 import { Opportunity, OpportunityStatus } from '../../models/opportunity.model';
 
@@ -11,13 +11,14 @@ import { OpportunityModalityPipe } from '../../../../shared/pipes/opportunity-mo
 import { OpportunitySeniorityPipe } from '../../../../shared/pipes/opportunity-seniority-pipe';
 import { TjmPipe } from '../../../../shared/pipes/tjm-pipe';
 import { WorkloadPipe } from '../../../../shared/pipes/workload-pipe';
-import { OpportunityEvent, OpportunityEventType } from '../../models/opportunity-event.model';
-import {
-  OPPORTUNITY_EVENT_TYPES,
-  OPPORTUNITY_STATUSES,
-} from '../../constants/opportunity.constants';
+
+import { OpportunityEventType } from '../../models/opportunity-event.model';
 import { NextAction } from '../../models/next-action.model';
+
+import { OPPORTUNITY_STATUSES } from '../../constants/opportunity.constants';
+
 import { NextActionCard } from '../next-action-card/next-action-card';
+import { Timeline } from '../timeline/timeline';
 
 @Component({
   selector: 'app-opportunity-details-panel',
@@ -34,6 +35,7 @@ import { NextActionCard } from '../next-action-card/next-action-card';
     TjmPipe,
     WorkloadPipe,
     NextActionCard,
+    Timeline,
   ],
 
   templateUrl: './opportunity-details-panel.html',
@@ -41,12 +43,6 @@ import { NextActionCard } from '../next-action-card/next-action-card';
   styleUrl: './opportunity-details-panel.scss',
 })
 export class OpportunityDetailsPanel {
-  readonly manualEventTypes = [
-    OPPORTUNITY_EVENT_TYPES.CALL,
-    OPPORTUNITY_EVENT_TYPES.EMAIL,
-    OPPORTUNITY_EVENT_TYPES.MEETING,
-  ];
-
   /*
     The selected opportunity is controlled
     by the board container component.
@@ -75,24 +71,16 @@ export class OpportunityDetailsPanel {
   }>();
 
   /*
-    Status options are generated directly from
-    business constants to preserve consistency.
+    Event updates are delegated upward
+    to centralize state mutations.
   */
-  readonly statuses = Object.values(OPPORTUNITY_STATUSES);
+  readonly eventUpdate = output<{
+    eventId: string;
+    type: OpportunityEventType;
+    comment?: string;
+  }>();
 
-  /*
-    Status menu visibility is handled locally
-    to keep workflow interactions lightweight.
-  */
-  readonly showStatusMenu = signal(false);
-
-  readonly notesComponent = viewChild(Notes);
-
-  /*
-    The next action workflow is delegated
-    to its dedicated component.
-  */
-  readonly nextActionComponent = viewChild(NextActionCard);
+  readonly eventDelete = output<string>();
 
   /*
     Notes are created by the board container
@@ -119,55 +107,29 @@ export class OpportunityDetailsPanel {
   */
   readonly noteDelete = output<string>();
 
-  /*
-    Event updates are delegated upward
-    to centralize state mutations.
-  */
-  readonly eventUpdate = output<{
-    eventId: string;
-    type: OpportunityEventType;
-    comment?: string;
-  }>();
-
-  /*
-    Timeline events are sorted from newest
-    to oldest to prioritize recent activity.
-  */
-  readonly sortedEvents = computed(() =>
-    [...this.opportunity().events].sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-    ),
-  );
-
-  /*
-    Lightweight timeline event creation
-    stays contextual inside the panel.
-  */
-  readonly showEventForm = signal(false);
-
-  readonly showEventTypeSelector = signal(false);
-
-  readonly currentEventType = signal<OpportunityEventType>(OPPORTUNITY_EVENT_TYPES.CALL.value);
-
-  /*
-    Inline event editing preserves context
-    while keeping timeline interactions lightweight.
-  */
-  readonly editingEventId = signal<string | null>(null);
-
-  readonly selectedEventTypeLabel = computed(
-    () =>
-      this.manualEventTypes.find((eventType) => eventType.value === this.currentEventType())
-        ?.label ?? '',
-  );
-
-  readonly eventDelete = output<string>();
-
-  readonly deletingEventId = signal<string | null>(null);
-
   readonly nextActionUpdate = output<NextAction>();
 
   readonly nextActionComplete = output<void>();
+
+  /*
+    Status options are generated directly from
+    business constants to preserve consistency.
+  */
+  readonly statuses = Object.values(OPPORTUNITY_STATUSES);
+
+  /*
+    Status menu visibility is handled locally
+    to keep workflow interactions lightweight.
+  */
+  readonly showStatusMenu = signal(false);
+
+  readonly notesComponent = viewChild(Notes);
+
+  /*
+    The next action workflow is delegated
+    to its dedicated component.
+  */
+  readonly nextActionComponent = viewChild(NextActionCard);
 
   closePanel(): void {
     this.panelClose.emit();
@@ -177,46 +139,10 @@ export class OpportunityDetailsPanel {
     this.showStatusMenu.update((value) => !value);
   }
 
-  /*
-    Timeline events can be created directly
-    from the opportunity workflow.
-  */
-  toggleEventForm(): void {
-    this.editingEventId.set(null);
-
-    const nextValue = !this.showEventForm();
-
-    this.showEventForm.set(nextValue);
-
-    if (!nextValue) {
-      this.currentEventType.set(this.manualEventTypes[0].value);
-      this.showEventTypeSelector.set(false);
-    }
-  }
-
   selectStatus(status: OpportunityStatus): void {
     this.statusChange.emit(status);
 
     this.showStatusMenu.set(false);
-  }
-
-  /*
-    Generate user-facing event labels
-    directly from timeline event data.
-  */
-  getEventLabel(event: OpportunityEvent): string {
-    if (event.type === OPPORTUNITY_EVENT_TYPES.STATUS_CHANGED.value && event.status) {
-      const statusLabel =
-        Object.values(OPPORTUNITY_STATUSES).find((status) => status.value === event.status)
-          ?.label ?? event.status;
-
-      return `Passage en statut ${statusLabel}`;
-    }
-
-    return (
-      Object.values(OPPORTUNITY_EVENT_TYPES).find((type) => type.value === event.type)?.label ??
-      event.type
-    );
   }
 
   /*
@@ -225,90 +151,6 @@ export class OpportunityDetailsPanel {
   */
   openQuickNoteForm(): void {
     this.notesComponent()?.openNoteForm();
-  }
-
-  /*
-    Event creation requests are emitted upward
-    so workflow history remains centralized.
-  */
-  addEvent(type: OpportunityEventType, comment?: string): void {
-    this.eventAdd.emit({
-      type,
-      comment,
-    });
-
-    this.currentEventType.set(this.manualEventTypes[0].value);
-    this.showEventTypeSelector.set(false);
-
-    this.showEventForm.set(false);
-  }
-
-  selectEventType(type: OpportunityEventType): void {
-    this.currentEventType.set(type);
-
-    this.showEventTypeSelector.set(false);
-  }
-
-  toggleEventTypeMenu(): void {
-    this.showEventTypeSelector.update((value) => !value);
-  }
-
-  /*
-    Timeline events can be edited directly
-    from the opportunity history.
-  */
-  startEventEdit(event: OpportunityEvent): void {
-    this.showEventForm.set(false);
-
-    this.showEventTypeSelector.set(false);
-
-    this.currentEventType.set(event.type);
-
-    this.editingEventId.set(event.id);
-  }
-
-  /*
-    Cancel inline editing and restore
-    the compact timeline presentation.
-  */
-  cancelEventEdit(): void {
-    this.deletingEventId.set(null);
-
-    this.editingEventId.set(null);
-  }
-
-  /*
-    Event updates are emitted upward so the
-    parent remains the source of truth.
-  */
-  updateEvent(eventId: string, type: OpportunityEventType, comment?: string): void {
-    this.eventUpdate.emit({
-      eventId,
-      type,
-      comment,
-    });
-
-    this.cancelEventEdit();
-  }
-
-  isEditableEvent(event: OpportunityEvent): boolean {
-    return this.manualEventTypes.some((eventType) => eventType.value === event.type);
-  }
-
-  confirmEventDelete(eventId: string): void {
-    this.deletingEventId.set(eventId);
-  }
-
-  cancelEventDelete(): void {
-    this.deletingEventId.set(null);
-  }
-
-  deleteEvent(eventId: string): void {
-    this.eventDelete.emit(eventId);
-
-    this.deletingEventId.set(null);
-
-    this.cancelEventEdit();
   }
 
   /*

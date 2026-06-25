@@ -1,0 +1,212 @@
+import { Component, computed, input, output, signal } from '@angular/core';
+
+import { DateFormatPipe } from '../../../../shared/pipes/date-format-pipe';
+
+import { OpportunityEvent, OpportunityEventType } from '../../models/opportunity-event.model';
+
+import {
+  OPPORTUNITY_EVENT_TYPES,
+  OPPORTUNITY_STATUSES,
+} from '../../constants/opportunity.constants';
+
+@Component({
+  selector: 'app-timeline',
+
+  standalone: true,
+
+  imports: [DateFormatPipe],
+
+  templateUrl: './timeline.html',
+
+  styleUrl: './timeline.scss',
+})
+export class Timeline {
+  readonly events = input.required<OpportunityEvent[]>();
+
+  readonly add = output<{
+    type: OpportunityEventType;
+    comment?: string;
+  }>();
+
+  readonly update = output<{
+    eventId: string;
+    type: OpportunityEventType;
+    comment?: string;
+  }>();
+
+  readonly delete = output<string>();
+
+  /*
+    Only user-generated event types are exposed
+    through the manual timeline workflow.
+  */
+  readonly manualEventTypes = [
+    OPPORTUNITY_EVENT_TYPES.CALL,
+    OPPORTUNITY_EVENT_TYPES.EMAIL,
+    OPPORTUNITY_EVENT_TYPES.MEETING,
+  ];
+
+  /*
+    Display the currently selected event type
+    inside the compact selector button.
+  */
+  readonly selectedEventTypeLabel = computed(
+    () =>
+      this.manualEventTypes.find((eventType) => eventType.value === this.currentEventType())
+        ?.label ?? '',
+  );
+
+  /*
+    Timeline events are sorted from newest
+    to oldest to prioritize recent activity.
+  */
+  readonly sortedEvents = computed(() =>
+    [...this.events()].sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    ),
+  );
+
+  /*
+    Timeline interaction state stays local
+    to preserve lightweight editing workflows.
+  */
+  readonly showEventForm = signal(false);
+
+  readonly showEventTypeSelector = signal(false);
+
+  readonly currentEventType = signal<OpportunityEventType>(OPPORTUNITY_EVENT_TYPES.CALL.value);
+
+  readonly editingEventId = signal<string | null>(null);
+
+  readonly deletingEventId = signal<string | null>(null);
+
+  /*
+    Timeline events can be created directly
+    from the opportunity workflow.
+  */
+  toggleEventForm(): void {
+    this.editingEventId.set(null);
+
+    if (this.showEventForm()) {
+      this.closeEventForm();
+
+      return;
+    }
+
+    this.showEventForm.set(true);
+  }
+
+  /*
+    Close inline creation and restore
+    the default creation state.
+  */
+  closeEventForm(): void {
+    this.showEventForm.set(false);
+
+    this.currentEventType.set(this.manualEventTypes[0].value);
+
+    this.showEventTypeSelector.set(false);
+  }
+
+  /*
+    Event creation requests are emitted upward
+    so workflow history remains centralized.
+  */
+  addEvent(type: OpportunityEventType, comment?: string): void {
+    this.add.emit({
+      type,
+      comment,
+    });
+
+    this.closeEventForm();
+  }
+
+  /*
+    Timeline events can be edited directly
+    from the opportunity history.
+  */
+  startEventEdit(event: OpportunityEvent): void {
+    this.closeEventForm();
+
+    this.currentEventType.set(event.type);
+
+    this.editingEventId.set(event.id);
+  }
+
+  /*
+    Event updates are emitted upward so the
+    parent remains the source of truth.
+  */
+  updateEvent(eventId: string, type: OpportunityEventType, comment?: string): void {
+    this.update.emit({
+      eventId,
+      type,
+      comment,
+    });
+
+    this.cancelEventEdit();
+  }
+
+  /*
+    Cancel inline editing and restore
+    the compact timeline presentation.
+  */
+  cancelEventEdit(): void {
+    this.deletingEventId.set(null);
+
+    this.editingEventId.set(null);
+  }
+
+  confirmEventDelete(eventId: string): void {
+    this.deletingEventId.set(eventId);
+  }
+
+  /*
+    Cancel deletion confirmation while
+    preserving the current edit state.
+  */
+  cancelEventDelete(): void {
+    this.deletingEventId.set(null);
+  }
+
+  deleteEvent(eventId: string): void {
+    this.delete.emit(eventId);
+
+    this.cancelEventDelete();
+
+    this.cancelEventEdit();
+  }
+
+  selectEventType(type: OpportunityEventType): void {
+    this.currentEventType.set(type);
+
+    this.showEventTypeSelector.set(false);
+  }
+
+  toggleEventTypeMenu(): void {
+    this.showEventTypeSelector.update((value) => !value);
+  }
+
+  isEditableEvent(event: OpportunityEvent): boolean {
+    return this.manualEventTypes.some((eventType) => eventType.value === event.type);
+  }
+
+  /*
+    Generate user-facing event labels
+    directly from timeline event data.
+  */
+  getEventLabel(event: OpportunityEvent): string {
+    if (event.type === OPPORTUNITY_EVENT_TYPES.STATUS_CHANGED.value && event.status) {
+      const statusLabel =
+        Object.values(OPPORTUNITY_STATUSES).find((status) => status.value === event.status)
+          ?.label ?? event.status;
+
+      return `Passage en statut ${statusLabel}`;
+    }
+
+    return (
+      Object.values(OPPORTUNITY_EVENT_TYPES).find((type) => type.value === event.type)?.label ??
+      event.type
+    );
+  }
+}
