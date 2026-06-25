@@ -104,6 +104,7 @@
   ></button>
 
   <app-opportunity-details-panel
+    #detailsPanel
     [opportunity]="opportunity"
     (panelClose)="closeDetailsPanel()"
     (statusChange)="onOpportunityStatusChange($event)"

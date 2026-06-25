@@ -80,6 +80,10 @@ export class OpportunityDetailsPanel {
     comment?: string;
   }>();
 
+  /*
+    Event deletions are delegated upward
+    to centralize state mutations.
+  */
   readonly eventDelete = output<string>();
 
   /*
@@ -107,8 +111,16 @@ export class OpportunityDetailsPanel {
   */
   readonly noteDelete = output<string>();
 
+  /*
+    Next action updates remain centralized
+    inside the board container.
+  */
   readonly nextActionUpdate = output<NextAction>();
 
+  /*
+    Completing a follow-up action triggers
+    the parent workflow.
+  */
   readonly nextActionComplete = output<void>();
 
   /*
@@ -132,6 +144,10 @@ export class OpportunityDetailsPanel {
   readonly nextActionComponent = viewChild(NextActionCard);
 
   closePanel(): void {
+    if (!this.canClose()) {
+      return;
+    }
+
     this.panelClose.emit();
   }
 
@@ -158,6 +174,14 @@ export class OpportunityDetailsPanel {
     dedicated next action component.
   */
   openNextAction(): void {
-    this.nextActionComponent()?.open();
+    this.nextActionComponent()?.scrollIntoView();
+  }
+
+  /*
+    Indicate whether the panel can safely
+    be closed in its current workflow state.
+  */
+  canClose(): boolean {
+    return !this.nextActionComponent()?.isBlocking();
   }
 }

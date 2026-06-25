@@ -1,1 +1,1 @@
-type NextActionMode = 'view' | 'edit' | 'create' | 'status-change';
+type NextActionMode = 'view' | 'edit' | 'create' | 'mandatory' | 'status-change';

@@ -1,4 +1,4 @@
-import { Component, computed, effect, signal } from '@angular/core';
+import { Component, computed, effect, signal, viewChild } from '@angular/core';
 import { CdkDragDrop, CdkDropList, CdkDropListGroup } from '@angular/cdk/drag-drop';
 
 import { Opportunity, OpportunityStatus } from '../../models/opportunity.model';
@@ -90,6 +90,8 @@ export class OpportunitiesBoard {
   */
   readonly selectedOpportunity = signal<Opportunity | null>(null);
 
+  readonly detailsPanel = viewChild<OpportunityDetailsPanel>('detailsPanel');
+
   constructor() {
     /*
       Lock body scroll and register ESC closing
@@ -135,6 +137,10 @@ export class OpportunitiesBoard {
   }
 
   closeDetailsPanel(): void {
+    if (!this.detailsPanel()?.canClose()) {
+      return;
+    }
+
     this.selectedOpportunity.set(null);
   }
 

@@ -1,21 +1,42 @@
-import { Component, computed, input, output, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  ElementRef,
+  input,
+  inject,
+  output,
+  signal,
+  viewChild,
+} from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+
+import { DateFormatPipe } from '../../../../shared/pipes/date-format-pipe';
+
 import { OpportunityEventType } from '../../models/opportunity-event.model';
 import { OPPORTUNITY_EVENT_TYPES } from '../../constants/opportunity.constants';
-import { DateFormatPipe } from '../../../../shared/pipes/date-format-pipe';
 import { NextAction } from '../../models/next-action.model';
 
 @Component({
   selector: 'app-next-action-card',
+
   standalone: true,
-  imports: [DateFormatPipe],
+
+  imports: [DateFormatPipe, ReactiveFormsModule],
+
   templateUrl: './next-action-card.html',
+
   styleUrl: './next-action-card.scss',
 })
 export class NextActionCard {
   readonly nextAction = input<NextAction | null>();
 
   readonly update = output<NextAction>();
+
   readonly complete = output<void>();
+
+  readonly container = viewChild<ElementRef>('container');
+
+  readonly nextActionLabel = viewChild<ElementRef<HTMLInputElement>>('nextActionLabel');
 
   /*
     Only user-generated event types are exposed
@@ -27,19 +48,38 @@ export class NextActionCard {
     OPPORTUNITY_EVENT_TYPES.MEETING,
   ];
 
+  private readonly formBuilder = inject(FormBuilder);
+
+  readonly form = this.formBuilder.group({
+    type: this.formBuilder.control<OpportunityEventType>(this.manualEventTypes[0].value, {
+      validators: Validators.required,
+      nonNullable: true,
+    }),
+
+    label: this.formBuilder.control('', {
+      validators: Validators.required,
+      nonNullable: true,
+    }),
+
+    dueDate: this.formBuilder.control('', {
+      validators: Validators.required,
+      nonNullable: true,
+    }),
+  });
+
+  readonly showNextActionTypeSelector = signal(false);
+
+  readonly nextActionMode = signal<NextActionMode>('view');
+
   readonly currentNextActionTypeLabel = computed(
     () =>
-      this.manualEventTypes.find((eventType) => eventType.value === this.currentNextActionType())
+      this.manualEventTypes.find((eventType) => eventType.value === this.form.controls.type.value)
         ?.label ?? '',
   );
 
-  readonly currentNextActionType = signal<OpportunityEventType>(this.manualEventTypes[0].value);
-  readonly showNextActionTypeSelector = signal(false);
-  readonly nextActionMode = signal<NextActionMode>('view');
-
   /*
-    The next action card supports several
-    workflow modes while sharing the same UI.
+    Open the workflow in either edit or
+    creation mode depending on the state.
   */
   open(): void {
     if (this.nextAction()) {
@@ -49,27 +89,88 @@ export class NextActionCard {
     }
   }
 
+  /*
+    Force the user to create a new
+    follow-up action before leaving.
+  */
+  openMandatory(): void {
+    this.setMode('mandatory');
+  }
+
+  /*
+    Open the workflow used when closing
+    an opportunity with a pending action.
+  */
+  openStatusChange(): void {
+    this.setMode('status-change');
+  }
+
+  /*
+    Indicate whether the current workflow
+    temporarily prevents closing the panel.
+  */
+  isBlocking(): boolean {
+    return this.nextActionMode() === 'mandatory' || this.nextActionMode() === 'status-change';
+  }
+
+  /*
+    Switch workflow mode while restoring
+    the appropriate initial form state.
+  */
   private setMode(mode: NextActionMode): void {
+    this.scrollIntoView();
+
     this.showNextActionTypeSelector.set(false);
 
     this.nextActionMode.set(mode);
 
     const nextAction = this.nextAction();
 
-    if (mode === 'edit' && nextAction) {
-      this.currentNextActionType.set(nextAction.type);
-    } else {
-      this.currentNextActionType.set(this.manualEventTypes[0].value);
-    }
+    this.form.reset({
+      type: mode === 'edit' && nextAction ? nextAction.type : this.manualEventTypes[0].value,
+
+      label: mode === 'edit' && nextAction ? nextAction.label : '',
+
+      dueDate: mode === 'edit' && nextAction ? nextAction.dueDate : '',
+    });
+
+    queueMicrotask(() => {
+      this.nextActionLabel()?.nativeElement.focus();
+    });
   }
 
+  /*
+    Smoothly reveal the follow-up section
+    before displaying the editor.
+  */
+  scrollIntoView(): void {
+    this.container()?.nativeElement.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+    });
+  }
+
+  /*
+    Restore the default read-only card.
+  */
   close(): void {
+    if (this.isBlocking()) {
+      return;
+    }
+
     this.nextActionMode.set('view');
+
     this.showNextActionTypeSelector.set(false);
+
+    this.form.reset({
+      type: this.manualEventTypes[0].value,
+      label: '',
+      dueDate: '',
+    });
   }
 
   selectNextActionType(type: OpportunityEventType): void {
-    this.currentNextActionType.set(type);
+    this.form.controls.type.setValue(type);
 
     this.showNextActionTypeSelector.set(false);
   }
@@ -78,23 +179,30 @@ export class NextActionCard {
     this.showNextActionTypeSelector.update((value) => !value);
   }
 
-  save(label: string, dueDate: string): void {
+  save(): void {
+    if (this.form.invalid) {
+      return;
+    }
+
     this.update.emit({
-      type: this.currentNextActionType(),
-      label,
-      dueDate,
+      type: this.form.controls.type.value,
+      label: this.form.controls.label.value.trim(),
+      dueDate: this.form.controls.dueDate.value,
     });
 
-    this.close();
+    this.form.reset({
+      type: this.manualEventTypes[0].value,
+      label: '',
+      dueDate: '',
+    });
+
+    this.nextActionMode.set('view');
+    this.showNextActionTypeSelector.set(false);
   }
 
-  /*
-    Completing an action immediately prepares
-    the workflow for defining the next one.
-  */
   completeAction(): void {
     this.complete.emit();
 
-    this.setMode('create');
+    this.openMandatory();
   }
 }
