@@ -185,7 +185,21 @@ export class OpportunitiesBoard {
     panel reuse the centralized workflow logic.
   */
   onOpportunityStatusChange(status: OpportunityStatus): void {
-    if (status === OPPORTUNITY_STATUSES.WON.value || status === OPPORTUNITY_STATUSES.LOST.value) {
+    const selected = this.selectedOpportunity();
+
+    if (!selected) {
+      return;
+    }
+
+    const isClosing =
+      status === OPPORTUNITY_STATUSES.WON.value || status === OPPORTUNITY_STATUSES.LOST.value;
+
+    const isReopening =
+      (selected.status === OPPORTUNITY_STATUSES.WON.value ||
+        selected.status === OPPORTUNITY_STATUSES.LOST.value) &&
+      !isClosing;
+
+    if (isClosing) {
       this.pendingStatus.set(status);
 
       this.detailsPanel()?.openStatusChange();
@@ -193,9 +207,11 @@ export class OpportunitiesBoard {
       return;
     }
 
-    const selected = this.selectedOpportunity();
+    if (isReopening) {
+      this.pendingStatus.set(status);
 
-    if (!selected) {
+      this.detailsPanel()?.openMandatoryNextAction();
+
       return;
     }
 
@@ -504,6 +520,10 @@ export class OpportunitiesBoard {
     );
 
     this.selectedOpportunity.set(updatedOpportunity);
+
+    if (this.pendingStatus()) {
+      this.applyPendingStatus();
+    }
   }
 
   onNextActionCompleteForStatusChange(): void {

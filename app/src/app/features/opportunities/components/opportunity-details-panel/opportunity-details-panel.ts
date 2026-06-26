@@ -203,6 +203,10 @@ export class OpportunityDetailsPanel {
     this.nextActionComponent()?.openStatusChange();
   }
 
+  openMandatoryNextAction(): void {
+    this.nextActionComponent()?.openMandatory();
+  }
+
   closeStatusChange(): void {
     this.nextActionComponent()?.close();
   }
