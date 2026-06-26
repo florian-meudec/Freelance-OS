@@ -28,27 +28,11 @@
       <div class="actions-row">
         <button type="button" class="action-button action-button-primary">Modifier</button>
 
-        <div class="status-menu">
-          <button type="button" class="action-button" (click)="toggleStatusMenu()">
-            Changer statut
-          </button>
-
-          @if (showStatusMenu()) {
-            <div class="status-dropdown">
-              @for (status of statuses; track status.value) {
-                <button
-                  type="button"
-                  class="status-option"
-                  [class.status-option-active]="status.value === opportunity().status"
-                  [disabled]="status.value === opportunity().status"
-                  (click)="selectStatus(status.value)"
-                >
-                  {{ status.label }}
-                </button>
-              }
-            </div>
-          }
-        </div>
+        <app-select-menu
+          [options]="statuses"
+          [selected]="opportunity().status"
+          (selectionChange)="selectStatus($event)"
+        />
       </div>
 
       <div class="actions-row">

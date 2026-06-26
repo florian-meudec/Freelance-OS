@@ -1,0 +1,80 @@
+@use '../../../../styles/colors' as *;
+@use '../../../../styles/radius' as *;
+@use '../../../../styles/spacing' as *;
+@use '../../../../styles/typography' as *;
+
+/*
+  Select menus encapsulate lightweight
+  workflow choices across the application.
+*/
+.status-menu {
+  position: relative;
+}
+
+/*
+  Dropdown overlays surrounding content
+  without affecting the layout flow.
+*/
+.status-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 10;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  width: 100%;
+  padding: $spacing-xs;
+
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+
+  background: $surface-primary;
+  box-shadow: $shadow-panel;
+}
+
+/*
+  Options remain lightweight to preserve
+  compact workflow interactions.
+*/
+.status-option {
+  border: none;
+  padding: $spacing-sm;
+
+  border-radius: $radius-sm;
+
+  background: transparent;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  font-size: $text-sm;
+
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: $surface-secondary;
+  }
+}
+
+/*
+  The selected option stays visible while
+  preventing redundant selections.
+*/
+.status-option-active {
+  background: $surface-secondary;
+  color: $text-secondary;
+  cursor: default;
+  font-weight: 600;
+
+  &:hover {
+    background: $surface-secondary;
+  }
+}
+
+.status-option:disabled {
+  opacity: 1;
+}

@@ -21,26 +21,11 @@
       <div class="form-field">
         <span>Type d'évènement</span>
 
-        <div class="status-menu">
-          <button type="button" class="action-button" (click)="toggleEventTypeMenu()">
-            {{ selectedEventTypeLabel() }}
-          </button>
-
-          @if (showEventTypeSelector()) {
-            <div class="status-dropdown">
-              @for (eventType of manualEventTypes; track eventType.value) {
-                <button
-                  type="button"
-                  class="status-option"
-                  [class.status-option-active]="currentEventType() === eventType.value"
-                  (click)="selectEventType(eventType.value)"
-                >
-                  {{ eventType.label }}
-                </button>
-              }
-            </div>
-          }
-        </div>
+        <app-select-menu
+          [options]="manualEventTypes"
+          [selected]="currentEventType()"
+          (selectionChange)="selectEventType($event)"
+        />
       </div>
 
       <label class="form-field">
@@ -69,26 +54,11 @@
           <div class="form-field">
             <span>Type d'évènement</span>
 
-            <div class="status-menu">
-              <button type="button" class="action-button" (click)="toggleEventTypeMenu()">
-                {{ selectedEventTypeLabel() }}
-              </button>
-
-              @if (showEventTypeSelector()) {
-                <div class="status-dropdown">
-                  @for (eventType of manualEventTypes; track eventType.value) {
-                    <button
-                      type="button"
-                      class="status-option"
-                      [class.status-option-active]="currentEventType() === eventType.value"
-                      (click)="selectEventType(eventType.value)"
-                    >
-                      {{ eventType.label }}
-                    </button>
-                  }
-                </div>
-              }
-            </div>
+            <app-select-menu
+              [options]="manualEventTypes"
+              [selected]="currentEventType()"
+              (selectionChange)="selectEventType($event)"
+            />
           </div>
 
           <div class="form-field">

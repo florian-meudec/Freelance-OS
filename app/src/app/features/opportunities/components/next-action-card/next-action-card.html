@@ -6,26 +6,11 @@
       <div class="form-field">
         <span>Type d'action</span>
 
-        <div class="status-menu">
-          <button type="button" class="action-button" (click)="toggleNextActionTypeMenu()">
-            {{ currentNextActionTypeLabel() }}
-          </button>
-
-          @if (showNextActionTypeSelector()) {
-            <div class="status-dropdown">
-              @for (eventType of manualEventTypes; track eventType.value) {
-                <button
-                  type="button"
-                  class="status-option"
-                  [class.status-option-active]="form.controls.type.value === eventType.value"
-                  (click)="selectNextActionType(eventType.value)"
-                >
-                  {{ eventType.label }}
-                </button>
-              }
-            </div>
-          }
-        </div>
+        <app-select-menu
+          [options]="manualEventTypes"
+          [selected]="form.controls.type.value"
+          (selectionChange)="selectNextActionType($event)"
+        />
       </div>
 
       <label class="form-field">

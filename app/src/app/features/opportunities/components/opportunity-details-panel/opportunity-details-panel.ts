@@ -18,6 +18,7 @@ import { NextAction } from '../../models/next-action.model';
 import { OPPORTUNITY_STATUSES } from '../../constants/opportunity.constants';
 
 import { NextActionCard } from '../next-action-card/next-action-card';
+import { SelectMenu } from '../../../../shared/components/select-menu/select-menu';
 import { Timeline } from '../timeline/timeline';
 
 @Component({
@@ -35,6 +36,7 @@ import { Timeline } from '../timeline/timeline';
     TjmPipe,
     WorkloadPipe,
     NextActionCard,
+    SelectMenu,
     Timeline,
   ],
 
@@ -129,12 +131,6 @@ export class OpportunityDetailsPanel {
   */
   readonly statuses = Object.values(OPPORTUNITY_STATUSES);
 
-  /*
-    Status menu visibility is handled locally
-    to keep workflow interactions lightweight.
-  */
-  readonly showStatusMenu = signal(false);
-
   readonly notesComponent = viewChild(Notes);
 
   /*
@@ -151,14 +147,8 @@ export class OpportunityDetailsPanel {
     this.panelClose.emit();
   }
 
-  toggleStatusMenu(): void {
-    this.showStatusMenu.update((value) => !value);
-  }
-
-  selectStatus(status: OpportunityStatus): void {
-    this.statusChange.emit(status);
-
-    this.showStatusMenu.set(false);
+  selectStatus(status: string): void {
+    this.statusChange.emit(status as OpportunityStatus);
   }
 
   /*

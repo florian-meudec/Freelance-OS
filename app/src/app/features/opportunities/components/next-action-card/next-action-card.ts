@@ -1,16 +1,8 @@
-import {
-  Component,
-  computed,
-  ElementRef,
-  input,
-  inject,
-  output,
-  signal,
-  viewChild,
-} from '@angular/core';
+import { Component, ElementRef, input, inject, output, signal, viewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { DateFormatPipe } from '../../../../shared/pipes/date-format-pipe';
+import { SelectMenu } from '../../../../shared/components/select-menu/select-menu';
 
 import { OpportunityEventType } from '../../models/opportunity-event.model';
 import { OPPORTUNITY_EVENT_TYPES } from '../../constants/opportunity.constants';
@@ -21,7 +13,7 @@ import { NextAction } from '../../models/next-action.model';
 
   standalone: true,
 
-  imports: [DateFormatPipe, ReactiveFormsModule],
+  imports: [DateFormatPipe, ReactiveFormsModule, SelectMenu],
 
   templateUrl: './next-action-card.html',
 
@@ -67,60 +59,26 @@ export class NextActionCard {
     }),
   });
 
-  readonly showNextActionTypeSelector = signal(false);
-
   readonly nextActionMode = signal<NextActionMode>('view');
 
-  readonly currentNextActionTypeLabel = computed(
-    () =>
-      this.manualEventTypes.find((eventType) => eventType.value === this.form.controls.type.value)
-        ?.label ?? '',
-  );
-
-  /*
-    Open the workflow in either edit or
-    creation mode depending on the state.
-  */
   open(): void {
-    if (this.nextAction()) {
-      this.setMode('edit');
-    } else {
-      this.setMode('create');
-    }
+    this.nextAction() ? this.setMode('edit') : this.setMode('create');
   }
 
-  /*
-    Force the user to create a new
-    follow-up action before leaving.
-  */
   openMandatory(): void {
     this.setMode('mandatory');
   }
 
-  /*
-    Open the workflow used when closing
-    an opportunity with a pending action.
-  */
   openStatusChange(): void {
     this.setMode('status-change');
   }
 
-  /*
-    Indicate whether the current workflow
-    temporarily prevents closing the panel.
-  */
   isBlocking(): boolean {
     return this.nextActionMode() === 'mandatory' || this.nextActionMode() === 'status-change';
   }
 
-  /*
-    Switch workflow mode while restoring
-    the appropriate initial form state.
-  */
   private setMode(mode: NextActionMode): void {
     this.scrollIntoView();
-
-    this.showNextActionTypeSelector.set(false);
 
     this.nextActionMode.set(mode);
 
@@ -128,9 +86,7 @@ export class NextActionCard {
 
     this.form.reset({
       type: mode === 'edit' && nextAction ? nextAction.type : this.manualEventTypes[0].value,
-
       label: mode === 'edit' && nextAction ? nextAction.label : '',
-
       dueDate: mode === 'edit' && nextAction ? nextAction.dueDate : '',
     });
 
@@ -139,10 +95,6 @@ export class NextActionCard {
     });
   }
 
-  /*
-    Smoothly reveal the follow-up section
-    before displaying the editor.
-  */
   scrollIntoView(): void {
     this.container()?.nativeElement.scrollIntoView({
       behavior: 'smooth',
@@ -150,17 +102,12 @@ export class NextActionCard {
     });
   }
 
-  /*
-    Restore the default read-only card.
-  */
   close(): void {
     if (this.isBlocking()) {
       return;
     }
 
     this.nextActionMode.set('view');
-
-    this.showNextActionTypeSelector.set(false);
 
     this.form.reset({
       type: this.manualEventTypes[0].value,
@@ -169,14 +116,8 @@ export class NextActionCard {
     });
   }
 
-  selectNextActionType(type: OpportunityEventType): void {
-    this.form.controls.type.setValue(type);
-
-    this.showNextActionTypeSelector.set(false);
-  }
-
-  toggleNextActionTypeMenu(): void {
-    this.showNextActionTypeSelector.update((value) => !value);
+  selectNextActionType(type: string): void {
+    this.form.controls.type.setValue(type as OpportunityEventType);
   }
 
   save(): void {
@@ -197,7 +138,6 @@ export class NextActionCard {
     });
 
     this.nextActionMode.set('view');
-    this.showNextActionTypeSelector.set(false);
   }
 
   completeAction(): void {

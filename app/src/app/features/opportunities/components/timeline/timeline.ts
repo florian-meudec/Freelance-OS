@@ -3,6 +3,7 @@ import { Component, computed, input, output, signal } from '@angular/core';
 import { DateFormatPipe } from '../../../../shared/pipes/date-format-pipe';
 
 import { OpportunityEvent, OpportunityEventType } from '../../models/opportunity-event.model';
+import { SelectMenu } from '../../../../shared/components/select-menu/select-menu';
 
 import {
   OPPORTUNITY_EVENT_TYPES,
@@ -14,7 +15,7 @@ import {
 
   standalone: true,
 
-  imports: [DateFormatPipe],
+  imports: [DateFormatPipe, SelectMenu],
 
   templateUrl: './timeline.html',
 
@@ -47,16 +48,6 @@ export class Timeline {
   ];
 
   /*
-    Display the currently selected event type
-    inside the compact selector button.
-  */
-  readonly selectedEventTypeLabel = computed(
-    () =>
-      this.manualEventTypes.find((eventType) => eventType.value === this.currentEventType())
-        ?.label ?? '',
-  );
-
-  /*
     Timeline events are sorted from newest
     to oldest to prioritize recent activity.
   */
@@ -72,8 +63,6 @@ export class Timeline {
   */
   readonly showEventForm = signal(false);
 
-  readonly showEventTypeSelector = signal(false);
-
   readonly currentEventType = signal<OpportunityEventType>(OPPORTUNITY_EVENT_TYPES.CALL.value);
 
   readonly editingEventId = signal<string | null>(null);
@@ -85,13 +74,13 @@ export class Timeline {
     from the opportunity workflow.
   */
   toggleEventForm(): void {
-    this.editingEventId.set(null);
-
     if (this.showEventForm()) {
       this.closeEventForm();
 
       return;
     }
+
+    this.editingEventId.set(null);
 
     this.showEventForm.set(true);
   }
@@ -104,8 +93,6 @@ export class Timeline {
     this.showEventForm.set(false);
 
     this.currentEventType.set(this.manualEventTypes[0].value);
-
-    this.showEventTypeSelector.set(false);
   }
 
   /*
@@ -155,6 +142,8 @@ export class Timeline {
     this.deletingEventId.set(null);
 
     this.editingEventId.set(null);
+
+    this.currentEventType.set(this.manualEventTypes[0].value);
   }
 
   confirmEventDelete(eventId: string): void {
@@ -177,14 +166,8 @@ export class Timeline {
     this.cancelEventEdit();
   }
 
-  selectEventType(type: OpportunityEventType): void {
-    this.currentEventType.set(type);
-
-    this.showEventTypeSelector.set(false);
-  }
-
-  toggleEventTypeMenu(): void {
-    this.showEventTypeSelector.update((value) => !value);
+  selectEventType(type: string): void {
+    this.currentEventType.set(type as OpportunityEventType);
   }
 
   isEditableEvent(event: OpportunityEvent): boolean {
