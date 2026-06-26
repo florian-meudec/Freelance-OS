@@ -1,12 +1,25 @@
-import { Component, ElementRef, input, inject, output, signal, viewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  input,
+  inject,
+  output,
+  signal,
+  viewChild,
+  computed,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { DateFormatPipe } from '../../../../shared/pipes/date-format-pipe';
 import { SelectMenu } from '../../../../shared/components/select-menu/select-menu';
 
 import { OpportunityEventType } from '../../models/opportunity-event.model';
-import { OPPORTUNITY_EVENT_TYPES } from '../../constants/opportunity.constants';
+import {
+  OPPORTUNITY_EVENT_TYPES,
+  OPPORTUNITY_STATUSES,
+} from '../../constants/opportunity.constants';
 import { NextAction } from '../../models/next-action.model';
+import { OpportunityStatus } from '../../models/opportunity.model';
 
 @Component({
   selector: 'app-next-action-card',
@@ -22,9 +35,17 @@ import { NextAction } from '../../models/next-action.model';
 export class NextActionCard {
   readonly nextAction = input<NextAction | null>();
 
+  readonly pendingStatus = input<OpportunityStatus | null>();
+
   readonly update = output<NextAction>();
 
   readonly complete = output<void>();
+
+  readonly completeForStatusChange = output<void>();
+
+  readonly deleteForStatusChange = output<void>();
+
+  readonly statusChangeCancelled = output<void>();
 
   readonly container = viewChild<ElementRef>('container');
 
@@ -61,6 +82,19 @@ export class NextActionCard {
 
   readonly nextActionMode = signal<NextActionMode>('view');
 
+  readonly pendingStatusLabel = computed(() => {
+    switch (this.pendingStatus()) {
+      case OPPORTUNITY_STATUSES.WON.value:
+        return OPPORTUNITY_STATUSES.WON.label;
+
+      case OPPORTUNITY_STATUSES.LOST.value:
+        return OPPORTUNITY_STATUSES.LOST.label;
+
+      default:
+        return '';
+    }
+  });
+
   open(): void {
     this.nextAction() ? this.setMode('edit') : this.setMode('create');
   }
@@ -90,9 +124,11 @@ export class NextActionCard {
       dueDate: mode === 'edit' && nextAction ? nextAction.dueDate : '',
     });
 
-    queueMicrotask(() => {
-      this.nextActionLabel()?.nativeElement.focus();
-    });
+    if (mode !== 'status-change') {
+      queueMicrotask(() => {
+        this.nextActionLabel()?.nativeElement.focus();
+      });
+    }
   }
 
   scrollIntoView(): void {
@@ -144,5 +180,23 @@ export class NextActionCard {
     this.complete.emit();
 
     this.openMandatory();
+  }
+
+  completeForStatusChangeAction(): void {
+    this.nextActionMode.set('view');
+
+    this.completeForStatusChange.emit();
+  }
+
+  deleteForStatusChangeAction(): void {
+    this.nextActionMode.set('view');
+
+    this.deleteForStatusChange.emit();
+  }
+
+  cancelStatusChange(): void {
+    this.nextActionMode.set('view');
+
+    this.statusChangeCancelled.emit();
   }
 }

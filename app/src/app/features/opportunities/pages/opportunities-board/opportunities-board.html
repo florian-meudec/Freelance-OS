@@ -106,6 +106,7 @@
   <app-opportunity-details-panel
     #detailsPanel
     [opportunity]="opportunity"
+    [pendingStatus]="pendingStatus()"
     (panelClose)="closeDetailsPanel()"
     (statusChange)="onOpportunityStatusChange($event)"
     (noteAdd)="onOpportunityNoteAdd($event)"
@@ -114,7 +115,10 @@
     (eventAdd)="onOpportunityEventAdd($event)"
     (eventUpdate)="onOpportunityEventUpdate($event)"
     (eventDelete)="onOpportunityEventDelete($event)"
-    (nextActionComplete)="completeNextAction()"
     (nextActionUpdate)="onNextActionUpdate($event)"
+    (nextActionComplete)="completeNextAction()"
+    (nextActionCompleteForStatusChange)="onNextActionCompleteForStatusChange()"
+    (nextActionDeleteForStatusChange)="onNextActionDeleteForStatusChange()"
+    (statusChangeCancelled)="onStatusChangeCancelled()"
   />
 }

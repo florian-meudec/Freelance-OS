@@ -52,6 +52,12 @@ export class OpportunityDetailsPanel {
   readonly opportunity = input.required<Opportunity>();
 
   /*
+    The requested terminal status is forwarded
+    to the next action workflow.
+  */
+  readonly pendingStatus = input<OpportunityStatus | null>(null);
+
+  /*
     Closing logic stays in the parent container
     to keep this component presentation-focused.
   */
@@ -126,6 +132,24 @@ export class OpportunityDetailsPanel {
   readonly nextActionComplete = output<void>();
 
   /*
+    Completing the pending follow-up action
+    allows the status transition to continue.
+  */
+  readonly nextActionCompleteForStatusChange = output<void>();
+
+  /*
+    Abandoning the pending follow-up action
+    allows the status transition to continue.
+  */
+  readonly nextActionDeleteForStatusChange = output<void>();
+
+  /*
+    Cancelling the status transition restores
+    the previous opportunity state.
+  */
+  readonly statusChangeCancelled = output<void>();
+
+  /*
     Status options are generated directly from
     business constants to preserve consistency.
   */
@@ -163,7 +187,7 @@ export class OpportunityDetailsPanel {
     Delegate the workflow opening to the
     dedicated next action component.
   */
-  openNextAction(): void {
+  scrollToNextAction(): void {
     this.nextActionComponent()?.scrollIntoView();
   }
 
@@ -173,5 +197,13 @@ export class OpportunityDetailsPanel {
   */
   canClose(): boolean {
     return !this.nextActionComponent()?.isBlocking();
+  }
+
+  openStatusChange(): void {
+    this.nextActionComponent()?.openStatusChange();
+  }
+
+  closeStatusChange(): void {
+    this.nextActionComponent()?.close();
   }
 }

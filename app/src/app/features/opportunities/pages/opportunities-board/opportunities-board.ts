@@ -90,6 +90,8 @@ export class OpportunitiesBoard {
   */
   readonly selectedOpportunity = signal<Opportunity | null>(null);
 
+  readonly pendingStatus = signal<OpportunityStatus | null>(null);
+
   readonly detailsPanel = viewChild<OpportunityDetailsPanel>('detailsPanel');
 
   constructor() {
@@ -183,6 +185,14 @@ export class OpportunitiesBoard {
     panel reuse the centralized workflow logic.
   */
   onOpportunityStatusChange(status: OpportunityStatus): void {
+    if (status === OPPORTUNITY_STATUSES.WON.value || status === OPPORTUNITY_STATUSES.LOST.value) {
+      this.pendingStatus.set(status);
+
+      this.detailsPanel()?.openStatusChange();
+
+      return;
+    }
+
     const selected = this.selectedOpportunity();
 
     if (!selected) {
@@ -448,6 +458,8 @@ export class OpportunitiesBoard {
     const updatedOpportunity = {
       ...selected,
 
+      nextAction: null,
+
       events: [
         ...selected.events,
 
@@ -483,6 +495,60 @@ export class OpportunitiesBoard {
       ...selected,
 
       nextAction,
+    };
+
+    this.opportunities.update((opportunities) =>
+      opportunities.map((opportunity) =>
+        opportunity.id === updatedOpportunity.id ? updatedOpportunity : opportunity,
+      ),
+    );
+
+    this.selectedOpportunity.set(updatedOpportunity);
+  }
+
+  onNextActionCompleteForStatusChange(): void {
+    this.completeNextAction();
+
+    this.applyPendingStatus();
+  }
+
+  onNextActionDeleteForStatusChange(): void {
+    this.removeNextAction();
+
+    this.applyPendingStatus();
+  }
+
+  private applyPendingStatus(): void {
+    const selected = this.selectedOpportunity();
+
+    const status = this.pendingStatus();
+
+    if (!selected || !status) {
+      return;
+    }
+
+    this.updateOpportunityStatus(selected.id, status);
+
+    this.pendingStatus.set(null);
+  }
+
+  onStatusChangeCancelled(): void {
+    this.pendingStatus.set(null);
+
+    this.detailsPanel()?.closeStatusChange();
+  }
+
+  private removeNextAction(): void {
+    const selected = this.selectedOpportunity();
+
+    if (!selected) {
+      return;
+    }
+
+    const updatedOpportunity = {
+      ...selected,
+
+      nextAction: null,
     };
 
     this.opportunities.update((opportunities) =>

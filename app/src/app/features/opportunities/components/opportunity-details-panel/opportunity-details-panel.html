@@ -45,7 +45,7 @@
           scheduling dated follow-up actions directly
           from the opportunity panel.
         -->
-        <button type="button" class="action-button" (click)="openNextAction()">
+        <button type="button" class="action-button" (click)="scrollToNextAction()">
           Prochaine action
         </button>
       </div>
@@ -153,8 +153,12 @@
 
     <app-next-action-card
       [nextAction]="opportunity().nextAction"
+      [pendingStatus]="pendingStatus()"
       (update)="nextActionUpdate.emit($event)"
       (complete)="nextActionComplete.emit()"
+      (completeForStatusChange)="nextActionCompleteForStatusChange.emit()"
+      (deleteForStatusChange)="nextActionDeleteForStatusChange.emit()"
+      (statusChangeCancelled)="statusChangeCancelled.emit()"
     />
 
     <div class="details-subsection">

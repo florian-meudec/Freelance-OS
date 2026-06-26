@@ -1,7 +1,9 @@
 <div class="details-subsection" #container>
   <h4>Suivi</h4>
 
-  @if (nextActionMode() !== 'view') {
+  @if (
+    nextActionMode() === 'create' || nextActionMode() === 'edit' || nextActionMode() === 'mandatory'
+  ) {
     <form class="event-form" [formGroup]="form" (ngSubmit)="save()">
       <div class="form-field">
         <span>Type d'action</span>
@@ -35,6 +37,41 @@
         }
       </div>
     </form>
+  } @else if (nextActionMode() === 'status-change' && nextAction(); as nextAction) {
+    <div class="event-form">
+      <p>
+        Vous êtes sur le point de passer cette opportunité en
+        <strong> {{ pendingStatusLabel() }} </strong>. Que souhaitez-vous faire de cette prochaine
+        action ?
+      </p>
+      <div class="next-action-card">
+        <strong>{{ nextAction.label }}</strong>
+
+        <span>{{ nextAction.dueDate | dateFormat: 'date' }}</span>
+      </div>
+
+      <div class="form-actions">
+        <button
+          type="button"
+          class="action-button action-button-primary"
+          (click)="completeForStatusChangeAction()"
+        >
+          Terminer l'action
+        </button>
+
+        <button
+          type="button"
+          class="action-button action-button-danger"
+          (click)="deleteForStatusChangeAction()"
+        >
+          Abandonner l'action
+        </button>
+      </div>
+
+      <div class="form-actions form-actions-center">
+        <button type="button" class="action-button" (click)="cancelStatusChange()">Annuler</button>
+      </div>
+    </div>
   } @else if (nextAction(); as nextAction) {
     <div class="next-action-card">
       <strong>
