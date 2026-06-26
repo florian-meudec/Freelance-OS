@@ -45,7 +45,7 @@ export interface Opportunity {
   */
   missionTitle: string;
   description?: string;
-  stack?: string[];
+  stack: string[];
   seniority?: OpportunitySeniority;
   /*
     Estimated mission start date stored

@@ -49,6 +49,39 @@ export class OpportunityCard {
     calculateOpportunityUrgency(this.opportunity().nextAction?.dueDate),
   );
 
+  readonly urgencyLabel = computed(() => {
+    switch (this.urgency()) {
+      case 'late':
+        return 'En retard';
+
+      case 'today':
+        return "Aujourd'hui";
+
+      case 'this-week': {
+        const dueDate = this.opportunity().nextAction?.dueDate;
+
+        if (!dueDate) {
+          return '';
+        }
+
+        const today = new Date();
+
+        const target = new Date(dueDate);
+
+        const diffDays = Math.ceil((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+
+        if (diffDays === 1) {
+          return 'Demain';
+        }
+
+        return `Dans ${diffDays} j`;
+      }
+
+      default:
+        return '';
+    }
+  });
+
   /*
     Maps urgency values to CSS modifier classes
     used by the colored card header.

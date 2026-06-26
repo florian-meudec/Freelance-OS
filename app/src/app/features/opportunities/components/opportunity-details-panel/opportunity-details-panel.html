@@ -83,7 +83,7 @@
           <span>Secteur</span>
 
           <strong>
-            {{ opportunity().industry }}
+            {{ opportunity().industry | fallback }}
           </strong>
         </div>
 
@@ -91,7 +91,7 @@
           <span>Source</span>
 
           <strong>
-            {{ opportunity().source }}
+            {{ opportunity().source | fallback }}
           </strong>
         </div>
       </div>
@@ -105,7 +105,7 @@
           <span>Contact principal</span>
 
           <strong>
-            {{ opportunity().contactName }}
+            {{ opportunity().contactName | fallback }}
           </strong>
         </div>
 
@@ -113,7 +113,7 @@
           <span>Poste</span>
 
           <strong>
-            {{ opportunity().contactRole }}
+            {{ opportunity().contactRole | fallback }}
           </strong>
         </div>
 
@@ -122,10 +122,14 @@
 
           <div class="copy-field">
             <span class="copy-value">
-              {{ opportunity().contactEmail }}
+              {{ opportunity().contactEmail | fallback }}
             </span>
 
-            <button type="button" class="copy-button">Copier</button>
+            @if (opportunity().contactEmail) {
+              <button type="button" class="copy-button" (click)="copyEmail()">
+                {{ emailCopied() ? 'Copié !' : 'Copier' }}
+              </button>
+            }
           </div>
         </div>
       </div>
@@ -147,7 +151,7 @@
       <h4>{{ opportunity().missionTitle }}</h4>
 
       <p class="mission-description">
-        {{ opportunity().description }}
+        {{ opportunity().description | fallback }}
       </p>
     </div>
 
@@ -193,7 +197,7 @@
           <span>Localisation</span>
 
           <strong>
-            {{ opportunity().location }}
+            {{ opportunity().location | fallback }}
           </strong>
         </div>
       </div>
@@ -210,7 +214,7 @@
             @if (opportunity().estimatedStartDate; as estimatedStartDate) {
               {{ estimatedStartDate | dateFormat: 'date' }}
             } @else {
-              Non défini
+              {{ null | fallback }}
             }
           </strong>
         </div>
@@ -240,10 +244,14 @@
       </div>
 
       <div class="stack-tags">
-        @for (technology of opportunity().stack; track technology) {
-          <span class="stack-tag">
-            {{ technology }}
-          </span>
+        @if (opportunity().stack.length) {
+          @for (technology of opportunity().stack; track technology) {
+            <span class="stack-tag">
+              {{ technology }}
+            </span>
+          }
+        } @else {
+          <span>-</span>
         }
       </div>
     </div>

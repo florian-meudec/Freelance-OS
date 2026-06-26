@@ -20,6 +20,7 @@ import { OPPORTUNITY_STATUSES } from '../../constants/opportunity.constants';
 import { NextActionCard } from '../next-action-card/next-action-card';
 import { SelectMenu } from '../../../../shared/components/select-menu/select-menu';
 import { Timeline } from '../timeline/timeline';
+import { FallbackPipe } from '../../../../shared/pipes/fallback-pipe';
 
 @Component({
   selector: 'app-opportunity-details-panel',
@@ -30,6 +31,7 @@ import { Timeline } from '../timeline/timeline';
     CompanyTypePipe,
     DurationUnitPipe,
     DateFormatPipe,
+    FallbackPipe,
     Notes,
     OpportunityModalityPipe,
     OpportunitySeniorityPipe,
@@ -163,6 +165,14 @@ export class OpportunityDetailsPanel {
   */
   readonly nextActionComponent = viewChild(NextActionCard);
 
+  /*
+  Temporary feedback confirms that the
+  contact email has been copied.
+*/
+  readonly emailCopied = signal(false);
+
+  private copyFeedbackTimeout?: ReturnType<typeof setTimeout>;
+
   closePanel(): void {
     if (!this.canClose()) {
       return;
@@ -209,5 +219,23 @@ export class OpportunityDetailsPanel {
 
   closeStatusChange(): void {
     this.nextActionComponent()?.close();
+  }
+
+  copyEmail(): void {
+    const email = this.opportunity().contactEmail;
+
+    if (!email) {
+      return;
+    }
+
+    navigator.clipboard.writeText(email);
+
+    this.emailCopied.set(true);
+
+    clearTimeout(this.copyFeedbackTimeout);
+
+    this.copyFeedbackTimeout = setTimeout(() => {
+      this.emailCopied.set(false);
+    }, 2000);
   }
 }

@@ -43,10 +43,12 @@
     -->
     <div class="card-follow-up">
       @if (opportunity().nextAction; as nextAction) {
-        <strong>{{ nextAction.label }}</strong>
+        <strong [title]="nextAction.label">
+          {{ nextAction.label }}
+        </strong>
 
-        <span>
-          {{ nextAction.dueDate | dateFormat: 'date' }}
+        <span class="follow-up-badge">
+          {{ urgencyLabel() }}
         </span>
       }
     </div>

@@ -103,19 +103,49 @@
 }
 
 .card-follow-up {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
   gap: $spacing-sm;
 
   strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
     font-size: $text-md;
   }
+}
 
-  span {
-    font-size: $text-sm;
-    color: $text-secondary;
-  }
+.follow-up-badge {
+  flex-shrink: 0;
+
+  padding: 2px 8px;
+
+  border-radius: 999px;
+
+  font-size: $text-xs;
+  font-weight: 600;
+
+  color: white;
+
+  background: $interactive-primary;
+}
+
+.card-header.urgency-late ~ .card-content .follow-up-badge {
+  background: $urgency-late;
+}
+
+.card-header.urgency-today ~ .card-content .follow-up-badge {
+  background: $urgency-today;
+}
+
+.card-header.urgency-this-week ~ .card-content .follow-up-badge {
+  background: $urgency-this-week;
+}
+
+.card-header.urgency-waiting ~ .card-content .follow-up-badge {
+  background: $urgency-waiting;
 }
 
 /*

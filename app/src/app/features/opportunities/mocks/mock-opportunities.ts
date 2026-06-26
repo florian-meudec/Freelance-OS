@@ -20,7 +20,6 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     contactName: 'Sophie Meier',
     contactRole: 'Engineering Manager',
-    contactEmail: 'sophie.meier@ubs.com',
 
     missionTitle: 'Angular Migration',
 
@@ -47,7 +46,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     nextAction: {
       type: OPPORTUNITY_EVENT_TYPES.EMAIL.value,
       label: 'Premier contact LinkedIn',
-      dueDate: '2026-05-20',
+      dueDate: '2026-06-20',
     },
 
     events: [
@@ -140,7 +139,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     nextAction: {
       type: OPPORTUNITY_EVENT_TYPES.EMAIL.value,
       label: 'Envoyer proposition commerciale',
-      dueDate: '2026-05-22',
+      dueDate: '2026-06-26',
     },
 
     events: [
@@ -224,7 +223,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     nextAction: {
       type: OPPORTUNITY_EVENT_TYPES.EMAIL.value,
       label: 'Validation budget',
-      dueDate: '2026-05-21',
+      dueDate: '2026-06-27',
     },
 
     events: [
@@ -318,7 +317,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     nextAction: {
       type: OPPORTUNITY_EVENT_TYPES.CALL.value,
       label: 'Entretien technique',
-      dueDate: '2026-07-01',
+      dueDate: '2026-06-29',
     },
 
     events: [
@@ -362,5 +361,215 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
         content: 'Le scope semble très intéressant techniquement.',
       },
     ],
+  },
+  {
+    id: '5',
+
+    companyName: 'Spotify',
+    companyType: COMPANY_TYPES.CLIENT_FINAL.value,
+    industry: 'Streaming',
+
+    source: 'LinkedIn',
+
+    contactName: 'Anna Svensson',
+    contactRole: 'Engineering Manager',
+    contactEmail: 'anna.svensson@spotify.com',
+
+    missionTitle: 'Angular Platform',
+
+    description: 'Mission plateforme frontend.',
+
+    stack: ['Angular', 'Nx'],
+
+    seniority: OPPORTUNITY_SENIORITIES.SENIOR.value,
+
+    estimatedStartDate: '2026-07-15',
+
+    durationValue: 12,
+    durationUnit: DURATION_UNITS.MONTHS.value,
+
+    status: OPPORTUNITY_STATUSES.CONTACTED.value,
+
+    tjm: 850,
+    workload: 5,
+
+    modality: OPPORTUNITY_MODALITIES.HYBRID.value,
+    location: 'Stockholm',
+
+    nextAction: {
+      type: OPPORTUNITY_EVENT_TYPES.CALL.value,
+      label: 'Préparer le premier entretien',
+      dueDate: '2026-07-08',
+    },
+
+    events: [],
+
+    notes: [],
+  },
+
+  {
+    id: '6',
+
+    companyName: 'Datadog',
+    companyType: COMPANY_TYPES.CLIENT_FINAL.value,
+    industry: 'Monitoring',
+
+    source: 'Malt',
+
+    contactName: 'John Miller',
+    contactRole: 'Tech Lead',
+    contactEmail: 'john.miller@datadog.com',
+
+    missionTitle: 'Frontend Platform',
+
+    description: 'Mission plateforme.',
+
+    stack: ['Angular'],
+
+    seniority: OPPORTUNITY_SENIORITIES.LEAD.value,
+
+    estimatedStartDate: '2026-07-01',
+
+    durationValue: 6,
+    durationUnit: DURATION_UNITS.MONTHS.value,
+
+    status: OPPORTUNITY_STATUSES.INTERVIEW.value,
+
+    tjm: 900,
+    workload: 5,
+
+    modality: OPPORTUNITY_MODALITIES.REMOTE.value,
+    location: 'Paris',
+
+    nextAction: {
+      type: OPPORTUNITY_EVENT_TYPES.MEETING.value,
+      label:
+        'Organiser un atelier de cadrage technique avec le lead frontend et l’équipe architecture afin de préparer la migration Angular',
+      dueDate: '2026-06-18',
+    },
+
+    events: [],
+
+    notes: [],
+  },
+  {
+    id: '7',
+
+    companyName: 'Qonto',
+    companyType: COMPANY_TYPES.STARTUP.value,
+    industry: 'Finance',
+
+    source: 'LinkedIn',
+
+    contactName: 'Lucas Bernard',
+    contactRole: 'CTO',
+    contactEmail: 'lucas.bernard@qonto.com',
+
+    missionTitle: 'Angular Lead',
+
+    description: 'Mission Angular.',
+
+    stack: ['Angular'],
+
+    seniority: OPPORTUNITY_SENIORITIES.LEAD.value,
+
+    estimatedStartDate: '2026-08-01',
+
+    durationValue: 12,
+    durationUnit: DURATION_UNITS.MONTHS.value,
+
+    status: OPPORTUNITY_STATUSES.CONTACTED.value,
+
+    tjm: 820,
+    workload: 5,
+
+    modality: OPPORTUNITY_MODALITIES.HYBRID.value,
+    location: 'Paris',
+
+    nextAction: null,
+
+    events: [],
+
+    notes: [],
+  },
+  {
+    id: '8',
+
+    companyName: 'Alan',
+    companyType: COMPANY_TYPES.STARTUP.value,
+    industry: 'Assurance',
+
+    source: 'Réseau',
+
+    contactName: 'Paul Martin',
+    contactRole: 'VP Engineering',
+    contactEmail: 'paul.martin@alan.com',
+
+    missionTitle: 'Tech Lead',
+
+    description: 'Mission Tech Lead.',
+
+    stack: ['Angular'],
+
+    seniority: OPPORTUNITY_SENIORITIES.LEAD.value,
+
+    estimatedStartDate: '2026-06-01',
+
+    durationValue: 12,
+    durationUnit: DURATION_UNITS.MONTHS.value,
+
+    status: OPPORTUNITY_STATUSES.WON.value,
+
+    tjm: 900,
+    workload: 5,
+
+    modality: OPPORTUNITY_MODALITIES.REMOTE.value,
+    location: 'Paris',
+
+    nextAction: null,
+
+    events: [],
+
+    notes: [],
+  },
+  {
+    id: '9',
+
+    companyName: 'Back Market',
+    companyType: COMPANY_TYPES.STARTUP.value,
+    industry: 'E-commerce',
+
+    source: 'LinkedIn',
+
+    contactName: 'Claire Petit',
+    contactRole: 'Engineering Manager',
+    contactEmail: 'claire.petit@backmarket.com',
+
+    missionTitle: 'Frontend Expert',
+
+    description: 'Mission Frontend.',
+
+    stack: ['Angular'],
+
+    seniority: OPPORTUNITY_SENIORITIES.SENIOR.value,
+
+    estimatedStartDate: '2026-06-15',
+
+    durationValue: 9,
+    durationUnit: DURATION_UNITS.MONTHS.value,
+
+    status: OPPORTUNITY_STATUSES.LOST.value,
+
+    tjm: 820,
+    workload: 5,
+
+    modality: OPPORTUNITY_MODALITIES.HYBRID.value,
+    location: 'Paris',
+
+    nextAction: null,
+
+    events: [],
+
+    notes: [],
   },
 ];
