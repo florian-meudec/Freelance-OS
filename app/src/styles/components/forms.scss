@@ -159,3 +159,9 @@
 
   transform: none;
 }
+
+.form-label-required::after {
+  content: ' *';
+
+  color: $urgency-today;
+}

@@ -1,4 +1,14 @@
-<h1>Opportunités</h1>
+<!--
+  Page header centralizes the primary
+  actions available on the opportunity board.
+-->
+<div class="page-header">
+  <h1>Opportunités</h1>
+
+  <button type="button" class="action-button action-button-primary" (click)="openOpportunityForm()">
+    Nouvelle opportunité
+  </button>
+</div>
 
 <!--
   Active opportunities are organized into
@@ -91,6 +101,10 @@
       }
     </div>
   </div>
+}
+
+@if (showOpportunityForm()) {
+  <app-opportunity-form (closed)="closeOpportunityForm()" />
 }
 
 @if (selectedOpportunity(); as opportunity) {

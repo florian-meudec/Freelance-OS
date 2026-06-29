@@ -12,6 +12,7 @@ import {
 import { MOCK_OPPORTUNITIES } from '../../mocks/mock-opportunities';
 import { OpportunityEventType } from '../../models/opportunity-event.model';
 import { NextAction } from '../../models/next-action.model';
+import { OpportunityForm } from '../../components/opportunity-form/opportunity-form';
 
 /*
   Columns act as drop zones for kanban interactions.
@@ -19,7 +20,13 @@ import { NextAction } from '../../models/next-action.model';
 @Component({
   selector: 'app-opportunities-board',
   standalone: true,
-  imports: [CdkDropList, CdkDropListGroup, OpportunityCard, OpportunityDetailsPanel],
+  imports: [
+    CdkDropList,
+    CdkDropListGroup,
+    OpportunityCard,
+    OpportunityDetailsPanel,
+    OpportunityForm,
+  ],
   templateUrl: './opportunities-board.html',
   styleUrl: './opportunities-board.scss',
 })
@@ -91,6 +98,8 @@ export class OpportunitiesBoard {
   readonly selectedOpportunity = signal<Opportunity | null>(null);
 
   readonly pendingStatus = signal<OpportunityStatus | null>(null);
+
+  readonly showOpportunityForm = signal(false);
 
   readonly detailsPanel = viewChild<OpportunityDetailsPanel>('detailsPanel');
 
@@ -578,5 +587,13 @@ export class OpportunitiesBoard {
     );
 
     this.selectedOpportunity.set(updatedOpportunity);
+  }
+
+  openOpportunityForm(): void {
+    this.showOpportunityForm.set(true);
+  }
+
+  closeOpportunityForm(): void {
+    this.showOpportunityForm.set(false);
   }
 }

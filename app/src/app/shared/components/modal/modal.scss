@@ -1,7 +1,7 @@
-@use '../../../styles/foundations/colors' as *;
-@use '../../../styles/foundations/radius' as *;
-@use '../../../styles/foundations/shadows' as *;
-@use '../../../styles/foundations/spacing' as *;
+@use '../../../../styles/foundations/colors' as *;
+@use '../../../../styles/foundations/radius' as *;
+@use '../../../../styles/foundations/shadows' as *;
+@use '../../../../styles/foundations/spacing' as *;
 
 .modal-backdrop {
   position: fixed;
@@ -31,6 +31,8 @@
 
   width: min(900px, calc(100vw - #{$spacing-xl * 2}));
   max-height: calc(100vh - #{$spacing-xl * 2});
+
+  min-height: 0;
 
   border-radius: $radius-lg;
 

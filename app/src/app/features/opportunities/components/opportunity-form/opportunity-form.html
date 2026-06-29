@@ -1,0 +1,210 @@
+<app-modal (closed)="requestClose()">
+  <div class="opportunity-form">
+    <div class="form-header">
+      <div>
+        <h2>Nouvelle opportunité</h2>
+
+        <p class="form-description">
+          Les champs marqués d'un
+          <span class="required-indicator">*</span>
+          sont obligatoires.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="action-button action-button-icon"
+        (click)="requestClose()"
+        aria-label="Fermer"
+      >
+        ✕
+      </button>
+    </div>
+
+    <div class="form-body">
+      <div class="form-section">
+        <h3>Entreprise</h3>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="companyName" class="form-label form-label-required"> Entreprise </label>
+
+            <input id="companyName" class="form-input" />
+          </div>
+
+          <div class="form-field">
+            <label for="companyType" class="form-label"> Type </label>
+
+            <app-select-menu id="companyType" [options]="companyTypes" [selected]="noSelection" />
+          </div>
+
+          <div class="form-field">
+            <label for="industry" class="form-label"> Secteur </label>
+
+            <input id="industry" class="form-input" />
+          </div>
+
+          <div class="form-field">
+            <label for="source" class="form-label"> Source </label>
+
+            <input id="source" class="form-input" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>Contact</h3>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="contactName" class="form-label"> Nom </label>
+
+            <input id="contactName" class="form-input" />
+          </div>
+
+          <div class="form-field">
+            <label for="contactRole" class="form-label"> Poste </label>
+
+            <input id="contactRole" class="form-input" />
+          </div>
+
+          <div class="form-field form-grid-full">
+            <label for="contactEmail" class="form-label"> Email </label>
+
+            <input id="contactEmail" type="email" class="form-input" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>Mission</h3>
+
+        <div class="form-field">
+          <label for="missionTitle" class="form-label form-label-required"> Titre </label>
+
+          <input id="missionTitle" class="form-input" />
+        </div>
+
+        <div class="form-field">
+          <label for="description" class="form-label"> Description </label>
+
+          <textarea id="description" rows="5" class="form-textarea"></textarea>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>Conditions</h3>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="tjm" class="form-label"> TJM </label>
+
+            <input id="tjm" class="form-input" />
+          </div>
+
+          <div class="form-field">
+            <label for="workload" class="form-label"> Charge </label>
+
+            <input id="workload" class="form-input" />
+          </div>
+
+          <div class="form-field">
+            <label for="modality" class="form-label"> Modalité </label>
+
+            <app-select-menu id="modality" [options]="modalities" [selected]="noSelection" />
+          </div>
+
+          <div class="form-field">
+            <label for="location" class="form-label"> Localisation </label>
+
+            <input id="location" class="form-input" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>Planning</h3>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="estimatedStartDate" class="form-label"> Début estimé </label>
+
+            <input id="estimatedStartDate" type="date" class="form-input" />
+          </div>
+
+          <div class="form-field">
+            <label for="durationValue" class="form-label"> Durée </label>
+
+            <div class="duration-fields">
+              <input id="durationValue" class="form-input" />
+
+              <app-select-menu
+                id="durationUnit"
+                [options]="durationUnits"
+                [selected]="noSelection"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>Expertise</h3>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="seniority" class="form-label"> Séniorité </label>
+
+            <app-select-menu id="seniority" [options]="seniorities" [selected]="noSelection" />
+          </div>
+
+          <div class="form-field form-grid-full">
+            <label for="stack" class="form-label"> Stack </label>
+
+            <input
+              id="stack"
+              class="form-input"
+              placeholder="Angular, Spring Boot, PostgreSQL..."
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>Prochaine action</h3>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="nextActionType" class="form-label form-label-required"> Type </label>
+
+            <app-select-menu
+              id="nextActionType"
+              [options]="nextActionTypes"
+              [selected]="noSelection"
+            />
+          </div>
+
+          <div class="form-field">
+            <label for="nextActionDate" class="form-label form-label-required"> Date </label>
+
+            <input id="nextActionDate" type="date" class="form-input" />
+          </div>
+
+          <div class="form-field form-grid-full">
+            <label for="nextActionLabel" class="form-label form-label-required">
+              Description
+            </label>
+
+            <input id="nextActionLabel" class="form-input" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-footer">
+      <button type="button" class="action-button" (click)="requestClose()">Annuler</button>
+
+      <button type="button" class="action-button action-button-primary">Créer l'opportunité</button>
+    </div>
+  </div>
+</app-modal>

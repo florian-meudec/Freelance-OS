@@ -1,0 +1,162 @@
+@use '../../../../../styles/foundations/colors' as *;
+@use '../../../../../styles/foundations/radius' as *;
+@use '../../../../../styles/foundations/spacing' as *;
+@use '../../../../../styles/foundations/typography' as *;
+@use '../../../../../styles/foundations/font-weights' as *;
+@use '../../../../../styles/components/forms' as *;
+
+/*
+  Opportunity creation reuses the shared modal
+  while providing a dedicated business layout.
+*/
+.opportunity-form {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  min-height: 0;
+}
+
+/*
+  Header remains visible while scrolling
+  through long opportunity forms.
+*/
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: $spacing-lg;
+
+  padding: $spacing-xl;
+
+  border-bottom: 1px solid $border-color;
+
+  h2 {
+    margin: 0;
+
+    font-size: $text-xl;
+  }
+}
+
+/*
+  Form body becomes scrollable independently
+  from the header and footer.
+*/
+.form-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+
+  gap: $spacing-xl;
+
+  min-height: 0;
+
+  padding: $spacing-xl;
+
+  overflow-y: auto;
+}
+
+/*
+  Sections improve readability by grouping
+  related business information.
+*/
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  h3 {
+    margin: 0;
+
+    font-size: $text-md;
+  }
+}
+
+/*
+  Two-column layout keeps the form compact
+  without sacrificing readability.
+*/
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: $spacing-md;
+}
+
+.form-grid-full {
+  grid-column: 1 / -1;
+}
+
+/*
+  Grid items may contain custom Angular components
+  that need to shrink inside the available space.
+*/
+.form-field {
+  min-width: 0;
+}
+
+/*
+  Duration combines a numeric value
+  and its associated unit.
+*/
+.duration-fields {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+
+  gap: $spacing-sm;
+}
+
+/*
+  Footer stays fixed to keep primary actions
+  accessible regardless of scroll position.
+*/
+.form-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-sm;
+
+  padding: $spacing-xl;
+
+  border-top: 1px solid $border-color;
+}
+
+/*
+  Helper text clarifies the meaning
+  of required field indicators.
+*/
+.form-description {
+  margin: $spacing-xs 0 0;
+
+  color: $text-secondary;
+}
+
+.required-indicator {
+  color: $urgency-today;
+
+  font-weight: $font-weight-medium;
+}
+
+/*
+  Required labels display an asterisk
+  without polluting the HTML.
+*/
+.form-label-required::after {
+  content: ' *';
+
+  color: $urgency-today;
+}
+
+/*
+  Header actions keep their intrinsic width.
+*/
+.form-header .action-button {
+  width: auto;
+}
+
+/*
+  Footer actions should not stretch
+  across the available width.
+*/
+.form-footer .action-button {
+  width: auto;
+}
