@@ -1,0 +1,58 @@
+@use '../../../styles/foundations/colors' as *;
+@use '../../../styles/foundations/radius' as *;
+@use '../../../styles/foundations/shadows' as *;
+@use '../../../styles/foundations/spacing' as *;
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+
+  border: none;
+
+  background: $overlay-backdrop;
+
+  backdrop-filter: blur(2px);
+
+  cursor: pointer;
+
+  z-index: 100;
+}
+
+.modal-container {
+  position: fixed;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  flex-direction: column;
+
+  width: min(900px, calc(100vw - #{$spacing-xl * 2}));
+  max-height: calc(100vh - #{$spacing-xl * 2});
+
+  border-radius: $radius-lg;
+
+  background: $surface-primary;
+
+  box-shadow: $shadow-lg;
+
+  overflow: hidden;
+
+  z-index: 101;
+
+  animation: modal-in 0.18s ease-out;
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
