@@ -126,7 +126,7 @@
             </span>
 
             @if (opportunity().contactEmail) {
-              <button type="button" class="copy-button" (click)="copyEmail()">
+              <button type="button" class="link-button" (click)="copyEmail()">
                 {{ emailCopied() ? 'Copié !' : 'Copier' }}
               </button>
             }

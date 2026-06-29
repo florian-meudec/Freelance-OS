@@ -4,6 +4,7 @@
 @use '../../../../../styles/foundations/shadows' as *;
 @use '../../../../../styles/foundations/spacing' as *;
 @use '../../../../../styles/foundations/typography' as *;
+@use '../../../../../styles/components/scrollbar' as *;
 
 /*
   Main kanban layout keeps active opportunity stages
@@ -24,16 +25,8 @@
     while interacting with the kanban board.
   */
   overscroll-behavior-x: contain;
-}
 
-.board::-webkit-scrollbar {
-  height: 10px;
-}
-
-.board::-webkit-scrollbar-thumb {
-  border-radius: 999px;
-
-  background: rgba(0, 0, 0, 0.15);
+  @include thin-scrollbar;
 }
 
 .column {

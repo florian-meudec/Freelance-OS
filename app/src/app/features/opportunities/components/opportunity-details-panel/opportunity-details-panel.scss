@@ -5,6 +5,8 @@
 @use '../../../../../styles/foundations/spacing' as *;
 @use '../../../../../styles/foundations/typography' as *;
 @use '../../../../../styles/components/forms' as *;
+@use '../../../../../styles/components/scrollbar' as *;
+@use '../../../../../styles/components/link-button' as *;
 
 /*
   Fixed side panel used to inspect opportunity details
@@ -37,6 +39,8 @@
   z-index: 100;
 
   animation: slide-in 0.2s ease-out;
+
+  @include thin-scrollbar;
 }
 
 .details-header {
@@ -215,35 +219,6 @@
   gap: $spacing-sm;
 
   min-width: 0;
-}
-
-/*
-  Lightweight utility button used for
-  inline quick-copy interactions.
-*/
-.copy-button {
-  min-width: 56px;
-
-  padding: 0;
-
-  border: none;
-
-  background: transparent;
-
-  color: $interactive-primary;
-
-  font-size: $text-sm;
-  font-weight: $font-weight-medium;
-
-  white-space: nowrap;
-
-  cursor: pointer;
-
-  transition: color 0.15s ease;
-
-  &:hover {
-    text-decoration: underline;
-  }
 }
 
 .copy-value {

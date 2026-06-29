@@ -5,6 +5,7 @@
 @use '../../../../styles/foundations/spacing' as *;
 @use '../../../../styles/foundations/typography' as *;
 @use '../../../../styles/components/forms' as *;
+@use '../../../../styles/components/link-button' as *;
 
 /*
   Notes remain visually integrated inside
@@ -62,31 +63,6 @@
     font-size: $text-xs;
 
     white-space: nowrap;
-  }
-}
-
-/*
-  Lightweight notes action button stays visually
-  discreet inside dense CRM layouts.
-*/
-.notes-add-button {
-  padding: 0;
-
-  border: none;
-
-  background: transparent;
-
-  color: $interactive-primary;
-
-  font-size: $text-sm;
-  font-weight: $font-weight-medium;
-
-  cursor: pointer;
-
-  transition: color 0.15s ease;
-
-  &:hover {
-    text-decoration: underline;
   }
 }
 

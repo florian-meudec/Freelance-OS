@@ -1,0 +1,24 @@
+@use '../foundations/colors' as *;
+@use '../foundations/typography' as *;
+@use '../foundations/font-weights' as *;
+
+.link-button {
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  color: $interactive-primary;
+
+  font-size: $text-sm;
+  font-weight: $font-weight-medium;
+
+  cursor: pointer;
+
+  transition: color 0.15s ease;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
