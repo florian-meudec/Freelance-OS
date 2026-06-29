@@ -1,35 +1,50 @@
-@use '../colors' as *;
-@use '../radius' as *;
-@use '../spacing' as *;
-@use '../typography' as *;
+@use '../foundations/colors' as *;
+@use '../foundations/radius' as *;
+@use '../foundations/spacing' as *;
+@use '../foundations/typography' as *;
 
 /*
   Shared buttons provide consistent
   interactions across the CRM.
 */
 .action-button {
-  font: inherit;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 32px;
+
   width: 100%;
+  min-height: 32px;
+
   padding: $spacing-xs $spacing-sm;
+
   border: 1px solid $border-color;
   border-radius: $radius-md;
+
   background: $surface-primary;
-  cursor: pointer;
+
+  color: inherit;
+
+  font: inherit;
   font-size: $text-sm;
   text-align: center;
   white-space: nowrap;
+
+  cursor: pointer;
+
   box-sizing: border-box;
 
   transition:
     background 0.15s ease,
-    border-color 0.15s ease;
+    border-color 0.15s ease,
+    color 0.15s ease;
 
   &:hover {
     background: $surface-secondary;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $interactive-primary;
+    outline-offset: 2px;
   }
 }
 
@@ -39,11 +54,14 @@
 */
 .action-button-primary {
   border-color: $interactive-primary;
+
   background: $interactive-primary;
+
   color: white;
 
   &:hover {
     background: $interactive-primary;
+
     opacity: 0.95;
   }
 }
@@ -54,6 +72,7 @@
 */
 .action-button-danger {
   border-color: $urgency-late;
+
   color: $urgency-late;
 
   &:hover {

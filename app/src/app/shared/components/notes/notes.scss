@@ -1,8 +1,10 @@
-@use '../../../../styles/colors' as *;
-@use '../../../../styles/radius' as *;
-@use '../../../../styles/spacing' as *;
-@use '../../../../styles/typography' as *;
-@use '../../../../styles/forms' as *;
+@use '../../../../styles/foundations/colors' as *;
+@use '../../../../styles/foundations/font-weights' as *;
+@use '../../../../styles/foundations/radius' as *;
+@use '../../../../styles/foundations/shadows' as *;
+@use '../../../../styles/foundations/spacing' as *;
+@use '../../../../styles/foundations/typography' as *;
+@use '../../../../styles/components/forms' as *;
 
 /*
   Notes remain visually integrated inside
@@ -11,6 +13,7 @@
 .notes-section {
   display: flex;
   flex-direction: column;
+
   gap: $spacing-lg;
 
   padding-top: $spacing-xl;
@@ -19,7 +22,9 @@
 
   h3 {
     margin: 0;
+
     font-size: $text-md;
+    font-weight: $font-weight-semibold;
   }
 }
 
@@ -31,6 +36,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   gap: $spacing-md;
 }
 
@@ -42,15 +48,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   gap: $spacing-md;
 
   strong {
     font-size: $text-sm;
+    font-weight: $font-weight-semibold;
   }
 
   span {
-    font-size: $text-xs;
     color: $text-secondary;
+
+    font-size: $text-xs;
+
     white-space: nowrap;
   }
 }
@@ -60,13 +70,20 @@
   discreet inside dense CRM layouts.
 */
 .notes-add-button {
-  border: none;
   padding: 0;
+
+  border: none;
+
   background: transparent;
+
   color: $interactive-primary;
-  cursor: pointer;
+
   font-size: $text-sm;
-  font-weight: 500;
+  font-weight: $font-weight-medium;
+
+  cursor: pointer;
+
+  transition: color 0.15s ease;
 
   &:hover {
     text-decoration: underline;
@@ -80,6 +97,7 @@
 .notes-list {
   display: flex;
   flex-direction: column;
+
   gap: $spacing-md;
 }
 
@@ -90,17 +108,26 @@
 .note-card {
   display: flex;
   flex-direction: column;
+
   gap: $spacing-sm;
-  padding: $spacing-md;
-  border-radius: $radius-lg;
-  background: $surface-secondary;
+
   width: 100%;
-  border: 1px solid $border-color;
-  text-align: left;
-  font: inherit;
+
   margin: 0;
-  line-height: 1.6;
+  padding: $spacing-md;
+
+  border: 1px solid $border-color;
+  border-radius: $radius-lg;
+
+  background: $surface-secondary;
+
   color: $text-secondary;
+
+  font: inherit;
+
+  line-height: 1.6;
+  text-align: left;
+
   box-sizing: border-box;
 }
 
@@ -111,10 +138,14 @@
 .note-form {
   display: flex;
   flex-direction: column;
+
   gap: $spacing-md;
+
   padding: $spacing-md;
+
   border: 1px solid $border-color;
   border-radius: $radius-lg;
+
   background: $surface-secondary;
 }
 
@@ -127,12 +158,13 @@
 
   transition:
     border-color 0.15s ease,
-    background 0.15s ease,
-    transform 0.15s ease;
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 
   &:hover {
     border-color: $interactive-primary;
-    background: $surface-secondary;
+
+    box-shadow: $shadow-md;
 
     transform: translateY(-1px);
   }

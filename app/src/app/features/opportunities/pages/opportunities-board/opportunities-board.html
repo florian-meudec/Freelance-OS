@@ -33,6 +33,7 @@
             (cardClick)="selectOpportunity($event)"
           />
         }
+
         @if (!column.opportunities.length) {
           <div class="empty-column">Déposer une opportunité ici</div>
         }
@@ -71,8 +72,9 @@
   </div>
 
   <!--
-    Won opportunities are displayed separately since
-    they require less day-to-day monitoring.
+    Won opportunities remain available for
+    consultation while staying outside
+    the active pipeline.
   -->
   <div class="archived-section">
     <h2 class="archived-title">Opportunités gagnées</h2>

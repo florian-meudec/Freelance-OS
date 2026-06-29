@@ -1,7 +1,9 @@
-@use '../../../../../styles/colors' as *;
-@use '../../../../../styles/radius' as *;
-@use '../../../../../styles/spacing' as *;
-@use '../../../../../styles/typography' as *;
+@use '../../../../../styles/foundations/colors' as *;
+@use '../../../../../styles/foundations/font-weights' as *;
+@use '../../../../../styles/foundations/radius' as *;
+@use '../../../../../styles/foundations/shadows' as *;
+@use '../../../../../styles/foundations/spacing' as *;
+@use '../../../../../styles/foundations/typography' as *;
 
 /*
   Main kanban layout keeps active opportunity stages
@@ -9,9 +11,12 @@
 */
 .board {
   display: flex;
-  gap: $spacing-md;
-  overflow-x: auto;
   align-items: flex-start;
+
+  gap: $spacing-md;
+
+  overflow-x: auto;
+
   padding-bottom: $spacing-md;
 
   /*
@@ -26,9 +31,9 @@
 }
 
 .board::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.15);
-
   border-radius: 999px;
+
+  background: rgba(0, 0, 0, 0.15);
 }
 
 .column {
@@ -40,7 +45,9 @@
     regardless of the number of opportunities.
   */
   flex: 0 0 320px;
+
   gap: $spacing-md;
+
   min-height: 200px;
   height: 100%;
 }
@@ -49,18 +56,23 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   padding: $spacing-md;
+
   border-radius: $radius-md;
+
   background: $surface-secondary;
 
   h2 {
     margin: 0;
+
     font-size: $text-md;
+    font-weight: $font-weight-semibold;
   }
 
   span {
     font-size: $text-sm;
-    font-weight: 600;
+    font-weight: $font-weight-semibold;
   }
 }
 
@@ -70,9 +82,11 @@
 */
 .column-content {
   display: flex;
-  flex-direction: column;
-  gap: $spacing-md;
   flex: 1;
+  flex-direction: column;
+
+  gap: $spacing-md;
+
   min-height: 200px;
 }
 
@@ -89,23 +103,26 @@
   to improve spatial feedback inside the board.
 */
 .column-content.cdk-drop-list-receiving {
-  background: rgba(37, 99, 235, 0.04);
   border-radius: $radius-md;
   outline: 2px dashed $interactive-primary;
   outline-offset: 4px;
+
+  background: rgba(37, 99, 235, 0.04);
 }
 
 .archived-toggle {
   margin-top: $spacing-lg;
 }
 
-.archived-title {
-  margin-top: $spacing-lg;
-  margin-bottom: $spacing-md;
-}
-
 .archived-section {
   margin-top: $spacing-xl;
+}
+
+.archived-title {
+  margin: 0 0 $spacing-md;
+
+  font-size: $text-lg;
+  font-weight: $font-weight-semibold;
 }
 
 /*
@@ -115,8 +132,8 @@
 .archived-board {
   display: flex;
   flex-wrap: wrap;
+
   gap: $spacing-md;
-  margin-top: $spacing-md;
 }
 
 /*
@@ -125,16 +142,13 @@
 */
 .empty-column {
   display: flex;
-
+  flex: 1;
   justify-content: center;
   align-items: center;
-
-  flex: 1;
 
   min-height: 120px;
 
   border: 2px dashed rgba(0, 0, 0, 0.12);
-
   border-radius: $radius-md;
 
   color: $text-secondary;
@@ -151,12 +165,18 @@
 .details-backdrop {
   position: fixed;
   inset: 0;
-  border: none;
+
   padding: 0;
+  border: none;
+
   background: $overlay-backdrop;
+
   backdrop-filter: blur(2px);
+
   cursor: pointer;
+
   z-index: 90;
+
   animation: fade-in 0.2s ease-out;
 }
 

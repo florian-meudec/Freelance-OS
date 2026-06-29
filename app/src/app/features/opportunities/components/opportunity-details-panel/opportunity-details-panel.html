@@ -37,12 +37,12 @@
 
       <div class="actions-row">
         <button type="button" class="action-button" (click)="openQuickNoteForm()">
-          Ajouter note
+          Ajouter une note
         </button>
 
         <!--
           Future workflow action creation will allow
-          scheduling dated follow-up actions directly
+          scheduling follow-up actions directly
           from the opportunity panel.
         -->
         <button type="button" class="action-button" (click)="scrollToNextAction()">
@@ -64,7 +64,7 @@
 
       <div class="details-grid">
         <div>
-          <span>Entreprise</span>
+          <span class="form-label">Entreprise</span>
 
           <strong>
             {{ opportunity().companyName }}
@@ -72,7 +72,7 @@
         </div>
 
         <div>
-          <span>Type</span>
+          <span class="form-label">Type</span>
 
           <strong>
             {{ opportunity().companyType | companyType }}
@@ -80,7 +80,7 @@
         </div>
 
         <div>
-          <span>Secteur</span>
+          <span class="form-label">Secteur</span>
 
           <strong>
             {{ opportunity().industry | fallback }}
@@ -88,7 +88,7 @@
         </div>
 
         <div>
-          <span>Source</span>
+          <span class="form-label">Source</span>
 
           <strong>
             {{ opportunity().source | fallback }}
@@ -102,7 +102,7 @@
 
       <div class="details-grid">
         <div>
-          <span>Contact principal</span>
+          <span class="form-label">Contact principal</span>
 
           <strong>
             {{ opportunity().contactName | fallback }}
@@ -110,7 +110,7 @@
         </div>
 
         <div>
-          <span>Poste</span>
+          <span class="form-label">Poste</span>
 
           <strong>
             {{ opportunity().contactRole | fallback }}
@@ -118,7 +118,7 @@
         </div>
 
         <div>
-          <span>Email</span>
+          <span class="form-label">Email</span>
 
           <div class="copy-field">
             <span class="copy-value">
@@ -170,7 +170,7 @@
 
       <div class="details-grid">
         <div>
-          <span>TJM</span>
+          <span class="form-label">TJM</span>
 
           <strong>
             {{ opportunity().tjm | tjm }}
@@ -178,7 +178,7 @@
         </div>
 
         <div>
-          <span>Charge</span>
+          <span class="form-label">Charge</span>
 
           <strong>
             {{ opportunity().workload | workload }}
@@ -186,7 +186,7 @@
         </div>
 
         <div>
-          <span>Modalité</span>
+          <span class="form-label">Modalité</span>
 
           <strong>
             {{ opportunity().modality | opportunityModality }}
@@ -194,7 +194,7 @@
         </div>
 
         <div>
-          <span>Localisation</span>
+          <span class="form-label">Localisation</span>
 
           <strong>
             {{ opportunity().location | fallback }}
@@ -208,7 +208,7 @@
 
       <div class="details-grid">
         <div>
-          <span>Début estimé</span>
+          <span class="form-label">Début estimé</span>
 
           <strong>
             @if (opportunity().estimatedStartDate; as estimatedStartDate) {
@@ -220,7 +220,7 @@
         </div>
 
         <div>
-          <span>Durée</span>
+          <span class="form-label">Durée</span>
 
           <strong>
             {{ opportunity().durationValue }}
@@ -235,7 +235,7 @@
 
       <div class="details-grid">
         <div>
-          <span>Séniorité</span>
+          <span class="form-label">Séniorité</span>
 
           <strong>
             {{ opportunity().seniority | opportunitySeniority }}
@@ -251,7 +251,7 @@
             </span>
           }
         } @else {
-          <span>-</span>
+          <span>{{ null | fallback }}</span>
         }
       </div>
     </div>

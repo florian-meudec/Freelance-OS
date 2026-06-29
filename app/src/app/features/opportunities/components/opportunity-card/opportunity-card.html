@@ -1,6 +1,6 @@
 <!--
   Cards use a div with role="button" instead of a native button
-  to stay compatible with drag & drop interactions.
+  to remain compatible with drag and drop interactions.
 -->
 <div
   class="opportunity-card"
@@ -17,8 +17,8 @@
   (cdkDragEnded)="onDragEnded()"
 >
   <!--
-    The header combines urgency visualization
-    and drag interactions for active opportunities.
+    The header combines urgency indicators
+    with the kanban drag handle.
   -->
   <div class="card-header" [class]="headerClass()" cdkDragHandle>
     <h3>{{ opportunity().companyName }}</h3>
@@ -29,17 +29,19 @@
   <div class="card-content">
     <div class="card-section">
       <span>{{ opportunity().tjm | tjm }}</span>
+
       <span>{{ opportunity().workload | workload }}</span>
     </div>
 
     <div class="card-section">
       <span>{{ opportunity().modality | opportunityModality }}</span>
+
       <span>{{ opportunity().location }}</span>
     </div>
 
     <!--
-      Follow-up section highlights the next actionable step
-      to keep the board focused on ongoing opportunities.
+      The follow-up section highlights the
+      current action and its urgency.
     -->
     <div class="card-follow-up">
       @if (opportunity().nextAction; as nextAction) {

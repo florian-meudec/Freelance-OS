@@ -1,17 +1,29 @@
-@use '../../../../../styles/colors' as *;
-@use '../../../../../styles/spacing' as *;
-@use '../../../../../styles/typography' as *;
-@use '../../../../../styles/radius' as *;
+@use '../../../../../styles/foundations/colors' as *;
+@use '../../../../../styles/foundations/font-weights' as *;
+@use '../../../../../styles/foundations/radius' as *;
+@use '../../../../../styles/foundations/shadows' as *;
+@use '../../../../../styles/foundations/spacing' as *;
+@use '../../../../../styles/foundations/typography' as *;
 
+/*
+  Opportunity cards summarize the key
+  business information of the pipeline.
+*/
 .opportunity-card {
-  background: $surface-primary;
-  border: 1px solid $border-color;
   width: 100%;
-  text-align: left;
-  color: inherit;
-  cursor: pointer;
-  border-radius: $radius-lg;
+
   overflow: hidden;
+
+  border: 1px solid $border-color;
+  border-radius: $radius-lg;
+
+  background: $surface-primary;
+
+  color: inherit;
+  text-align: left;
+
+  cursor: pointer;
+
   user-select: none;
 
   transition:
@@ -20,7 +32,8 @@
 
   &:not(.cdk-drag-dragging):hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+
+    box-shadow: $shadow-md;
   }
 
   /*
@@ -38,7 +51,8 @@
   */
   &.selected {
     border-color: $interactive-primary;
-    box-shadow: 0 0 0 2px $interactive-primary-muted;
+
+    box-shadow: $shadow-md;
   }
 }
 
@@ -56,15 +70,19 @@
 
 .card-header {
   padding: $spacing-md;
+
   color: white;
 
   h3 {
     margin: 0 0 $spacing-xs;
+
     font-size: $text-lg;
+    font-weight: $font-weight-semibold;
   }
 
   p {
     margin: 0;
+
     opacity: 0.9;
   }
 
@@ -73,32 +91,39 @@
     directly from the board overview.
   */
   &.urgency-late {
-    background-color: $urgency-late;
+    background: $urgency-late;
   }
 
   &.urgency-today {
-    background-color: $urgency-today;
+    background: $urgency-today;
   }
 
   &.urgency-this-week {
-    background-color: $urgency-this-week;
+    background: $urgency-this-week;
   }
 
   &.urgency-waiting {
-    background-color: $urgency-waiting;
+    background: $urgency-waiting;
   }
 }
 
+/*
+  Business information remains compact while
+  preserving quick readability.
+*/
 .card-content {
-  padding: $spacing-md;
   display: flex;
   flex-direction: column;
+
   gap: $spacing-md;
+
+  padding: $spacing-md;
 }
 
 .card-section {
   display: flex;
   justify-content: space-between;
+
   font-size: $text-md;
 }
 
@@ -106,17 +131,24 @@
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
+
   gap: $spacing-sm;
 
   strong {
     overflow: hidden;
+
     text-overflow: ellipsis;
     white-space: nowrap;
 
     font-size: $text-md;
+    font-weight: $font-weight-semibold;
   }
 }
 
+/*
+  Urgency badges summarize the remaining
+  follow-up delay at a glance.
+*/
 .follow-up-badge {
   flex-shrink: 0;
 
@@ -124,12 +156,12 @@
 
   border-radius: 999px;
 
-  font-size: $text-xs;
-  font-weight: 600;
+  background: $interactive-primary;
 
   color: white;
 
-  background: $interactive-primary;
+  font-size: $text-xs;
+  font-weight: $font-weight-semibold;
 }
 
 .card-header.urgency-late ~ .card-content .follow-up-badge {
@@ -150,7 +182,7 @@
 
 /*
   Compact cards are used for archived opportunities
-  to keep the historical sections denser and easier to scan.
+  to keep historical sections denser and easier to scan.
 */
 :host(.compact-card) {
   .card-header {
@@ -162,8 +194,9 @@
   }
 
   .card-content {
-    padding: $spacing-sm;
     gap: $spacing-sm;
+
+    padding: $spacing-sm;
   }
 
   .card-section,
@@ -175,22 +208,22 @@
 /* Drag & drop states */
 
 /*
-  Drag preview keeps the lifted card visually
-  consistent while moving across columns.
+  Drag previews preserve the card appearance
+  while moving between kanban columns.
 */
 .cdk-drag-preview {
-  border-radius: $radius-lg;
-
   overflow: hidden;
 
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  border-radius: $radius-lg;
+
+  box-shadow: $shadow-lg;
 
   transform: rotate(2deg);
 }
 
 /*
-  Placeholder preserves layout stability
-  while dragging cards inside the board.
+  Placeholders preserve layout stability
+  while dragging cards across the board.
 */
 .cdk-drag-placeholder {
   opacity: 0;

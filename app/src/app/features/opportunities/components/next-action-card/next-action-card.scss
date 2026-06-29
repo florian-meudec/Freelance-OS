@@ -1,9 +1,14 @@
-@use '../../../../../styles/colors' as *;
-@use '../../../../../styles/radius' as *;
-@use '../../../../../styles/spacing' as *;
-@use '../../../../../styles/typography' as *;
-@use '../../../../../styles/forms' as *;
+@use '../../../../../styles/foundations/colors' as *;
+@use '../../../../../styles/foundations/font-weights' as *;
+@use '../../../../../styles/foundations/radius' as *;
+@use '../../../../../styles/foundations/spacing' as *;
+@use '../../../../../styles/foundations/typography' as *;
+@use '../../../../../styles/components/forms' as *;
 
+/*
+  Next actions remain visually highlighted
+  to emphasize the current follow-up.
+*/
 .next-action-card {
   display: flex;
   flex-direction: column;
@@ -19,6 +24,7 @@
 
   strong {
     font-size: $text-md;
+    font-weight: $font-weight-semibold;
   }
 
   span {
@@ -33,20 +39,25 @@
 .details-subsection {
   display: flex;
   flex-direction: column;
-  gap: $spacing-md;
-}
 
-.details-subsection h4 {
-  margin: 0;
-  font-size: $text-sm;
-  color: $text-secondary;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  gap: $spacing-md;
+
+  h4 {
+    margin: 0;
+
+    color: $text-secondary;
+
+    font-size: $text-sm;
+    font-weight: $font-weight-medium;
+
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
 }
 
 /*
-  Timeline event creation remains visually
-  separated from historical activity.
+  Next action forms remain visually
+  separated from the surrounding content.
 */
 .event-form {
   display: flex;
@@ -62,8 +73,4 @@
   border-radius: $radius-lg;
 
   background: $surface-secondary;
-}
-
-.form-actions-center {
-  justify-content: center;
 }

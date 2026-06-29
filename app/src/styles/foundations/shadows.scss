@@ -1,0 +1,11 @@
+/*
+  Medium elevation shadow used by
+  floating cards and interactive surfaces.
+*/
+$shadow-md: 0 8px 20px rgba(0, 0, 0, 0.08);
+
+/*
+  Large elevation shadow used while
+  dragging elements across the interface.
+*/
+$shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.18);

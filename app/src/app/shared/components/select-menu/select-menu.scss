@@ -1,7 +1,9 @@
-@use '../../../../styles/colors' as *;
-@use '../../../../styles/radius' as *;
-@use '../../../../styles/spacing' as *;
-@use '../../../../styles/typography' as *;
+@use '../../../../styles/foundations/colors' as *;
+@use '../../../../styles/foundations/font-weights' as *;
+@use '../../../../styles/foundations/radius' as *;
+@use '../../../../styles/foundations/shadows' as *;
+@use '../../../../styles/foundations/spacing' as *;
+@use '../../../../styles/foundations/typography' as *;
 
 /*
   Select menus encapsulate lightweight
@@ -17,22 +19,26 @@
 */
 .status-dropdown {
   position: absolute;
-  top: calc(100% + 4px);
+  top: calc(100% + $spacing-xs);
   left: 0;
+
   z-index: 10;
 
   display: flex;
   flex-direction: column;
+
   gap: 2px;
 
   width: 100%;
+
   padding: $spacing-xs;
 
   border: 1px solid $border-color;
   border-radius: $radius-md;
 
   background: $surface-primary;
-  box-shadow: $shadow-panel;
+
+  box-shadow: $shadow-md;
 }
 
 /*
@@ -40,18 +46,19 @@
   compact workflow interactions.
 */
 .status-option {
-  border: none;
   padding: $spacing-sm;
 
+  border: none;
   border-radius: $radius-sm;
 
   background: transparent;
 
+  font-size: $text-sm;
+  font-weight: $font-weight-medium;
+
   text-align: left;
 
   cursor: pointer;
-
-  font-size: $text-sm;
 
   transition: background 0.15s ease;
 
@@ -66,9 +73,12 @@
 */
 .status-option-active {
   background: $surface-secondary;
+
   color: $text-secondary;
+
+  font-weight: $font-weight-semibold;
+
   cursor: default;
-  font-weight: 600;
 
   &:hover {
     background: $surface-secondary;

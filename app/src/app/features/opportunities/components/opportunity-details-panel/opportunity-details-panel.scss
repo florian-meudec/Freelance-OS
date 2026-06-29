@@ -1,8 +1,10 @@
-@use '../../../../../styles/colors' as *;
-@use '../../../../../styles/radius' as *;
-@use '../../../../../styles/spacing' as *;
-@use '../../../../../styles/typography' as *;
-@use '../../../../../styles/forms' as *;
+@use '../../../../../styles/foundations/colors' as *;
+@use '../../../../../styles/foundations/font-weights' as *;
+@use '../../../../../styles/foundations/radius' as *;
+@use '../../../../../styles/foundations/shadows' as *;
+@use '../../../../../styles/foundations/spacing' as *;
+@use '../../../../../styles/foundations/typography' as *;
+@use '../../../../../styles/components/forms' as *;
 
 /*
   Fixed side panel used to inspect opportunity details
@@ -12,34 +14,48 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 420px;
-  height: 100vh;
+
   display: flex;
   flex-direction: column;
   gap: $spacing-xl;
-  padding: $spacing-xl;
-  background: $surface-primary;
-  border-left: 1px solid $border-color;
-  box-shadow: $shadow-panel;
+
+  width: 420px;
+  height: 100vh;
+
   overflow-y: auto;
-  z-index: 100;
-  animation: slide-in 0.2s ease-out;
+
+  padding: $spacing-xl;
+
+  border-left: 1px solid $border-color;
+
+  background: $surface-primary;
+
+  box-shadow: $shadow-md;
+
   box-sizing: border-box;
+
+  z-index: 100;
+
+  animation: slide-in 0.2s ease-out;
 }
 
 .details-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+
   gap: $spacing-md;
 
   h2 {
     margin: 0;
+
     font-size: $text-xl;
+    font-weight: $font-weight-semibold;
   }
 
   p {
     margin-top: $spacing-xs;
+
     color: $text-secondary;
   }
 }
@@ -51,19 +67,25 @@
 .details-section {
   display: flex;
   flex-direction: column;
+
   gap: $spacing-lg;
+
   padding-top: $spacing-xl;
+
   border-top: 1px solid $border-color;
 
   h3 {
     margin: 0;
-    font-size: $text-md;
-  }
-}
 
-.details-section:first-of-type {
-  padding-top: 0;
-  border-top: none;
+    font-size: $text-md;
+    font-weight: $font-weight-semibold;
+  }
+
+  &:first-of-type {
+    padding-top: 0;
+
+    border-top: none;
+  }
 }
 
 /*
@@ -73,22 +95,19 @@
 .details-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+
   gap: $spacing-md;
 
   > div {
     display: flex;
     flex-direction: column;
-    gap: $spacing-xs;
-  }
 
-  span {
-    font-size: $text-sm;
-    color: $text-secondary;
+    gap: $spacing-xs;
   }
 
   strong {
     font-size: $text-sm;
-    font-weight: 600;
+    font-weight: $font-weight-semibold;
   }
 }
 
@@ -115,12 +134,14 @@
 .actions-groups {
   display: flex;
   flex-direction: column;
+
   gap: $spacing-xs;
 }
 
 .actions-row {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+
   gap: $spacing-sm;
 }
 
@@ -131,6 +152,7 @@
 .panel-danger-zone {
   margin-top: $spacing-xl;
   padding-top: $spacing-lg;
+
   border-top: 1px solid $border-color;
 }
 
@@ -141,15 +163,20 @@
 .details-subsection {
   display: flex;
   flex-direction: column;
-  gap: $spacing-md;
-}
 
-.details-subsection h4 {
-  margin: 0;
-  font-size: $text-sm;
-  color: $text-secondary;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  gap: $spacing-md;
+
+  h4 {
+    margin: 0;
+
+    color: $text-secondary;
+
+    font-size: $text-sm;
+    font-weight: $font-weight-medium;
+
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
 }
 
 /*
@@ -159,14 +186,20 @@
 .mission-highlight {
   display: flex;
   flex-direction: column;
+
   gap: $spacing-md;
+
   padding: $spacing-lg;
+
   border-radius: $radius-lg;
+
   background: $surface-secondary;
 
   h4 {
     margin: 0;
+
     font-size: $text-lg;
+    font-weight: $font-weight-semibold;
   }
 }
 
@@ -178,7 +211,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   gap: $spacing-sm;
+
   min-width: 0;
 }
 
@@ -188,14 +223,22 @@
 */
 .copy-button {
   min-width: 56px;
-  border: none;
+
   padding: 0;
+
+  border: none;
+
   background: transparent;
+
   color: $interactive-primary;
-  cursor: pointer;
+
   font-size: $text-sm;
-  font-weight: 500;
+  font-weight: $font-weight-medium;
+
   white-space: nowrap;
+
+  cursor: pointer;
+
   transition: color 0.15s ease;
 
   &:hover {
@@ -205,6 +248,7 @@
 
 .copy-value {
   overflow: hidden;
+
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -216,16 +260,20 @@
 .stack-tags {
   display: flex;
   flex-wrap: wrap;
+
   gap: $spacing-sm;
 }
 
 .stack-tag {
   padding: $spacing-xs $spacing-sm;
+
   border: 1px solid $border-color;
   border-radius: 999px;
+
   background: $surface-secondary;
+
   font-size: $text-sm;
-  font-weight: 500;
+  font-weight: $font-weight-medium;
 }
 
 /*
@@ -234,6 +282,8 @@
 */
 .mission-description {
   margin: 0;
-  line-height: 1.6;
+
   color: $text-secondary;
+
+  line-height: 1.6;
 }

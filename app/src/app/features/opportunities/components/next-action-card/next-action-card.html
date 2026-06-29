@@ -6,7 +6,7 @@
   ) {
     <form class="event-form" [formGroup]="form" (ngSubmit)="save()">
       <div class="form-field">
-        <span>Type d'action</span>
+        <span class="form-label">Type d'action</span>
 
         <app-select-menu
           [options]="manualEventTypes"
@@ -16,13 +16,13 @@
       </div>
 
       <label class="form-field">
-        <span>Description</span>
+        <span class="form-label">Description</span>
 
         <input #nextActionLabel class="form-input" [formControl]="form.controls.label" />
       </label>
 
       <label class="form-field">
-        <span>Date</span>
+        <span class="form-label">Date</span>
 
         <input type="date" class="form-input" [formControl]="form.controls.dueDate" />
       </label>
@@ -41,9 +41,10 @@
     <div class="event-form">
       <p>
         Vous êtes sur le point de passer cette opportunité en
-        <strong> {{ pendingStatusLabel() }} </strong>. Que souhaitez-vous faire de cette prochaine
-        action ?
+        <strong>{{ pendingStatusLabel() }}</strong
+        >. Que souhaitez-vous faire de cette prochaine action ?
       </p>
+
       <div class="next-action-card">
         <strong>{{ nextAction.label }}</strong>
 
@@ -95,6 +96,6 @@
       </div>
     </div>
   } @else {
-    <p class="empty-state">Aucune prochaine action planifiée.</p>
+    <p class="empty-state">Aucune prochaine action.</p>
   }
 </div>

@@ -1,8 +1,10 @@
-@use '../../../../../styles/colors' as *;
-@use '../../../../../styles/radius' as *;
-@use '../../../../../styles/spacing' as *;
-@use '../../../../../styles/typography' as *;
-@use '../../../../../styles/forms' as *;
+@use '../../../../../styles/foundations/colors' as *;
+@use '../../../../../styles/foundations/font-weights' as *;
+@use '../../../../../styles/foundations/radius' as *;
+@use '../../../../../styles/foundations/shadows' as *;
+@use '../../../../../styles/foundations/spacing' as *;
+@use '../../../../../styles/foundations/typography' as *;
+@use '../../../../../styles/components/forms' as *;
 
 /*
   Timeline remains a self-contained section
@@ -11,11 +13,14 @@
 .details-section {
   display: flex;
   flex-direction: column;
+
   gap: $spacing-lg;
 
   h3 {
     margin: 0;
+
     font-size: $text-md;
+    font-weight: $font-weight-semibold;
   }
 }
 
@@ -34,13 +39,20 @@
   secondary actions visually discreet.
 */
 .timeline-add-button {
-  border: none;
   padding: 0;
+
+  border: none;
+
   background: transparent;
+
   color: $interactive-primary;
-  cursor: pointer;
+
   font-size: $text-sm;
-  font-weight: 500;
+  font-weight: $font-weight-medium;
+
+  cursor: pointer;
+
+  transition: color 0.15s ease;
 
   &:hover {
     text-decoration: underline;
@@ -74,6 +86,7 @@
 .timeline {
   display: flex;
   flex-direction: column;
+
   gap: $spacing-lg;
 }
 
@@ -83,11 +96,13 @@
 */
 .timeline-event {
   display: flex;
+
   gap: $spacing-md;
 }
 
 .timeline-event-button {
   display: flex;
+
   gap: $spacing-md;
 
   width: 100%;
@@ -105,10 +120,14 @@
 
   transition:
     border-color 0.15s ease,
-    transform 0.15s ease;
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 
   &:hover {
     border-color: $interactive-primary;
+
+    box-shadow: $shadow-md;
+
     transform: translateY(-1px);
   }
 }
@@ -120,10 +139,14 @@
 .timeline-marker {
   position: relative;
   top: 6px;
+
   flex-shrink: 0;
+
   width: 10px;
   height: 10px;
+
   border-radius: 999px;
+
   background: $interactive-primary;
 }
 
@@ -134,12 +157,16 @@
 .timeline-content {
   display: flex;
   flex-direction: column;
+
   gap: $spacing-xs;
+
   min-width: 0;
 
   p {
     margin: 0;
+
     color: $text-secondary;
+
     line-height: 1.5;
   }
 }
@@ -151,14 +178,17 @@
 .timeline-meta {
   display: flex;
   flex-direction: column;
+
   gap: 2px;
 
   strong {
     font-size: $text-sm;
+    font-weight: $font-weight-semibold;
   }
 
   span {
-    font-size: $text-xs;
     color: $text-secondary;
+
+    font-size: $text-xs;
   }
 }

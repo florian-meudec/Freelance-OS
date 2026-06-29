@@ -1,0 +1,54 @@
+/*
+  Surface colors define the different
+  elevation levels of the application.
+*/
+$surface-primary: white;
+$surface-secondary: #f3f4f6;
+$surface-danger-muted: rgba(153, 27, 27, 0.06);
+
+/*
+  Text colors preserve readability while
+  establishing visual hierarchy.
+*/
+$text-primary: #111827;
+$text-secondary: #666;
+
+/*
+  Border colors separate interface elements
+  without introducing visual noise.
+*/
+$border-color: #e5e7eb;
+
+/*
+  Brand colors highlight interactive
+  elements across the CRM.
+*/
+$interactive-primary: #2563eb;
+$interactive-primary-muted: rgba(37, 99, 235, 0.15);
+
+/*
+  Urgency colors communicate follow-up
+  priority directly from the board.
+*/
+$urgency-late: #991b1b;
+$urgency-today: #dc2626;
+$urgency-this-week: #ea580c;
+$urgency-waiting: #16a34a;
+
+/*
+  Overlay colors isolate floating
+  components from the page.
+*/
+$overlay-backdrop: rgba(0, 0, 0, 0.35);
+
+/*
+  Shared shadow used by floating panels
+  and elevated overlays.
+*/
+$shadow-panel: -4px 0 24px rgba(0, 0, 0, 0.08);
+
+/*
+  Semantic colors represent application
+  states independently from their usage.
+*/
+$danger: #991b1b;

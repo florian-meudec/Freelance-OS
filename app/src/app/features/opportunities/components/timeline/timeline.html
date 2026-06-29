@@ -1,6 +1,6 @@
 <!--
-    Timeline centralizes the opportunity lifecycle
-    and important business interactions.
+  Timeline centralizes the opportunity lifecycle
+  and important business interactions.
 -->
 
 <div class="details-section">
@@ -19,7 +19,7 @@
     -->
     <div class="event-form">
       <div class="form-field">
-        <span>Type d'évènement</span>
+        <span class="form-label">Type d'évènement</span>
 
         <app-select-menu
           [options]="manualEventTypes"
@@ -29,10 +29,11 @@
       </div>
 
       <label class="form-field">
-        <span>Commentaire</span>
+        <span class="form-label">Commentaire</span>
 
         <textarea #eventComment rows="4" class="form-textarea"></textarea>
       </label>
+
       <div class="form-actions">
         <button
           type="button"
@@ -52,7 +53,7 @@
       @if (editingEventId() === event.id) {
         <div class="event-form">
           <div class="form-field">
-            <span>Type d'évènement</span>
+            <span class="form-label">Type d'évènement</span>
 
             <app-select-menu
               [options]="manualEventTypes"
@@ -62,7 +63,7 @@
           </div>
 
           <div class="form-field">
-            <span>Commentaire</span>
+            <span class="form-label">Commentaire</span>
 
             <textarea
               #editComment
@@ -83,9 +84,10 @@
 
             <button type="button" class="action-button" (click)="cancelEventEdit()">Annuler</button>
           </div>
+
           @if (deletingEventId() === event.id) {
             <div class="delete-confirmation">
-              <p>Confirmer suppression ?</p>
+              <p>Confirmer la suppression ?</p>
 
               <div class="form-actions">
                 <button

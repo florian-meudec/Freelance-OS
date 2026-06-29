@@ -1,0 +1,161 @@
+@use '../foundations/colors' as *;
+@use '../foundations/radius' as *;
+@use '../foundations/spacing' as *;
+@use '../foundations/typography' as *;
+
+/*
+  Lightweight CRM inputs stay visually aligned
+  with the surrounding panel density.
+*/
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: $spacing-sm;
+
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+
+  background: $surface-primary;
+
+  font: inherit;
+
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $interactive-primary;
+  }
+}
+
+/*
+  Form fields stack labels and controls
+  while keeping a compact CRM layout.
+*/
+.form-field {
+  display: flex;
+  flex-direction: column;
+
+  gap: $spacing-xs;
+}
+
+/*
+  Labels remain lightweight to preserve
+  readability inside dense business forms.
+*/
+.form-label {
+  font-size: $text-sm;
+
+  color: $text-secondary;
+
+  font-weight: 500;
+}
+
+/*
+  Required markers stay visually discreet
+  while remaining immediately identifiable.
+*/
+.required {
+  margin-left: 2px;
+
+  color: $danger;
+
+  font-weight: 600;
+}
+
+/*
+  Help messages provide contextual guidance
+  without competing with field labels.
+*/
+.form-help {
+  font-size: $text-xs;
+
+  color: $text-secondary;
+}
+
+/*
+  Validation errors stay compact while
+  remaining clearly distinguishable.
+*/
+.form-error {
+  font-size: $text-xs;
+
+  color: $danger;
+
+  font-weight: 500;
+}
+
+/*
+  Form groups separate logical field sets
+  inside larger creation and edition forms.
+*/
+.form-group {
+  display: flex;
+  flex-direction: column;
+
+  gap: $spacing-lg;
+}
+
+/*
+  Form actions remain compact to preserve
+  panel readability and workflow density.
+*/
+.form-actions {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: $spacing-sm;
+}
+
+/*
+  Centered actions are used for secondary
+  confirmations and lightweight workflows.
+*/
+.form-actions-center {
+  justify-content: center;
+}
+
+/*
+  Confirmation blocks isolate destructive
+  actions from the surrounding workflow.
+*/
+.delete-confirmation {
+  display: flex;
+  flex-direction: column;
+
+  gap: $spacing-md;
+
+  padding-top: $spacing-sm;
+
+  p {
+    margin: 0;
+
+    font-size: $text-sm;
+
+    color: $text-secondary;
+  }
+}
+
+/*
+  Disabled actions remain clearly unavailable
+  without drawing unnecessary attention.
+*/
+.action-button:disabled {
+  opacity: 0.55;
+
+  border-color: $border-color;
+
+  background: $surface-secondary;
+
+  color: $text-secondary;
+
+  cursor: not-allowed;
+
+  pointer-events: none;
+
+  transform: none;
+}
