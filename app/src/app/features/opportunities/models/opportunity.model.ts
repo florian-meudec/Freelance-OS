@@ -1,15 +1,12 @@
-import {
-  COMPANY_TYPES,
-  DURATION_UNITS,
-  OPPORTUNITY_MODALITIES,
-  OPPORTUNITY_SENIORITIES,
-  OPPORTUNITY_STATUSES,
-  OPPORTUNITY_URGENCIES,
-} from '../constants/opportunity.constants';
-
-import { OpportunityEvent } from './opportunity-event.model';
-import { NextAction } from './next-action.model';
 import { Note } from '../../../shared/models/note.model';
+import { CompanyType } from '../../../shared/types/company.type';
+import { DurationUnit } from '../../../shared/types/duration.type';
+import { Seniority } from '../../../shared/types/seniority.type';
+import { WorkModality } from '../../../shared/types/work-modality.type';
+
+import { NextAction } from './next-action.model';
+import { OpportunityEvent } from './opportunity-event.model';
+import { OpportunityStatus } from '../types/opportunity.type';
 
 /*
   Central business model representing a freelance opportunity
@@ -19,17 +16,20 @@ export interface Opportunity {
   id: string;
 
   companyName: string;
+
   /*
     Company classification helps segment
     opportunities by business type.
   */
   companyType?: CompanyType;
+
   industry?: string;
+
   /*
     Acquisition source helps track where
     opportunities originate from.
   */
-  source?: string;
+  source: string;
 
   /*
     Main recruiter or client contact
@@ -45,23 +45,27 @@ export interface Opportunity {
   */
   missionTitle: string;
   description?: string;
+
   stack: string[];
-  seniority?: OpportunitySeniority;
+
+  seniority?: Seniority;
+
   /*
     Estimated mission start date stored
     as an ISO date string.
   */
   estimatedStartDate?: string;
+
   durationValue?: number;
   durationUnit?: DurationUnit;
 
   status: OpportunityStatus;
 
-  tjm: number;
-  workload: number;
+  tjm?: number;
+  workload?: number;
 
-  modality: OpportunityModality;
-  location: string;
+  modality?: WorkModality;
+  location?: string;
 
   nextAction: NextAction | null;
 
@@ -77,26 +81,3 @@ export interface Opportunity {
   */
   notes: Note[];
 }
-
-/*
-  Utility type used to extract values from constant objects
-  while preserving full TypeScript inference.
-*/
-type ValueOf<T> = T[keyof T];
-
-/*
-  Opportunity types are generated directly from constants
-  to keep business rules centralized and type-safe.
-*/
-
-export type CompanyType = ValueOf<typeof COMPANY_TYPES>['value'];
-
-export type DurationUnit = ValueOf<typeof DURATION_UNITS>['value'];
-
-export type OpportunityModality = ValueOf<typeof OPPORTUNITY_MODALITIES>['value'];
-
-export type OpportunitySeniority = ValueOf<typeof OPPORTUNITY_SENIORITIES>['value'];
-
-export type OpportunityStatus = ValueOf<typeof OPPORTUNITY_STATUSES>['value'];
-
-export type OpportunityUrgency = ValueOf<typeof OPPORTUNITY_URGENCIES>['value'];

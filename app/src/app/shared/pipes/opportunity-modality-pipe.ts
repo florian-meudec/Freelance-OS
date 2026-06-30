@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { OPPORTUNITY_MODALITIES } from '../../features/opportunities/constants/opportunity.constants';
+import { WORK_MODALITIES } from '../../shared/constants/work-modality.constants';
 
 @Pipe({
   name: 'opportunityModality',
@@ -8,16 +8,14 @@ import { OPPORTUNITY_MODALITIES } from '../../features/opportunities/constants/o
 })
 export class OpportunityModalityPipe implements PipeTransform {
   /*
-    Convert stored modality values into
+    Convert stored work modality values into
     user-friendly labels for UI rendering.
   */
   transform(value?: string): string {
     if (!value) {
-      return '';
+      return '-';
     }
 
-    return (
-      Object.values(OPPORTUNITY_MODALITIES).find((item) => item.value === value)?.label ?? value
-    );
+    return Object.values(WORK_MODALITIES).find((item) => item.value === value)?.label ?? value;
   }
 }

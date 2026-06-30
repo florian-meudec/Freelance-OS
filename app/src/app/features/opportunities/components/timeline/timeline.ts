@@ -2,13 +2,14 @@ import { Component, computed, input, output, signal } from '@angular/core';
 
 import { DateFormatPipe } from '../../../../shared/pipes/date-format-pipe';
 
-import { OpportunityEvent, OpportunityEventType } from '../../models/opportunity-event.model';
+import { OpportunityEvent } from '../../models/opportunity-event.model';
 import { SelectMenu } from '../../../../shared/components/select-menu/select-menu';
 
 import {
   OPPORTUNITY_EVENT_TYPES,
   OPPORTUNITY_STATUSES,
 } from '../../constants/opportunity.constants';
+import { OpportunityEventType } from '../../types/opportunity.type';
 
 @Component({
   selector: 'app-timeline',

@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { DURATION_UNITS } from '../../features/opportunities/constants/opportunity.constants';
+import { DURATION_UNITS } from '../../shared/constants/duration.constants';
 
 @Pipe({
   name: 'durationUnit',
@@ -13,7 +13,7 @@ export class DurationUnitPipe implements PipeTransform {
   */
   transform(value?: string): string {
     if (!value) {
-      return '';
+      return '-';
     }
 
     return Object.values(DURATION_UNITS).find((item) => item.value === value)?.label ?? value;

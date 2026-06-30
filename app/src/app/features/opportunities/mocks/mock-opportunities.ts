@@ -1,11 +1,8 @@
-import {
-  COMPANY_TYPES,
-  DURATION_UNITS,
-  OPPORTUNITY_EVENT_TYPES,
-  OPPORTUNITY_MODALITIES,
-  OPPORTUNITY_SENIORITIES,
-  OPPORTUNITY_STATUSES,
-} from '../constants/opportunity.constants';
+import { COMPANY_TYPES } from '../../../shared/constants/company.constants';
+import { DURATION_UNITS } from '../../../shared/constants/duration.constants';
+import { SENIORITIES } from '../../../shared/constants/seniority.constants';
+import { WORK_MODALITIES } from '../../../shared/constants/work-modality.constants';
+import { OPPORTUNITY_EVENT_TYPES, OPPORTUNITY_STATUSES } from '../constants/opportunity.constants';
 import { Opportunity } from '../models/opportunity.model';
 
 export const MOCK_OPPORTUNITIES: Opportunity[] = [
@@ -28,7 +25,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     stack: ['Angular', 'TypeScript', 'Nx', 'Jest'],
 
-    seniority: OPPORTUNITY_SENIORITIES.SENIOR.value,
+    seniority: SENIORITIES.SENIOR.value,
 
     estimatedStartDate: '2026-06-15',
 
@@ -40,7 +37,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     tjm: 750,
     workload: 5,
 
-    modality: OPPORTUNITY_MODALITIES.HYBRID.value,
+    modality: WORK_MODALITIES.HYBRID.value,
     location: 'Zürich',
 
     nextAction: {
@@ -121,7 +118,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     stack: ['Java', 'Spring Boot', 'PostgreSQL', 'Docker'],
 
-    seniority: OPPORTUNITY_SENIORITIES.CONFIRMED.value,
+    seniority: SENIORITIES.CONFIRMED.value,
 
     estimatedStartDate: '2026-07-01',
 
@@ -133,7 +130,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     tjm: 820,
     workload: 4,
 
-    modality: OPPORTUNITY_MODALITIES.REMOTE.value,
+    modality: WORK_MODALITIES.REMOTE.value,
     location: 'Berne',
 
     nextAction: {
@@ -205,7 +202,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     stack: ['Angular', 'TypeScript', 'Storybook', 'Cypress'],
 
-    seniority: OPPORTUNITY_SENIORITIES.SENIOR.value,
+    seniority: SENIORITIES.SENIOR.value,
 
     estimatedStartDate: '2026-06-20',
 
@@ -217,7 +214,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     tjm: 850,
     workload: 4,
 
-    modality: OPPORTUNITY_MODALITIES.REMOTE.value,
+    modality: WORK_MODALITIES.REMOTE.value,
     location: 'Paris',
 
     nextAction: {
@@ -299,7 +296,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     stack: ['Angular', 'SCSS', 'Storybook', 'Nx'],
 
-    seniority: OPPORTUNITY_SENIORITIES.LEAD.value,
+    seniority: SENIORITIES.LEAD.value,
 
     estimatedStartDate: '2026-08-01',
 
@@ -311,7 +308,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     tjm: 780,
     workload: 5,
 
-    modality: OPPORTUNITY_MODALITIES.HYBRID.value,
+    modality: WORK_MODALITIES.HYBRID.value,
     location: 'Lyon',
 
     nextAction: {
@@ -381,7 +378,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     stack: ['Angular', 'Nx'],
 
-    seniority: OPPORTUNITY_SENIORITIES.SENIOR.value,
+    seniority: SENIORITIES.SENIOR.value,
 
     estimatedStartDate: '2026-07-15',
 
@@ -393,7 +390,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     tjm: 850,
     workload: 5,
 
-    modality: OPPORTUNITY_MODALITIES.HYBRID.value,
+    modality: WORK_MODALITIES.HYBRID.value,
     location: 'Stockholm',
 
     nextAction: {
@@ -426,7 +423,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     stack: ['Angular'],
 
-    seniority: OPPORTUNITY_SENIORITIES.LEAD.value,
+    seniority: SENIORITIES.LEAD.value,
 
     estimatedStartDate: '2026-07-01',
 
@@ -438,7 +435,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     tjm: 900,
     workload: 5,
 
-    modality: OPPORTUNITY_MODALITIES.REMOTE.value,
+    modality: WORK_MODALITIES.REMOTE.value,
     location: 'Paris',
 
     nextAction: {
@@ -471,7 +468,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     stack: ['Angular'],
 
-    seniority: OPPORTUNITY_SENIORITIES.LEAD.value,
+    seniority: SENIORITIES.LEAD.value,
 
     estimatedStartDate: '2026-08-01',
 
@@ -483,7 +480,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     tjm: 820,
     workload: 5,
 
-    modality: OPPORTUNITY_MODALITIES.HYBRID.value,
+    modality: WORK_MODALITIES.HYBRID.value,
     location: 'Paris',
 
     nextAction: null,
@@ -511,7 +508,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     stack: ['Angular'],
 
-    seniority: OPPORTUNITY_SENIORITIES.LEAD.value,
+    seniority: SENIORITIES.LEAD.value,
 
     estimatedStartDate: '2026-06-01',
 
@@ -523,7 +520,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     tjm: 900,
     workload: 5,
 
-    modality: OPPORTUNITY_MODALITIES.REMOTE.value,
+    modality: WORK_MODALITIES.REMOTE.value,
     location: 'Paris',
 
     nextAction: null,
@@ -551,7 +548,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     stack: ['Angular'],
 
-    seniority: OPPORTUNITY_SENIORITIES.SENIOR.value,
+    seniority: SENIORITIES.SENIOR.value,
 
     estimatedStartDate: '2026-06-15',
 
@@ -563,7 +560,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     tjm: 820,
     workload: 5,
 
-    modality: OPPORTUNITY_MODALITIES.HYBRID.value,
+    modality: WORK_MODALITIES.HYBRID.value,
     location: 'Paris',
 
     nextAction: null,

@@ -1,5 +1,5 @@
-import { OpportunityUrgency } from '../models/opportunity.model';
 import { OPPORTUNITY_URGENCIES } from '../constants/opportunity.constants';
+import { OpportunityUrgency } from '../types/opportunity.type';
 
 /*
   Time calculations are normalized to full days

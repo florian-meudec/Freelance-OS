@@ -1,6 +1,6 @@
 import { Component, input, output, signal, viewChild } from '@angular/core';
 
-import { Opportunity, OpportunityStatus } from '../../models/opportunity.model';
+import { Opportunity } from '../../models/opportunity.model';
 
 import { Notes } from '../../../../shared/components/notes/notes';
 
@@ -12,7 +12,7 @@ import { OpportunitySeniorityPipe } from '../../../../shared/pipes/opportunity-s
 import { TjmPipe } from '../../../../shared/pipes/tjm-pipe';
 import { WorkloadPipe } from '../../../../shared/pipes/workload-pipe';
 
-import { OpportunityEventType } from '../../models/opportunity-event.model';
+import { OpportunityEventType, OpportunityStatus } from '../../types/opportunity.type';
 import { NextAction } from '../../models/next-action.model';
 
 import { OPPORTUNITY_STATUSES } from '../../constants/opportunity.constants';

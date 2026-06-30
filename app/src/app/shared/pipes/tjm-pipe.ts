@@ -9,13 +9,13 @@ export class TjmPipe implements PipeTransform {
     Formats daily freelance rates using
     French number formatting conventions.
   */
-  transform(value: number): string {
+  transform(value?: number): string {
     /*
-      Empty values return an empty string
-      to avoid displaying invalid pricing data.
+      Missing values display the shared
+      placeholder used across the application.
     */
     if (value == null) {
-      return '';
+      return '-';
     }
 
     const formattedValue = new Intl.NumberFormat('fr-FR').format(value);

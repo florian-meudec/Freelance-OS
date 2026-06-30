@@ -1,7 +1,7 @@
 import { Component, computed, effect, signal, viewChild } from '@angular/core';
 import { CdkDragDrop, CdkDropList, CdkDropListGroup } from '@angular/cdk/drag-drop';
 
-import { Opportunity, OpportunityStatus } from '../../models/opportunity.model';
+import { Opportunity } from '../../models/opportunity.model';
 import { OpportunityCard } from '../../components/opportunity-card/opportunity-card';
 import { OpportunityDetailsPanel } from '../../components/opportunity-details-panel/opportunity-details-panel';
 import {
@@ -10,7 +10,7 @@ import {
 } from '../../constants/opportunity.constants';
 
 import { MOCK_OPPORTUNITIES } from '../../mocks/mock-opportunities';
-import { OpportunityEventType } from '../../models/opportunity-event.model';
+import { OpportunityEventType, OpportunityStatus } from '../../types/opportunity.type';
 import { NextAction } from '../../models/next-action.model';
 import { OpportunityForm } from '../../components/opportunity-form/opportunity-form';
 

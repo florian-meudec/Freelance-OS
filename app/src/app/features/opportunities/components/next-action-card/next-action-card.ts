@@ -1,25 +1,26 @@
 import {
   Component,
   ElementRef,
-  input,
+  computed,
   inject,
+  input,
   output,
   signal,
   viewChild,
-  computed,
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { DateFormatPipe } from '../../../../shared/pipes/date-format-pipe';
 import { SelectMenu } from '../../../../shared/components/select-menu/select-menu';
+import { DateFormatPipe } from '../../../../shared/pipes/date-format-pipe';
 
-import { OpportunityEventType } from '../../models/opportunity-event.model';
 import {
   OPPORTUNITY_EVENT_TYPES,
   OPPORTUNITY_STATUSES,
 } from '../../constants/opportunity.constants';
+
 import { NextAction } from '../../models/next-action.model';
-import { OpportunityStatus } from '../../models/opportunity.model';
+
+import { OpportunityEventType, OpportunityStatus } from '../../types/opportunity.type';
 
 @Component({
   selector: 'app-next-action-card',

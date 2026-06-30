@@ -47,27 +47,6 @@ export const OPPORTUNITY_STATUSES = {
 } as const;
 
 /*
-  Modalities stay centralized to keep labels,
-  filters and future business rules consistent.
-*/
-export const OPPORTUNITY_MODALITIES = {
-  REMOTE: {
-    value: 'remote',
-    label: 'Télétravail',
-  },
-
-  HYBRID: {
-    value: 'hybrid',
-    label: 'Hybride',
-  },
-
-  ONSITE: {
-    value: 'onsite',
-    label: 'Sur site',
-  },
-} as const;
-
-/*
   Urgency levels drive visual prioritization
   based on upcoming follow-up deadlines.
 */
@@ -89,72 +68,6 @@ export const OPPORTUNITY_URGENCIES = {
 
   WAITING: {
     value: 'waiting',
-  },
-} as const;
-
-export const COMPANY_TYPES = {
-  CLIENT_FINAL: {
-    value: 'client-final',
-    label: 'Client final',
-  },
-
-  ESN: {
-    value: 'esn',
-    label: 'ESN',
-  },
-
-  CABINET: {
-    value: 'cabinet',
-    label: 'Cabinet',
-  },
-
-  STARTUP: {
-    value: 'startup',
-    label: 'Startup',
-  },
-} as const;
-
-export const OPPORTUNITY_SENIORITIES = {
-  JUNIOR: {
-    value: 'junior',
-    label: 'Junior',
-  },
-
-  CONFIRMED: {
-    value: 'confirmed',
-    label: 'Confirmé',
-  },
-
-  SENIOR: {
-    value: 'senior',
-    label: 'Senior',
-  },
-
-  LEAD: {
-    value: 'lead',
-    label: 'Lead',
-  },
-} as const;
-
-export const DURATION_UNITS = {
-  DAYS: {
-    value: 'days',
-    label: 'Jours',
-  },
-
-  WEEKS: {
-    value: 'weeks',
-    label: 'Semaines',
-  },
-
-  MONTHS: {
-    value: 'months',
-    label: 'Mois',
-  },
-
-  YEARS: {
-    value: 'years',
-    label: 'Années',
   },
 } as const;
 

@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { COMPANY_TYPES } from '../../features/opportunities/constants/opportunity.constants';
+import { COMPANY_TYPES } from '../../shared/constants/company.constants';
 
 @Pipe({
   name: 'companyType',
@@ -13,7 +13,7 @@ export class CompanyTypePipe implements PipeTransform {
   */
   transform(value?: string): string {
     if (!value) {
-      return '';
+      return '-';
     }
 
     return Object.values(COMPANY_TYPES).find((item) => item.value === value)?.label ?? value;

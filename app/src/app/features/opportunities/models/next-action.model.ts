@@ -1,4 +1,4 @@
-import { OpportunityEventType } from './opportunity-event.model';
+import { OpportunityEventType } from '../types/opportunity.type';
 
 export interface NextAction {
   type: OpportunityEventType;

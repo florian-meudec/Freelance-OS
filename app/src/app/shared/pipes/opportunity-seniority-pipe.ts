@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { OPPORTUNITY_SENIORITIES } from '../../features/opportunities/constants/opportunity.constants';
+import { SENIORITIES } from '../../shared/constants/seniority.constants';
 
 @Pipe({
   name: 'opportunitySeniority',
@@ -13,11 +13,9 @@ export class OpportunitySeniorityPipe implements PipeTransform {
   */
   transform(value?: string): string {
     if (!value) {
-      return '';
+      return '-';
     }
 
-    return (
-      Object.values(OPPORTUNITY_SENIORITIES).find((item) => item.value === value)?.label ?? value
-    );
+    return Object.values(SENIORITIES).find((item) => item.value === value)?.label ?? value;
   }
 }
