@@ -8,23 +8,19 @@
       <div class="form-field">
         <span class="form-label">Type d'action</span>
 
-        <app-select-menu
-          [options]="manualEventTypes"
-          [selected]="form.controls.type.value"
-          (selectionChange)="selectNextActionType($event)"
-        />
+        <app-select-menu [options]="manualEventTypes" formControlName="type" />
       </div>
 
       <label class="form-field">
         <span class="form-label">Description</span>
 
-        <input #nextActionLabel class="form-input" [formControl]="form.controls.label" />
+        <input class="form-input" formControlName="label" />
       </label>
 
       <label class="form-field">
         <span class="form-label">Date</span>
 
-        <input type="date" class="form-input" [formControl]="form.controls.dueDate" />
+        <input type="date" class="form-input" formControlName="dueDate" />
       </label>
 
       <div class="form-actions">

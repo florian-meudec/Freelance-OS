@@ -1,26 +1,25 @@
-import { Component, input, output, signal, viewChild } from '@angular/core';
+import { Component, effect, inject, input, output, signal, viewChild } from '@angular/core';
+import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import { Opportunity } from '../../models/opportunity.model';
+import { NextAction } from '../../models/next-action.model';
+import { OpportunityEventType, OpportunityStatus } from '../../types/opportunity.type';
+
+import { OPPORTUNITY_STATUSES } from '../../constants/opportunity.constants';
 
 import { Notes } from '../../../../shared/components/notes/notes';
+import { NextActionCard } from '../next-action-card/next-action-card';
+import { SelectMenu } from '../../../../shared/components/select-menu/select-menu';
+import { Timeline } from '../timeline/timeline';
 
 import { CompanyTypePipe } from '../../../../shared/pipes/company-type-pipe';
-import { DurationUnitPipe } from '../../../../shared/pipes/duration-unit-pipe';
 import { DateFormatPipe } from '../../../../shared/pipes/date-format-pipe';
+import { DurationUnitPipe } from '../../../../shared/pipes/duration-unit-pipe';
+import { FallbackPipe } from '../../../../shared/pipes/fallback-pipe';
 import { OpportunityModalityPipe } from '../../../../shared/pipes/opportunity-modality-pipe';
 import { OpportunitySeniorityPipe } from '../../../../shared/pipes/opportunity-seniority-pipe';
 import { TjmPipe } from '../../../../shared/pipes/tjm-pipe';
 import { WorkloadPipe } from '../../../../shared/pipes/workload-pipe';
-
-import { OpportunityEventType, OpportunityStatus } from '../../types/opportunity.type';
-import { NextAction } from '../../models/next-action.model';
-
-import { OPPORTUNITY_STATUSES } from '../../constants/opportunity.constants';
-
-import { NextActionCard } from '../next-action-card/next-action-card';
-import { SelectMenu } from '../../../../shared/components/select-menu/select-menu';
-import { Timeline } from '../timeline/timeline';
-import { FallbackPipe } from '../../../../shared/pipes/fallback-pipe';
 
 @Component({
   selector: 'app-opportunity-details-panel',
@@ -29,17 +28,18 @@ import { FallbackPipe } from '../../../../shared/pipes/fallback-pipe';
 
   imports: [
     CompanyTypePipe,
-    DurationUnitPipe,
     DateFormatPipe,
+    DurationUnitPipe,
     FallbackPipe,
+    NextActionCard,
     Notes,
     OpportunityModalityPipe,
     OpportunitySeniorityPipe,
-    TjmPipe,
-    WorkloadPipe,
-    NextActionCard,
+    ReactiveFormsModule,
     SelectMenu,
     Timeline,
+    TjmPipe,
+    WorkloadPipe,
   ],
 
   templateUrl: './opportunity-details-panel.html',
@@ -59,96 +59,44 @@ export class OpportunityDetailsPanel {
   */
   readonly pendingStatus = input<OpportunityStatus | null>(null);
 
-  /*
-    Closing logic stays in the parent container
-    to keep this component presentation-focused.
-  */
   readonly panelClose = output<void>();
 
-  /*
-    Status updates are delegated to the board
-    container to keep state mutations centralized.
-  */
   readonly statusChange = output<OpportunityStatus>();
 
-  /*
-    Timeline events are created by the board
-    container to centralize state mutations.
-  */
   readonly eventAdd = output<{
     type: OpportunityEventType;
     comment?: string;
   }>();
 
-  /*
-    Event updates are delegated upward
-    to centralize state mutations.
-  */
   readonly eventUpdate = output<{
     eventId: string;
     type: OpportunityEventType;
     comment?: string;
   }>();
 
-  /*
-    Event deletions are delegated upward
-    to centralize state mutations.
-  */
   readonly eventDelete = output<string>();
 
-  /*
-    Notes are created by the board container
-    to centralize opportunity state mutations.
-  */
   readonly noteAdd = output<{
     title: string;
     content: string;
   }>();
 
-  /*
-    Note updates are delegated upward
-    to centralize state mutations.
-  */
   readonly noteUpdate = output<{
     noteId: string;
     title: string;
     content: string;
   }>();
 
-  /*
-    Note deletions stay centralized
-    inside the board container.
-  */
   readonly noteDelete = output<string>();
 
-  /*
-    Next action updates remain centralized
-    inside the board container.
-  */
   readonly nextActionUpdate = output<NextAction>();
 
-  /*
-    Completing a follow-up action triggers
-    the parent workflow.
-  */
   readonly nextActionComplete = output<void>();
 
-  /*
-    Completing the pending follow-up action
-    allows the status transition to continue.
-  */
   readonly nextActionCompleteForStatusChange = output<void>();
 
-  /*
-    Abandoning the pending follow-up action
-    allows the status transition to continue.
-  */
   readonly nextActionDeleteForStatusChange = output<void>();
 
-  /*
-    Cancelling the status transition restores
-    the previous opportunity state.
-  */
   readonly statusChangeCancelled = output<void>();
 
   /*
@@ -166,12 +114,39 @@ export class OpportunityDetailsPanel {
   readonly nextActionComponent = viewChild(NextActionCard);
 
   /*
-  Temporary feedback confirms that the
-  contact email has been copied.
-*/
+    Temporary feedback confirms that the
+    contact email has been copied.
+  */
   readonly emailCopied = signal(false);
 
+  private readonly formBuilder = inject(NonNullableFormBuilder);
+
+  readonly statusForm = this.formBuilder.group({
+    status: [''],
+  });
+
   private copyFeedbackTimeout?: ReturnType<typeof setTimeout>;
+
+  constructor() {
+    effect(() => {
+      this.statusForm.patchValue(
+        {
+          status: this.opportunity().status,
+        },
+        {
+          emitEvent: false,
+        },
+      );
+    });
+
+    this.statusForm.controls.status.valueChanges.subscribe((status) => {
+      if (!status || status === this.opportunity().status) {
+        return;
+      }
+
+      this.statusChange.emit(status as OpportunityStatus);
+    });
+  }
 
   closePanel(): void {
     if (!this.canClose()) {
@@ -179,10 +154,6 @@ export class OpportunityDetailsPanel {
     }
 
     this.panelClose.emit();
-  }
-
-  selectStatus(status: string): void {
-    this.statusChange.emit(status as OpportunityStatus);
   }
 
   /*

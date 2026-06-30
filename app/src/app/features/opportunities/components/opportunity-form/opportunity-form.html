@@ -31,7 +31,7 @@
           <div class="form-field">
             <label for="companyType" class="form-label">Type</label>
 
-            <app-select-menu id="companyType" [options]="companyTypes" [selected]="noSelection" />
+            <app-select-menu [options]="companyTypes" formControlName="companyType" />
           </div>
 
           <div class="form-field">
@@ -117,7 +117,7 @@
           <div class="form-field">
             <label for="modality" class="form-label">Modalité</label>
 
-            <app-select-menu id="modality" [options]="modalities" [selected]="noSelection" />
+            <app-select-menu [options]="modalities" formControlName="modality" />
           </div>
 
           <div class="form-field">
@@ -154,11 +154,7 @@
                 formControlName="durationValue"
               />
 
-              <app-select-menu
-                id="durationUnit"
-                [options]="durationUnits"
-                [selected]="noSelection"
-              />
+              <app-select-menu [options]="durationUnits" formControlName="durationUnit" />
             </div>
           </div>
         </div>
@@ -171,7 +167,7 @@
           <div class="form-field">
             <label for="seniority" class="form-label">Séniorité</label>
 
-            <app-select-menu id="seniority" [options]="seniorities" [selected]="noSelection" />
+            <app-select-menu [options]="seniorities" formControlName="seniority" />
           </div>
 
           <div class="form-field form-grid-full">
@@ -194,11 +190,7 @@
           <div class="form-field">
             <label for="nextActionType" class="form-label form-label-required"> Type </label>
 
-            <app-select-menu
-              id="nextActionType"
-              [options]="nextActionTypes"
-              [selected]="noSelection"
-            />
+            <app-select-menu [options]="nextActionTypes" formControlName="type" />
           </div>
 
           <div class="form-field">

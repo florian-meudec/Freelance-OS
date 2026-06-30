@@ -28,11 +28,9 @@
       <div class="actions-row">
         <button type="button" class="action-button action-button-primary">Modifier</button>
 
-        <app-select-menu
-          [options]="statuses"
-          [selected]="opportunity().status"
-          (selectionChange)="selectStatus($event)"
-        />
+        <form [formGroup]="statusForm">
+          <app-select-menu [options]="statuses" formControlName="status" />
+        </form>
       </div>
 
       <div class="actions-row">

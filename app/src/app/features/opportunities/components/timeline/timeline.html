@@ -17,67 +17,50 @@
       Inline timeline event creation keeps
       workflow history contextual and lightweight.
     -->
-    <div class="event-form">
+    <form class="event-form" [formGroup]="form" (ngSubmit)="addEvent()">
       <div class="form-field">
         <span class="form-label">Type d'évènement</span>
 
-        <app-select-menu
-          [options]="manualEventTypes"
-          [selected]="currentEventType()"
-          (selectionChange)="selectEventType($event)"
-        />
+        <app-select-menu [options]="manualEventTypes" formControlName="type" />
       </div>
 
       <label class="form-field">
         <span class="form-label">Commentaire</span>
 
-        <textarea #eventComment rows="4" class="form-textarea"></textarea>
+        <textarea rows="4" class="form-textarea" formControlName="comment"></textarea>
       </label>
 
       <div class="form-actions">
-        <button
-          type="button"
-          class="action-button action-button-primary"
-          (click)="addEvent(currentEventType(), eventComment.value)"
-        >
+        <button type="submit" class="action-button action-button-primary" [disabled]="form.invalid">
           Ajouter
         </button>
 
         <button type="button" class="action-button" (click)="closeEventForm()">Annuler</button>
       </div>
-    </div>
+    </form>
   }
 
   <div class="timeline">
     @for (event of sortedEvents(); track event.id) {
       @if (editingEventId() === event.id) {
-        <div class="event-form">
+        <form class="event-form" [formGroup]="form" (ngSubmit)="updateEvent(event.id)">
           <div class="form-field">
             <span class="form-label">Type d'évènement</span>
 
-            <app-select-menu
-              [options]="manualEventTypes"
-              [selected]="currentEventType()"
-              (selectionChange)="selectEventType($event)"
-            />
+            <app-select-menu [options]="manualEventTypes" formControlName="type" />
           </div>
 
           <div class="form-field">
             <span class="form-label">Commentaire</span>
 
-            <textarea
-              #editComment
-              rows="4"
-              class="form-textarea"
-              [value]="event.comment"
-            ></textarea>
+            <textarea rows="4" class="form-textarea" formControlName="comment"></textarea>
           </div>
 
           <div class="form-actions">
             <button
-              type="button"
+              type="submit"
               class="action-button action-button-primary"
-              (click)="updateEvent(event.id, currentEventType(), editComment.value)"
+              [disabled]="form.invalid"
             >
               Sauvegarder
             </button>
@@ -112,7 +95,7 @@
               Supprimer
             </button>
           }
-        </div>
+        </form>
       } @else {
         @if (isEditableEvent(event)) {
           <button type="button" class="timeline-event-button" (click)="startEventEdit(event)">

@@ -9,7 +9,7 @@
         <button
           type="button"
           class="status-option"
-          [class.status-option-active]="selected() === option.value"
+          [class.status-option-active]="selectedValue() === option.value"
           [disabled]="option.disabled"
           (click)="selectOption(option.value)"
         >

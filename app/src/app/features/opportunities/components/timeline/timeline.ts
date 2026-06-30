@@ -1,22 +1,23 @@
-import { Component, computed, input, output, signal } from '@angular/core';
+import { Component, computed, inject, input, output, signal } from '@angular/core';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { DateFormatPipe } from '../../../../shared/pipes/date-format-pipe';
+import { SelectMenu } from '../../../../shared/components/select-menu/select-menu';
 
 import { OpportunityEvent } from '../../models/opportunity-event.model';
-import { SelectMenu } from '../../../../shared/components/select-menu/select-menu';
+import { OpportunityEventType } from '../../types/opportunity.type';
 
 import {
   OPPORTUNITY_EVENT_TYPES,
   OPPORTUNITY_STATUSES,
 } from '../../constants/opportunity.constants';
-import { OpportunityEventType } from '../../types/opportunity.type';
 
 @Component({
   selector: 'app-timeline',
 
   standalone: true,
 
-  imports: [DateFormatPipe, SelectMenu],
+  imports: [DateFormatPipe, ReactiveFormsModule, SelectMenu],
 
   templateUrl: './timeline.html',
 
@@ -26,13 +27,13 @@ export class Timeline {
   readonly events = input.required<OpportunityEvent[]>();
 
   readonly add = output<{
-    type: OpportunityEventType;
+    type: OpportunityEvent['type'];
     comment?: string;
   }>();
 
   readonly update = output<{
     eventId: string;
-    type: OpportunityEventType;
+    type: OpportunityEvent['type'];
     comment?: string;
   }>();
 
@@ -47,6 +48,17 @@ export class Timeline {
     OPPORTUNITY_EVENT_TYPES.EMAIL,
     OPPORTUNITY_EVENT_TYPES.MEETING,
   ];
+
+  private readonly formBuilder = inject(NonNullableFormBuilder);
+
+  readonly form = this.formBuilder.group({
+    type: this.formBuilder.control<OpportunityEventType>(
+      this.manualEventTypes[0].value,
+      Validators.required,
+    ),
+
+    comment: [''],
+  });
 
   /*
     Timeline events are sorted from newest
@@ -63,8 +75,6 @@ export class Timeline {
     to preserve lightweight editing workflows.
   */
   readonly showEventForm = signal(false);
-
-  readonly currentEventType = signal<OpportunityEventType>(OPPORTUNITY_EVENT_TYPES.CALL.value);
 
   readonly editingEventId = signal<string | null>(null);
 
@@ -93,17 +103,22 @@ export class Timeline {
   closeEventForm(): void {
     this.showEventForm.set(false);
 
-    this.currentEventType.set(this.manualEventTypes[0].value);
+    this.form.reset({
+      type: this.manualEventTypes[0].value,
+      comment: '',
+    });
   }
 
   /*
     Event creation requests are emitted upward
     so workflow history remains centralized.
   */
-  addEvent(type: OpportunityEventType, comment?: string): void {
+  addEvent(): void {
+    const { type, comment } = this.form.getRawValue();
+
     this.add.emit({
       type,
-      comment,
+      comment: comment || undefined,
     });
 
     this.closeEventForm();
@@ -116,7 +131,10 @@ export class Timeline {
   startEventEdit(event: OpportunityEvent): void {
     this.closeEventForm();
 
-    this.currentEventType.set(event.type);
+    this.form.reset({
+      type: event.type,
+      comment: event.comment ?? '',
+    });
 
     this.editingEventId.set(event.id);
   }
@@ -125,11 +143,13 @@ export class Timeline {
     Event updates are emitted upward so the
     parent remains the source of truth.
   */
-  updateEvent(eventId: string, type: OpportunityEventType, comment?: string): void {
+  updateEvent(eventId: string): void {
+    const { type, comment } = this.form.getRawValue();
+
     this.update.emit({
       eventId,
       type,
-      comment,
+      comment: comment || undefined,
     });
 
     this.cancelEventEdit();
@@ -144,7 +164,10 @@ export class Timeline {
 
     this.editingEventId.set(null);
 
-    this.currentEventType.set(this.manualEventTypes[0].value);
+    this.form.reset({
+      type: this.manualEventTypes[0].value,
+      comment: '',
+    });
   }
 
   confirmEventDelete(eventId: string): void {
@@ -165,10 +188,6 @@ export class Timeline {
     this.cancelEventDelete();
 
     this.cancelEventEdit();
-  }
-
-  selectEventType(type: string): void {
-    this.currentEventType.set(type as OpportunityEventType);
   }
 
   isEditableEvent(event: OpportunityEvent): boolean {

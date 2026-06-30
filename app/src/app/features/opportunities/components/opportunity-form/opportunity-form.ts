@@ -23,8 +23,6 @@ export class OpportunityForm {
 
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
-  readonly noSelection = '';
-
   readonly companyTypes = Object.values(COMPANY_TYPES);
 
   readonly modalities = Object.values(WORK_MODALITIES);
@@ -33,9 +31,11 @@ export class OpportunityForm {
 
   readonly seniorities = Object.values(SENIORITIES);
 
-  readonly nextActionTypes = Object.values(OPPORTUNITY_EVENT_TYPES).filter(
-    (type) => type.value !== OPPORTUNITY_EVENT_TYPES.STATUS_CHANGED.value,
-  );
+  readonly nextActionTypes = [
+    OPPORTUNITY_EVENT_TYPES.CALL,
+    OPPORTUNITY_EVENT_TYPES.EMAIL,
+    OPPORTUNITY_EVENT_TYPES.MEETING,
+  ];
 
   readonly form = this.formBuilder.group({
     companyName: ['', Validators.required],
@@ -77,6 +77,7 @@ export class OpportunityForm {
   }
 
   submit(): void {
+    console.log(this.form.getRawValue());
     if (this.form.invalid) {
       this.form.markAllAsTouched();
 
