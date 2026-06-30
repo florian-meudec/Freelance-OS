@@ -4,11 +4,7 @@
       <div>
         <h2>Nouvelle opportunité</h2>
 
-        <p class="form-description">
-          Les champs marqués d'un
-          <span class="required-indicator">*</span>
-          sont obligatoires.
-        </p>
+        <p>Ajoutez une nouvelle opportunité à votre pipeline.</p>
       </div>
 
       <button
@@ -21,33 +17,33 @@
       </button>
     </div>
 
-    <div class="form-body">
+    <form class="form-body" [formGroup]="form">
       <div class="form-section">
         <h3>Entreprise</h3>
 
         <div class="form-grid">
           <div class="form-field">
-            <label for="companyName" class="form-label form-label-required"> Entreprise </label>
+            <label for="companyName" class="form-label form-label-required">Entreprise</label>
 
-            <input id="companyName" class="form-input" />
+            <input id="companyName" class="form-input" formControlName="companyName" />
           </div>
 
           <div class="form-field">
-            <label for="companyType" class="form-label"> Type </label>
+            <label for="companyType" class="form-label">Type</label>
 
             <app-select-menu id="companyType" [options]="companyTypes" [selected]="noSelection" />
           </div>
 
           <div class="form-field">
-            <label for="industry" class="form-label"> Secteur </label>
+            <label for="industry" class="form-label">Secteur</label>
 
-            <input id="industry" class="form-input" />
+            <input id="industry" class="form-input" formControlName="industry" />
           </div>
 
           <div class="form-field">
-            <label for="source" class="form-label"> Source </label>
+            <label for="source" class="form-label form-label-required">Source</label>
 
-            <input id="source" class="form-input" />
+            <input id="source" class="form-input" formControlName="source" />
           </div>
         </div>
       </div>
@@ -57,21 +53,26 @@
 
         <div class="form-grid">
           <div class="form-field">
-            <label for="contactName" class="form-label"> Nom </label>
+            <label for="contactName" class="form-label">Nom</label>
 
-            <input id="contactName" class="form-input" />
+            <input id="contactName" class="form-input" formControlName="contactName" />
           </div>
 
           <div class="form-field">
-            <label for="contactRole" class="form-label"> Poste </label>
+            <label for="contactRole" class="form-label">Poste</label>
 
-            <input id="contactRole" class="form-input" />
+            <input id="contactRole" class="form-input" formControlName="contactRole" />
           </div>
 
           <div class="form-field form-grid-full">
-            <label for="contactEmail" class="form-label"> Email </label>
+            <label for="contactEmail" class="form-label">Email</label>
 
-            <input id="contactEmail" type="email" class="form-input" />
+            <input
+              id="contactEmail"
+              type="email"
+              class="form-input"
+              formControlName="contactEmail"
+            />
           </div>
         </div>
       </div>
@@ -80,15 +81,20 @@
         <h3>Mission</h3>
 
         <div class="form-field">
-          <label for="missionTitle" class="form-label form-label-required"> Titre </label>
+          <label for="missionTitle" class="form-label form-label-required">Titre</label>
 
-          <input id="missionTitle" class="form-input" />
+          <input id="missionTitle" class="form-input" formControlName="missionTitle" />
         </div>
 
         <div class="form-field">
-          <label for="description" class="form-label"> Description </label>
+          <label for="description" class="form-label">Description</label>
 
-          <textarea id="description" rows="5" class="form-textarea"></textarea>
+          <textarea
+            id="description"
+            rows="5"
+            class="form-textarea"
+            formControlName="description"
+          ></textarea>
         </div>
       </div>
 
@@ -97,27 +103,27 @@
 
         <div class="form-grid">
           <div class="form-field">
-            <label for="tjm" class="form-label"> TJM </label>
+            <label for="tjm" class="form-label">TJM</label>
 
-            <input id="tjm" class="form-input" />
+            <input id="tjm" type="number" class="form-input" formControlName="tjm" />
           </div>
 
           <div class="form-field">
-            <label for="workload" class="form-label"> Charge </label>
+            <label for="workload" class="form-label">Charge</label>
 
-            <input id="workload" class="form-input" />
+            <input id="workload" type="number" class="form-input" formControlName="workload" />
           </div>
 
           <div class="form-field">
-            <label for="modality" class="form-label"> Modalité </label>
+            <label for="modality" class="form-label">Modalité</label>
 
             <app-select-menu id="modality" [options]="modalities" [selected]="noSelection" />
           </div>
 
           <div class="form-field">
-            <label for="location" class="form-label"> Localisation </label>
+            <label for="location" class="form-label">Localisation</label>
 
-            <input id="location" class="form-input" />
+            <input id="location" class="form-input" formControlName="location" />
           </div>
         </div>
       </div>
@@ -127,16 +133,26 @@
 
         <div class="form-grid">
           <div class="form-field">
-            <label for="estimatedStartDate" class="form-label"> Début estimé </label>
+            <label for="estimatedStartDate" class="form-label">Début estimé</label>
 
-            <input id="estimatedStartDate" type="date" class="form-input" />
+            <input
+              id="estimatedStartDate"
+              type="date"
+              class="form-input"
+              formControlName="estimatedStartDate"
+            />
           </div>
 
           <div class="form-field">
-            <label for="durationValue" class="form-label"> Durée </label>
+            <label for="durationValue" class="form-label">Durée</label>
 
             <div class="duration-fields">
-              <input id="durationValue" class="form-input" />
+              <input
+                id="durationValue"
+                type="number"
+                class="form-input"
+                formControlName="durationValue"
+              />
 
               <app-select-menu
                 id="durationUnit"
@@ -153,17 +169,18 @@
 
         <div class="form-grid">
           <div class="form-field">
-            <label for="seniority" class="form-label"> Séniorité </label>
+            <label for="seniority" class="form-label">Séniorité</label>
 
             <app-select-menu id="seniority" [options]="seniorities" [selected]="noSelection" />
           </div>
 
           <div class="form-field form-grid-full">
-            <label for="stack" class="form-label"> Stack </label>
+            <label for="stack" class="form-label">Stack</label>
 
             <input
               id="stack"
               class="form-input"
+              formControlName="stack"
               placeholder="Angular, Spring Boot, PostgreSQL..."
             />
           </div>
@@ -173,7 +190,7 @@
       <div class="form-section">
         <h3>Prochaine action</h3>
 
-        <div class="form-grid">
+        <div class="form-grid" formGroupName="nextAction">
           <div class="form-field">
             <label for="nextActionType" class="form-label form-label-required"> Type </label>
 
@@ -187,7 +204,7 @@
           <div class="form-field">
             <label for="nextActionDate" class="form-label form-label-required"> Date </label>
 
-            <input id="nextActionDate" type="date" class="form-input" />
+            <input id="nextActionDate" type="date" class="form-input" formControlName="dueDate" />
           </div>
 
           <div class="form-field form-grid-full">
@@ -195,16 +212,23 @@
               Description
             </label>
 
-            <input id="nextActionLabel" class="form-input" />
+            <input id="nextActionLabel" class="form-input" formControlName="label" />
           </div>
         </div>
       </div>
-    </div>
+    </form>
 
     <div class="form-footer">
       <button type="button" class="action-button" (click)="requestClose()">Annuler</button>
 
-      <button type="button" class="action-button action-button-primary">Créer l'opportunité</button>
+      <button
+        type="button"
+        class="action-button action-button-primary"
+        [disabled]="form.invalid"
+        (click)="submit()"
+      >
+        Créer l'opportunité
+      </button>
     </div>
   </div>
 </app-modal>
