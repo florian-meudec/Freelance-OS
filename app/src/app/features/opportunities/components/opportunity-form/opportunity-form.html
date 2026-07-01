@@ -1,5 +1,5 @@
 <app-modal (closed)="requestClose()">
-  <div class="opportunity-form">
+  <form class="opportunity-form" [formGroup]="form" (ngSubmit)="submit()">
     <div class="form-header">
       <div>
         <h2>Nouvelle opportunité</h2>
@@ -17,7 +17,7 @@
       </button>
     </div>
 
-    <form class="form-body" [formGroup]="form">
+    <div class="form-body">
       <div class="form-section">
         <h3>Entreprise</h3>
 
@@ -25,7 +25,12 @@
           <div class="form-field">
             <label for="companyName" class="form-label form-label-required">Entreprise</label>
 
-            <input id="companyName" class="form-input" formControlName="companyName" />
+            <input
+              id="companyName"
+              class="form-input"
+              formControlName="companyName"
+              autocomplete="organization"
+            />
           </div>
 
           <div class="form-field">
@@ -55,7 +60,12 @@
           <div class="form-field">
             <label for="contactName" class="form-label">Nom</label>
 
-            <input id="contactName" class="form-input" formControlName="contactName" />
+            <input
+              id="contactName"
+              class="form-input"
+              formControlName="contactName"
+              autocomplete="name"
+            />
           </div>
 
           <div class="form-field">
@@ -72,6 +82,8 @@
               type="email"
               class="form-input"
               formControlName="contactEmail"
+              autocomplete="email"
+              placeholder="prenom.nom@entreprise.fr"
             />
           </div>
         </div>
@@ -105,13 +117,19 @@
           <div class="form-field">
             <label for="tjm" class="form-label">TJM</label>
 
-            <input id="tjm" type="number" class="form-input" formControlName="tjm" />
+            <input id="tjm" type="number" min="0" class="form-input" formControlName="tjm" />
           </div>
 
           <div class="form-field">
             <label for="workload" class="form-label">Charge</label>
 
-            <input id="workload" type="number" class="form-input" formControlName="workload" />
+            <input
+              id="workload"
+              type="number"
+              min="0"
+              class="form-input"
+              formControlName="workload"
+            />
           </div>
 
           <div class="form-field">
@@ -150,6 +168,7 @@
               <input
                 id="durationValue"
                 type="number"
+                min="0"
                 class="form-input"
                 formControlName="durationValue"
               />
@@ -208,19 +227,14 @@
           </div>
         </div>
       </div>
-    </form>
+    </div>
 
     <div class="form-footer">
       <button type="button" class="action-button" (click)="requestClose()">Annuler</button>
 
-      <button
-        type="button"
-        class="action-button action-button-primary"
-        [disabled]="form.invalid"
-        (click)="submit()"
-      >
+      <button type="submit" class="action-button action-button-primary" [disabled]="form.invalid">
         Créer l'opportunité
       </button>
     </div>
-  </div>
+  </form>
 </app-modal>

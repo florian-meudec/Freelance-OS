@@ -29,79 +29,93 @@
   }
 
   <div class="notes-list">
-    @for (note of sortedNotes(); track note.id) {
-      @if (editingNoteId() === note.id) {
-        <!--
+    @if (sortedNotes().length) {
+      @for (note of sortedNotes(); track note.id) {
+        @if (editingNoteId() === note.id) {
+          <!--
             Inline note editing preserves context
             while keeping CRM interactions lightweight.
           -->
-        <div class="note-form">
-          <input #editTitle type="text" class="form-input" [value]="note.title" />
+          <div class="note-form">
+            <input #editTitle type="text" class="form-input" [value]="note.title" />
 
-          <textarea #editContent rows="4" class="form-textarea" [value]="note.content"></textarea>
+            <textarea #editContent rows="4" class="form-textarea" [value]="note.content"></textarea>
 
-          <div class="form-actions">
-            <button
-              type="button"
-              class="action-button action-button-primary"
-              (click)="updateNote(note.id, editTitle.value, editContent.value)"
-            >
-              Sauvegarder
-            </button>
+            <div class="form-actions">
+              <button
+                type="button"
+                class="action-button action-button-primary"
+                (click)="updateNote(note.id, editTitle.value, editContent.value)"
+              >
+                Sauvegarder
+              </button>
 
-            <button type="button" class="action-button" (click)="cancelNoteEdit()">Annuler</button>
-          </div>
-
-          @if (deletingNoteId() === note.id) {
-            <div class="delete-confirmation">
-              <p>Confirmer suppression ?</p>
-
-              <div class="form-actions">
-                <button
-                  type="button"
-                  class="action-button action-button-danger"
-                  (click)="deleteNote(note.id)"
-                >
-                  Supprimer
-                </button>
-
-                <button type="button" class="action-button" (click)="deletingNoteId.set(null)">
-                  Annuler
-                </button>
-              </div>
+              <button type="button" class="action-button" (click)="cancelNoteEdit()">
+                Annuler
+              </button>
             </div>
-          } @else {
-            <button
-              type="button"
-              class="action-button action-button-danger"
-              (click)="confirmNoteDelete(note.id)"
-            >
-              Supprimer
-            </button>
-          }
-        </div>
-      } @else {
-        <button
-          type="button"
-          class="note-card note-card-interactive"
-          (click)="startNoteEdit(note.id)"
-          aria-label="Modifier la note"
-        >
-          <div class="note-header">
-            <strong>
-              {{ note.title }}
-            </strong>
 
-            <span>
-              {{ note.createdAt | dateFormat: 'datetime' }}
-            </span>
+            @if (deletingNoteId() === note.id) {
+              <div class="delete-confirmation">
+                <p>Confirmer suppression ?</p>
+
+                <div class="form-actions">
+                  <button
+                    type="button"
+                    class="action-button action-button-danger"
+                    (click)="deleteNote(note.id)"
+                  >
+                    Supprimer
+                  </button>
+
+                  <button type="button" class="action-button" (click)="deletingNoteId.set(null)">
+                    Annuler
+                  </button>
+                </div>
+              </div>
+            } @else {
+              <button
+                type="button"
+                class="action-button action-button-danger"
+                (click)="confirmNoteDelete(note.id)"
+              >
+                Supprimer
+              </button>
+            }
           </div>
+        } @else {
+          <button
+            type="button"
+            class="note-card note-card-interactive"
+            (click)="startNoteEdit(note.id)"
+            aria-label="Modifier la note"
+          >
+            <div class="note-header">
+              <strong>
+                {{ note.title }}
+              </strong>
 
-          <p>
-            {{ note.content }}
-          </p>
-        </button>
+              <span>
+                {{ note.createdAt | dateFormat: 'datetime' }}
+              </span>
+            </div>
+
+            <p>
+              {{ note.content }}
+            </p>
+          </button>
+        }
       }
+    } @else {
+      <div class="empty-state">
+        <p>Aucune note enregistrée.</p>
+
+        <p>Conservez ici les échanges, informations ou remarques concernant cette opportunité.</p>
+
+        <button type="button" class="action-button" (click)="toggleNoteForm()">
+          Ajouter une note
+        </button>
+      </div>
     }
   </div>
 </div>
