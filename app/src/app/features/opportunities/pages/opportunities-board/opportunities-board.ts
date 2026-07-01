@@ -601,6 +601,12 @@ export class OpportunitiesBoard {
     this.editedOpportunity.set(opportunity);
 
     this.showOpportunityForm.set(true);
+
+    this.closeDetailsPanel();
+
+    this.editedOpportunity.set(opportunity);
+
+    this.showOpportunityForm.set(true);
   }
 
   closeOpportunityForm(): void {
@@ -629,5 +635,21 @@ export class OpportunitiesBoard {
     }
 
     this.closeOpportunityForm();
+  }
+
+  deleteOpportunity(): void {
+    const selectedOpportunity = this.selectedOpportunity();
+
+    if (!selectedOpportunity) {
+      return;
+    }
+
+    this.opportunities.update((opportunities) =>
+      opportunities.filter((opportunity) => opportunity.id !== selectedOpportunity.id),
+    );
+
+    this.closeOpportunityForm();
+
+    this.closeDetailsPanel();
   }
 }

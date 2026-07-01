@@ -282,8 +282,28 @@
     the main workflow to reduce accidental clicks.
   -->
   <div class="panel-danger-zone">
-    <button type="button" class="action-button action-button-danger">
-      Supprimer l'opportunité
-    </button>
+    @if (confirmingDeletion()) {
+      <div class="delete-confirmation">
+        <strong>Supprimer cette opportunité&nbsp;?</strong>
+
+        <p>Cette action est <strong>définitive</strong> et ne pourra pas être annulée.</p>
+
+        <div class="form-actions">
+          <button
+            type="button"
+            class="action-button action-button-danger"
+            (click)="deleteOpportunity()"
+          >
+            Supprimer
+          </button>
+
+          <button type="button" class="action-button" (click)="cancelDeletion()">Annuler</button>
+        </div>
+      </div>
+    } @else {
+      <button type="button" class="action-button action-button-danger" (click)="confirmDeletion()">
+        Supprimer l'opportunité
+      </button>
+    }
   </div>
 </aside>

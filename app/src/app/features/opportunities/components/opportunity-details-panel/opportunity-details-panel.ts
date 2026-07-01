@@ -105,6 +105,8 @@ export class OpportunityDetailsPanel {
   */
   readonly edit = output<void>();
 
+  readonly delete = output<void>();
+
   /*
     Status options are generated directly from
     business constants to preserve consistency.
@@ -124,6 +126,8 @@ export class OpportunityDetailsPanel {
     contact email has been copied.
   */
   readonly emailCopied = signal(false);
+
+  readonly confirmingDeletion = signal(false);
 
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
@@ -221,5 +225,19 @@ export class OpportunityDetailsPanel {
   */
   openEdition(): void {
     this.edit.emit();
+  }
+
+  confirmDeletion(): void {
+    this.confirmingDeletion.set(true);
+  }
+
+  cancelDeletion(): void {
+    this.confirmingDeletion.set(false);
+  }
+
+  deleteOpportunity(): void {
+    this.delete.emit();
+
+    this.confirmingDeletion.set(false);
   }
 }
