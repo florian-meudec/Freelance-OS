@@ -1,4 +1,5 @@
 import { CreateOpportunityCommand } from '../commands/create-opportunity.command';
+import { UpdateOpportunityCommand } from '../commands/update-opportunity.command';
 
 import { NextAction } from '../models/next-action.model';
 import { Opportunity } from '../models/opportunity.model';
@@ -8,7 +9,7 @@ import { OPPORTUNITY_EVENT_TYPES, OPPORTUNITY_STATUSES } from '../constants/oppo
 
 export class OpportunityMapper {
   static toOpportunity(command: CreateOpportunityCommand): Opportunity {
-    const creationDate = new Date().toISOString();
+    const createdAt = new Date().toISOString();
 
     return {
       id: crypto.randomUUID(),
@@ -42,9 +43,44 @@ export class OpportunityMapper {
 
       nextAction: this.createNextAction(command),
 
-      events: [this.createCreationEvent(creationDate)],
+      events: [this.createCreationEvent(createdAt)],
 
       notes: [],
+    };
+  }
+
+  /*
+    Update descriptive opportunity data while
+    preserving workflow-related information.
+  */
+  static update(opportunity: Opportunity, command: UpdateOpportunityCommand): Opportunity {
+    return {
+      ...opportunity,
+
+      companyName: command.companyName,
+      companyType: command.companyType,
+      industry: command.industry,
+      source: command.source,
+
+      contactName: command.contactName,
+      contactRole: command.contactRole,
+      contactEmail: command.contactEmail,
+
+      missionTitle: command.missionTitle,
+      description: command.description,
+
+      stack: command.stack,
+      seniority: command.seniority,
+
+      estimatedStartDate: command.estimatedStartDate,
+      durationValue: command.durationValue,
+      durationUnit: command.durationUnit,
+
+      tjm: command.tjm,
+      workload: command.workload,
+
+      modality: command.modality,
+      location: command.location,
     };
   }
 

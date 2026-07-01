@@ -26,7 +26,9 @@
 
     <div class="actions-groups">
       <div class="actions-row">
-        <button type="button" class="action-button action-button-primary">Modifier</button>
+        <button type="button" class="action-button action-button-primary" (click)="openEdition()">
+          Modifier
+        </button>
 
         <form [formGroup]="statusForm">
           <app-select-menu [options]="statuses" formControlName="status" />

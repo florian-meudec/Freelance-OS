@@ -104,7 +104,12 @@
 }
 
 @if (showOpportunityForm()) {
-  <app-opportunity-form (closed)="closeOpportunityForm()" (created)="createOpportunity($event)" />
+  <app-opportunity-form
+    [opportunity]="editedOpportunity()"
+    (created)="createOpportunity($event)"
+    (updated)="updateOpportunity($event)"
+    (closed)="closeOpportunityForm()"
+  />
 }
 
 @if (selectedOpportunity(); as opportunity) {
@@ -136,5 +141,6 @@
     (nextActionCompleteForStatusChange)="onNextActionCompleteForStatusChange()"
     (nextActionDeleteForStatusChange)="onNextActionDeleteForStatusChange()"
     (statusChangeCancelled)="onStatusChangeCancelled()"
+    (edit)="openOpportunityEdition(selectedOpportunity()!)"
   />
 }

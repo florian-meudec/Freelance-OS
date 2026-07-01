@@ -2,9 +2,7 @@
   <form class="opportunity-form" [formGroup]="form" (ngSubmit)="submit()">
     <div class="form-header">
       <div>
-        <h2>Nouvelle opportunité</h2>
-
-        <p>Ajoutez une nouvelle opportunité à votre pipeline.</p>
+        <h2>{{ title() }}</h2>
       </div>
 
       <button
@@ -201,39 +199,40 @@
           </div>
         </div>
       </div>
+      @if (!isEditMode()) {
+        <div class="form-section">
+          <h3>Prochaine action</h3>
 
-      <div class="form-section">
-        <h3>Prochaine action</h3>
+          <div class="form-grid" formGroupName="nextAction">
+            <div class="form-field">
+              <label for="nextActionType" class="form-label form-label-required"> Type </label>
 
-        <div class="form-grid" formGroupName="nextAction">
-          <div class="form-field">
-            <label for="nextActionType" class="form-label form-label-required"> Type </label>
+              <app-select-menu [options]="nextActionTypes" formControlName="type" />
+            </div>
 
-            <app-select-menu [options]="nextActionTypes" formControlName="type" />
-          </div>
+            <div class="form-field">
+              <label for="nextActionDate" class="form-label form-label-required"> Date </label>
 
-          <div class="form-field">
-            <label for="nextActionDate" class="form-label form-label-required"> Date </label>
+              <input id="nextActionDate" type="date" class="form-input" formControlName="dueDate" />
+            </div>
 
-            <input id="nextActionDate" type="date" class="form-input" formControlName="dueDate" />
-          </div>
+            <div class="form-field form-grid-full">
+              <label for="nextActionLabel" class="form-label form-label-required">
+                Description
+              </label>
 
-          <div class="form-field form-grid-full">
-            <label for="nextActionLabel" class="form-label form-label-required">
-              Description
-            </label>
-
-            <input id="nextActionLabel" class="form-input" formControlName="label" />
+              <input id="nextActionLabel" class="form-input" formControlName="label" />
+            </div>
           </div>
         </div>
-      </div>
+      }
     </div>
 
     <div class="form-footer">
       <button type="button" class="action-button" (click)="requestClose()">Annuler</button>
 
       <button type="submit" class="action-button action-button-primary" [disabled]="form.invalid">
-        Créer l'opportunité
+        {{ submitLabel() }}
       </button>
     </div>
   </form>

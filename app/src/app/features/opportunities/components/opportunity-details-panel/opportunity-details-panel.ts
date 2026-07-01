@@ -100,6 +100,12 @@ export class OpportunityDetailsPanel {
   readonly statusChangeCancelled = output<void>();
 
   /*
+    Opportunity edition remains controlled
+    by the board container.
+  */
+  readonly edit = output<void>();
+
+  /*
     Status options are generated directly from
     business constants to preserve consistency.
   */
@@ -208,5 +214,12 @@ export class OpportunityDetailsPanel {
     this.copyFeedbackTimeout = setTimeout(() => {
       this.emailCopied.set(false);
     }, 2000);
+  }
+
+  /*
+    Open the opportunity edition workflow.
+  */
+  openEdition(): void {
+    this.edit.emit();
   }
 }

@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, computed, effect, inject, input, output } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Modal } from '../../../../shared/components/modal/modal';
@@ -17,6 +17,7 @@ import { WorkModality } from '../../../../shared/types/work-modality.type';
 import { OPPORTUNITY_EVENT_TYPES } from '../../constants/opportunity.constants';
 
 import { CreateOpportunityCommand } from '../../commands/create-opportunity.command';
+import { UpdateOpportunityCommand } from '../../commands/update-opportunity.command';
 import { OpportunityMapper } from '../../mappers/opportunity.mapper';
 import { Opportunity } from '../../models/opportunity.model';
 import { OpportunityEventType } from '../../types/opportunity.type';
@@ -29,9 +30,23 @@ import { OpportunityEventType } from '../../types/opportunity.type';
   styleUrl: './opportunity-form.scss',
 })
 export class OpportunityForm {
+  readonly opportunity = input<Opportunity | null>(null);
+
+  readonly isEditMode = computed(() => this.opportunity() !== null);
+
+  readonly title = computed(() =>
+    this.isEditMode() ? 'Modifier une opportunité' : 'Nouvelle opportunité',
+  );
+
+  readonly submitLabel = computed(() =>
+    this.isEditMode() ? 'Enregistrer' : "Créer l'opportunité",
+  );
+
   readonly closed = output<void>();
 
   readonly created = output<Opportunity>();
+
+  readonly updated = output<Opportunity>();
 
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
@@ -48,6 +63,51 @@ export class OpportunityForm {
     OPPORTUNITY_EVENT_TYPES.EMAIL,
     OPPORTUNITY_EVENT_TYPES.MEETING,
   ];
+
+  constructor() {
+    effect(() => {
+      const opportunity = this.opportunity();
+
+      if (!opportunity) {
+        this.form.controls.nextAction.enable({ emitEvent: false });
+
+        this.resetForm();
+
+        return;
+      }
+
+      this.form.controls.nextAction.disable({ emitEvent: false });
+
+      this.form.patchValue({
+        companyName: opportunity.companyName,
+        companyType: opportunity.companyType ?? '',
+        industry: opportunity.industry ?? '',
+        source: opportunity.source,
+
+        contactName: opportunity.contactName ?? '',
+        contactRole: opportunity.contactRole ?? '',
+        contactEmail: opportunity.contactEmail ?? '',
+
+        missionTitle: opportunity.missionTitle,
+        description: opportunity.description ?? '',
+
+        tjm: opportunity.tjm,
+        workload: opportunity.workload,
+
+        modality: opportunity.modality ?? '',
+        location: opportunity.location ?? '',
+
+        estimatedStartDate: opportunity.estimatedStartDate ?? '',
+
+        durationValue: opportunity.durationValue,
+        durationUnit: opportunity.durationUnit ?? '',
+
+        seniority: opportunity.seniority ?? '',
+
+        stack: opportunity.stack.join(', '),
+      });
+    });
+  }
 
   readonly form = this.formBuilder.group({
     companyName: ['', Validators.required],
@@ -93,10 +153,61 @@ export class OpportunityForm {
 
       return;
     }
+
+    if (this.isEditMode()) {
+      this.updateOpportunity();
+
+      return;
+    }
+
+    this.createOpportunity();
+  }
+
+  /*
+    Handle opportunity creation workflow.
+  */
+  private createOpportunity(): void {
     const command = this.createCommand();
+
     const opportunity = OpportunityMapper.toOpportunity(command);
 
     this.created.emit(opportunity);
+  }
+
+  /*
+    Handle opportunity update workflow.
+  */
+  private updateOpportunity(): void {
+    const command = this.updateCommand();
+
+    const opportunity = OpportunityMapper.update(this.opportunity()!, command);
+
+    this.updated.emit(opportunity);
+  }
+
+  /*
+    Restore the form to its initial
+    creation state.
+  */
+  private resetForm(): void {
+    this.form.reset();
+
+    this.form.patchValue({
+      companyType: '',
+      modality: '',
+      durationUnit: '',
+      seniority: '',
+
+      nextAction: {
+        type: '',
+        label: '',
+        dueDate: '',
+      },
+    });
+
+    this.form.markAsPristine();
+
+    this.form.markAsUntouched();
   }
 
   /*
@@ -104,6 +215,34 @@ export class OpportunityForm {
     current form values.
   */
   private createCommand(): CreateOpportunityCommand {
+    return {
+      ...this.buildOpportunityData(),
+
+      nextAction: {
+        type: this.form.controls.nextAction.controls.type.value as OpportunityEventType,
+        label: this.form.controls.nextAction.controls.label.value,
+        dueDate: this.form.controls.nextAction.controls.dueDate.value,
+      },
+    };
+  }
+
+  /*
+    Build the update command from the
+    current form values.
+  */
+  private updateCommand(): UpdateOpportunityCommand {
+    return {
+      id: this.opportunity()!.id,
+
+      ...this.buildOpportunityData(),
+    };
+  }
+
+  /*
+    Extract business data shared by
+    creation and update workflows.
+  */
+  private buildOpportunityData() {
     const value = this.form.getRawValue();
 
     return {
@@ -111,30 +250,31 @@ export class OpportunityForm {
       companyType: value.companyType || undefined,
       industry: value.industry || undefined,
       source: value.source,
+
       contactName: value.contactName || undefined,
       contactRole: value.contactRole || undefined,
       contactEmail: value.contactEmail || undefined,
+
       missionTitle: value.missionTitle,
       description: value.description || undefined,
+
       tjm: value.tjm,
       workload: value.workload,
+
       modality: value.modality || undefined,
       location: value.location || undefined,
+
       estimatedStartDate: value.estimatedStartDate || undefined,
+
       durationValue: value.durationValue,
       durationUnit: value.durationUnit || undefined,
+
       seniority: value.seniority || undefined,
 
       stack: value.stack
         .split(',')
         .map((technology) => technology.trim())
         .filter((technology) => technology.length > 0),
-
-      nextAction: {
-        type: value.nextAction.type as OpportunityEventType,
-        label: value.nextAction.label,
-        dueDate: value.nextAction.dueDate,
-      },
     };
   }
 }

@@ -4,6 +4,8 @@ import { Seniority } from '../../../shared/types/seniority.type';
 import { WorkModality } from '../../../shared/types/work-modality.type';
 
 export interface UpdateOpportunityCommand {
+  id: string;
+
   companyName: string;
 
   companyType?: CompanyType;
@@ -39,4 +41,9 @@ export interface UpdateOpportunityCommand {
   modality?: WorkModality;
 
   location?: string;
+
+  /*
+    The next action is intentionally excluded.
+    It is managed by its dedicated workflow.
+  */
 }

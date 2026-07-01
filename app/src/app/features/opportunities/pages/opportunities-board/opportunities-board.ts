@@ -99,6 +99,8 @@ export class OpportunitiesBoard {
 
   readonly pendingStatus = signal<OpportunityStatus | null>(null);
 
+  readonly editedOpportunity = signal<Opportunity | null>(null);
+
   readonly showOpportunityForm = signal(false);
 
   readonly detailsPanel = viewChild<OpportunityDetailsPanel>('detailsPanel');
@@ -590,11 +592,21 @@ export class OpportunitiesBoard {
   }
 
   openOpportunityForm(): void {
+    this.editedOpportunity.set(null);
+
+    this.showOpportunityForm.set(true);
+  }
+
+  openOpportunityEdition(opportunity: Opportunity): void {
+    this.editedOpportunity.set(opportunity);
+
     this.showOpportunityForm.set(true);
   }
 
   closeOpportunityForm(): void {
     this.showOpportunityForm.set(false);
+
+    this.editedOpportunity.set(null);
   }
 
   /*
@@ -603,6 +615,18 @@ export class OpportunitiesBoard {
   */
   createOpportunity(opportunity: Opportunity): void {
     this.opportunities.update((opportunities) => [opportunity, ...opportunities]);
+
+    this.closeOpportunityForm();
+  }
+
+  updateOpportunity(updated: Opportunity): void {
+    this.opportunities.update((opportunities) =>
+      opportunities.map((opportunity) => (opportunity.id === updated.id ? updated : opportunity)),
+    );
+
+    if (this.selectedOpportunity()?.id === updated.id) {
+      this.selectedOpportunity.set(updated);
+    }
 
     this.closeOpportunityForm();
   }
