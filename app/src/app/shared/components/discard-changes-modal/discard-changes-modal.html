@@ -1,0 +1,17 @@
+<app-modal (closed)="cancel()" [size]="'small'">
+  <div class="discard-modal">
+    <h2>Modifications non enregistrées</h2>
+
+    <p>Si vous quittez maintenant,</p>
+
+    <p>vos modifications seront perdues.</p>
+
+    <div class="form-actions">
+      <button type="button" class="action-button" (click)="cancel()">Continuer l'édition</button>
+
+      <button type="button" class="action-button action-button-danger" (click)="confirm()">
+        Quitter
+      </button>
+    </div>
+  </div>
+</app-modal>

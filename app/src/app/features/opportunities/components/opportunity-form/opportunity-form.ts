@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, output } from '@angular/core';
+import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Modal } from '../../../../shared/components/modal/modal';
@@ -22,10 +22,12 @@ import { OpportunityMapper } from '../../mappers/opportunity.mapper';
 import { Opportunity } from '../../models/opportunity.model';
 import { OpportunityEventType } from '../../types/opportunity.type';
 
+import { DiscardChangesModal } from '../../../../shared/components/discard-changes-modal/discard-changes-modal';
+
 @Component({
   selector: 'app-opportunity-form',
   standalone: true,
-  imports: [Modal, ReactiveFormsModule, SelectMenu],
+  imports: [Modal, ReactiveFormsModule, SelectMenu, DiscardChangesModal],
   templateUrl: './opportunity-form.html',
   styleUrl: './opportunity-form.scss',
 })
@@ -63,6 +65,8 @@ export class OpportunityForm {
     OPPORTUNITY_EVENT_TYPES.EMAIL,
     OPPORTUNITY_EVENT_TYPES.MEETING,
   ];
+
+  readonly showDiscardChangesModal = signal(false);
 
   constructor() {
     effect(() => {
@@ -144,7 +148,13 @@ export class OpportunityForm {
   });
 
   requestClose(): void {
-    this.closed.emit();
+    if (this.canClose()) {
+      this.closed.emit();
+
+      return;
+    }
+
+    this.showDiscardChangesModal.set(true);
   }
 
   submit(): void {
@@ -276,5 +286,19 @@ export class OpportunityForm {
         .map((technology) => technology.trim())
         .filter((technology) => technology.length > 0),
     };
+  }
+
+  cancelDiscardChanges(): void {
+    this.showDiscardChangesModal.set(false);
+  }
+
+  confirmDiscardChanges(): void {
+    this.showDiscardChangesModal.set(false);
+
+    this.closed.emit();
+  }
+
+  private canClose(): boolean {
+    return this.form.pristine;
   }
 }

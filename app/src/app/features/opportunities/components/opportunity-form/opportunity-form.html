@@ -1,5 +1,11 @@
-<app-modal (closed)="requestClose()">
-  <form class="opportunity-form" [formGroup]="form" (ngSubmit)="submit()">
+<app-modal (closed)="requestClose()" [size]="'large'">
+  <form
+    class="opportunity-form"
+    [formGroup]="form"
+    [class.inactive]="showDiscardChangesModal()"
+    [inert]="showDiscardChangesModal()"
+    (ngSubmit)="submit()"
+  >
     <div class="form-header">
       <div>
         <h2>{{ title() }}</h2>
@@ -237,3 +243,10 @@
     </div>
   </form>
 </app-modal>
+
+@if (showDiscardChangesModal()) {
+  <app-discard-changes-modal
+    (cancelled)="cancelDiscardChanges()"
+    (confirmed)="confirmDiscardChanges()"
+  />
+}

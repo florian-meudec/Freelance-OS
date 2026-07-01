@@ -5,6 +5,11 @@
   aria-label="Fermer la modale"
 ></button>
 
-<div class="modal-container">
+<div
+  class="modal-container"
+  [class.modal-small]="size() === 'small'"
+  [class.modal-medium]="size() === 'medium'"
+  [class.modal-large]="size() === 'large'"
+>
   <ng-content />
 </div>

@@ -1,4 +1,4 @@
-import { Component, HostListener, output } from '@angular/core';
+import { Component, HostListener, input, output } from '@angular/core';
 
 @Component({
   selector: 'app-modal',
@@ -11,6 +11,8 @@ import { Component, HostListener, output } from '@angular/core';
 })
 export class Modal {
   readonly closed = output<void>();
+
+  readonly size = input<'small' | 'medium' | 'large'>('large');
 
   requestClose(): void {
     this.closed.emit();

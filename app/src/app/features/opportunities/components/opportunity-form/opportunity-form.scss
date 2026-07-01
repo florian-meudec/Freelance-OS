@@ -160,3 +160,11 @@
 .form-footer .action-button {
   width: auto;
 }
+
+.opportunity-form.inactive {
+  opacity: 0.45;
+
+  transform: scale(0.985);
+
+  transition: all 150ms ease;
+}
