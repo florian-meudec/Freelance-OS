@@ -104,7 +104,7 @@
 }
 
 @if (showOpportunityForm()) {
-  <app-opportunity-form (closed)="closeOpportunityForm()" />
+  <app-opportunity-form (closed)="closeOpportunityForm()" (created)="createOpportunity($event)" />
 }
 
 @if (selectedOpportunity(); as opportunity) {

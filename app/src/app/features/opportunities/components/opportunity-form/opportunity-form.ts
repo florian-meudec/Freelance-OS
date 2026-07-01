@@ -95,8 +95,8 @@ export class OpportunityForm {
     }
     const command = this.createCommand();
     const opportunity = OpportunityMapper.toOpportunity(command);
+
     this.created.emit(opportunity);
-    this.requestClose();
   }
 
   /*

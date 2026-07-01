@@ -596,4 +596,14 @@ export class OpportunitiesBoard {
   closeOpportunityForm(): void {
     this.showOpportunityForm.set(false);
   }
+
+  /*
+    Add the newly created opportunity
+    to the active pipeline.
+  */
+  createOpportunity(opportunity: Opportunity): void {
+    this.opportunities.update((opportunities) => [opportunity, ...opportunities]);
+
+    this.closeOpportunityForm();
+  }
 }
