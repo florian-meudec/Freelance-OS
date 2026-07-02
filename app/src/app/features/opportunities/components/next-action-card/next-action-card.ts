@@ -21,19 +21,21 @@ import {
 import { NextAction } from '../../models/next-action.model';
 
 import { OpportunityEventType, OpportunityStatus } from '../../types/opportunity.type';
+import { FormInteractionHandler } from '../../../../shared/utils/form-interaction-handler';
+import { DiscardChangesModal } from '../../../../shared/components/discard-changes-modal/discard-changes-modal';
 
 @Component({
   selector: 'app-next-action-card',
 
   standalone: true,
 
-  imports: [DateFormatPipe, ReactiveFormsModule, SelectMenu],
+  imports: [DateFormatPipe, ReactiveFormsModule, SelectMenu, DiscardChangesModal],
 
   templateUrl: './next-action-card.html',
 
   styleUrl: './next-action-card.scss',
 })
-export class NextActionCard {
+export class NextActionCard extends FormInteractionHandler {
   readonly nextAction = input<NextAction | null>(null);
 
   readonly pendingStatus = input<OpportunityStatus | null>();
@@ -91,36 +93,20 @@ export class NextActionCard {
   });
 
   open(): void {
-    this.nextAction() ? this.setMode('edit') : this.setMode('create');
-  }
+    if (this.nextAction()) {
+      this.openEditionForm();
 
-  openMandatory(): void {
-    this.setMode('mandatory');
-  }
+      return;
+    }
 
-  openStatusChange(): void {
-    this.setMode('status-change');
+    this.openCreationForm();
   }
 
   isBlocking(): boolean {
     return this.nextActionMode() === 'mandatory' || this.nextActionMode() === 'status-change';
   }
 
-  private setMode(mode: NextActionMode): void {
-    this.scrollIntoView();
-
-    this.nextActionMode.set(mode);
-
-    this.fillForm(mode === 'edit' ? this.nextAction() : null);
-
-    if (mode !== 'status-change') {
-      queueMicrotask(() => {
-        this.nextActionLabel()?.nativeElement.focus();
-      });
-    }
-  }
-
-  private fillForm(nextAction: NextAction | null): void {
+  private fillForm(nextAction: NextAction | null | undefined): void {
     this.form.reset({
       type: nextAction?.type ?? this.manualEventTypes[0].value,
       label: nextAction?.label ?? '',
@@ -140,10 +126,6 @@ export class NextActionCard {
   }
 
   close(): void {
-    if (this.isBlocking()) {
-      return;
-    }
-
     this.resetForm();
 
     this.nextActionMode.set('view');
@@ -166,9 +148,7 @@ export class NextActionCard {
       dueDate: this.form.controls.dueDate.value,
     });
 
-    this.resetForm();
-
-    this.nextActionMode.set('view');
+    this.close();
   }
 
   completeAction(): void {
@@ -178,26 +158,72 @@ export class NextActionCard {
   }
 
   completeForStatusChangeAction(): void {
-    this.resetForm();
-
-    this.nextActionMode.set('view');
+    this.close();
 
     this.completeForStatusChange.emit();
   }
 
   deleteForStatusChangeAction(): void {
-    this.resetForm();
-
-    this.nextActionMode.set('view');
+    this.close();
 
     this.deleteForStatusChange.emit();
   }
 
   cancelStatusChange(): void {
-    this.resetForm();
-
-    this.nextActionMode.set('view');
+    this.close();
 
     this.statusChangeCancelled.emit();
+  }
+
+  private focusForm(): void {
+    queueMicrotask(() => {
+      this.nextActionLabel()?.nativeElement.focus();
+    });
+  }
+
+  private openCreationForm(): void {
+    this.scrollIntoView();
+
+    this.nextActionMode.set('create');
+
+    this.resetForm();
+
+    this.focusForm();
+  }
+
+  private openEditionForm(): void {
+    this.scrollIntoView();
+
+    this.nextActionMode.set('edit');
+
+    this.fillForm(this.nextAction());
+
+    this.focusForm();
+  }
+
+  openMandatory(): void {
+    this.scrollIntoView();
+
+    this.resetForm();
+
+    this.nextActionMode.set('mandatory');
+
+    this.focusForm();
+  }
+
+  openStatusChange(): void {
+    this.scrollIntoView();
+
+    this.resetForm();
+
+    this.nextActionMode.set('status-change');
+  }
+
+  requestClose(): void {
+    if (this.isBlocking()) {
+      return;
+    }
+
+    this.executeOrConfirm(this.form.dirty, () => this.close());
   }
 }

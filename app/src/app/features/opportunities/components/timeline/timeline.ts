@@ -11,19 +11,21 @@ import {
   OPPORTUNITY_EVENT_TYPES,
   OPPORTUNITY_STATUSES,
 } from '../../constants/opportunity.constants';
+import { FormInteractionHandler } from '../../../../shared/utils/form-interaction-handler';
+import { DiscardChangesModal } from '../../../../shared/components/discard-changes-modal/discard-changes-modal';
 
 @Component({
   selector: 'app-timeline',
 
   standalone: true,
 
-  imports: [DateFormatPipe, ReactiveFormsModule, SelectMenu],
+  imports: [DateFormatPipe, ReactiveFormsModule, SelectMenu, DiscardChangesModal],
 
   templateUrl: './timeline.html',
 
   styleUrl: './timeline.scss',
 })
-export class Timeline {
+export class Timeline extends FormInteractionHandler {
   readonly events = input.required<OpportunityEvent[]>();
 
   readonly add = output<{
@@ -94,27 +96,22 @@ export class Timeline {
     from the opportunity workflow.
   */
   openEventForm(): void {
-    this.editingEventId.set(null);
+    if (
+      this.editingEventId() !== null &&
+      !this.executeOrConfirm(this.editionForm.dirty, () => this.openCreationForm())
+    ) {
+      return;
+    }
 
-    this.creationForm.reset({
-      type: this.manualEventTypes[0].value,
-      comment: '',
-    });
-
-    this.showEventForm.set(true);
+    this.openCreationForm();
   }
 
   /*
-    Close inline creation and restore
-    the default creation state.
+    Request creation form closure while
+    protecting unsaved modifications.
   */
-  closeEventForm(): void {
-    this.showEventForm.set(false);
-
-    this.creationForm.reset({
-      type: this.manualEventTypes[0].value,
-      comment: '',
-    });
+  requestCloseEventForm(): void {
+    this.executeOrConfirm(this.creationForm.dirty, () => this.closeCreationForm());
   }
 
   /*
@@ -135,7 +132,7 @@ export class Timeline {
       comment: comment || undefined,
     });
 
-    this.closeEventForm();
+    this.closeCreationForm();
   }
 
   /*
@@ -143,16 +140,30 @@ export class Timeline {
     from the opportunity history.
   */
   startEventEdit(event: OpportunityEvent): void {
-    this.closeEventForm();
+    if (
+      this.showEventForm() &&
+      !this.executeOrConfirm(this.creationForm.dirty, () => this.openEditionForm(event))
+    ) {
+      return;
+    }
 
-    this.editingEventId.set(event.id);
+    if (
+      this.editingEventId() !== null &&
+      this.editingEventId() !== event.id &&
+      !this.executeOrConfirm(this.editionForm.dirty, () => this.openEditionForm(event))
+    ) {
+      return;
+    }
 
-    this.deletingEventId.set(null);
+    this.openEditionForm(event);
+  }
 
-    this.editionForm.reset({
-      type: event.type,
-      comment: event.comment ?? '',
-    });
+  /*
+    Request edition cancellation while
+    protecting unsaved modifications.
+  */
+  requestCancelEventEdit(): void {
+    this.executeOrConfirm(this.editionForm.dirty, () => this.closeEditionForm());
   }
 
   /*
@@ -174,24 +185,13 @@ export class Timeline {
       comment: comment || undefined,
     });
 
-    this.cancelEventEdit();
+    this.closeEditionForm();
   }
 
   /*
-    Cancel inline editing and restore
-    the compact timeline presentation.
+    Cancel deletion confirmation while
+    preserving the current edition state.
   */
-  cancelEventEdit(): void {
-    this.deletingEventId.set(null);
-
-    this.editingEventId.set(null);
-
-    this.editionForm.reset({
-      type: this.manualEventTypes[0].value,
-      comment: '',
-    });
-  }
-
   confirmEventDelete(eventId: string): void {
     this.deletingEventId.set(eventId);
   }
@@ -209,7 +209,7 @@ export class Timeline {
 
     this.cancelEventDelete();
 
-    this.cancelEventEdit();
+    this.closeEditionForm();
   }
 
   isEditableEvent(event: OpportunityEvent): boolean {
@@ -233,5 +233,62 @@ export class Timeline {
       Object.values(OPPORTUNITY_EVENT_TYPES).find((type) => type.value === event.type)?.label ??
       event.type
     );
+  }
+
+  private openCreationForm(): void {
+    this.deletingEventId.set(null);
+
+    this.editingEventId.set(null);
+
+    this.creationForm.reset({
+      type: this.manualEventTypes[0].value,
+      comment: '',
+    });
+
+    this.showEventForm.set(true);
+  }
+
+  /*
+    Close inline creation and restore
+    the default creation state.
+  */
+  private closeCreationForm(): void {
+    this.deletingEventId.set(null);
+
+    this.showEventForm.set(false);
+
+    this.creationForm.reset({
+      type: this.manualEventTypes[0].value,
+      comment: '',
+    });
+  }
+
+  private openEditionForm(event: OpportunityEvent): void {
+    this.showEventForm.set(false);
+
+    this.editingEventId.set(event.id);
+
+    this.deletingEventId.set(null);
+
+    this.editionForm.reset({
+      type: event.type,
+      comment: event.comment ?? '',
+    });
+  }
+
+  /*
+    Cancel inline editing and restore
+    the compact timeline presentation.
+  */
+
+  private closeEditionForm(): void {
+    this.deletingEventId.set(null);
+
+    this.editingEventId.set(null);
+
+    this.editionForm.reset({
+      type: this.manualEventTypes[0].value,
+      comment: '',
+    });
   }
 }

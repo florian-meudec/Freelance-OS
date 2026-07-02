@@ -4,6 +4,10 @@
   @if (
     nextActionMode() === 'create' || nextActionMode() === 'edit' || nextActionMode() === 'mandatory'
   ) {
+    <!--
+      Inline next action editing preserves context
+      while protecting unsaved modifications.
+    -->
     <form class="event-form" [formGroup]="form" (ngSubmit)="save()">
       <div class="form-field">
         <span class="form-label">Type d'action</span>
@@ -29,7 +33,7 @@
         </button>
 
         @if (!isBlocking()) {
-          <button type="button" class="action-button" (click)="close()">Annuler</button>
+          <button type="button" class="action-button" (click)="requestClose()">Annuler</button>
         }
       </div>
     </form>
@@ -97,3 +101,10 @@
     <p class="empty-state">Aucune prochaine action.</p>
   }
 </div>
+
+@if (showDiscardChangesModal()) {
+  <app-discard-changes-modal
+    (confirmed)="confirmDiscardChanges()"
+    (cancelled)="cancelDiscardChanges()"
+  />
+}

@@ -14,8 +14,8 @@
 
   @if (showEventForm()) {
     <!--
-      Inline timeline event creation keeps
-      workflow history contextual and lightweight.
+      Inline timeline event creation preserves context
+      while protecting unsaved modifications.
     -->
     <form class="event-form" [formGroup]="creationForm" (ngSubmit)="addEvent()">
       <div class="form-field">
@@ -39,11 +39,17 @@
           Ajouter
         </button>
 
-        <button type="button" class="action-button" (click)="closeEventForm()">Annuler</button>
+        <button type="button" class="action-button" (click)="requestCloseEventForm()">
+          Annuler
+        </button>
       </div>
     </form>
   }
 
+  <!--
+    Inline timeline event editing stays contextual
+    while protecting unsaved modifications.
+  -->
   <div class="timeline">
     @for (event of sortedEvents(); track event.id) {
       @if (editingEventId() === event.id) {
@@ -69,7 +75,9 @@
               Sauvegarder
             </button>
 
-            <button type="button" class="action-button" (click)="cancelEventEdit()">Annuler</button>
+            <button type="button" class="action-button" (click)="requestCancelEventEdit()">
+              Annuler
+            </button>
           </div>
 
           @if (deletingEventId() === event.id) {
@@ -152,3 +160,10 @@
     }
   </div>
 </div>
+
+@if (showDiscardChangesModal()) {
+  <app-discard-changes-modal
+    (confirmed)="confirmDiscardChanges()"
+    (cancelled)="cancelDiscardChanges()"
+  />
+}
