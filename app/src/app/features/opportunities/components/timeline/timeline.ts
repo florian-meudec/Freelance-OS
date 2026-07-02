@@ -51,7 +51,16 @@ export class Timeline {
 
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
-  readonly form = this.formBuilder.group({
+  readonly creationForm = this.formBuilder.group({
+    type: this.formBuilder.control<OpportunityEventType>(
+      this.manualEventTypes[0].value,
+      Validators.required,
+    ),
+
+    comment: [''],
+  });
+
+  readonly editionForm = this.formBuilder.group({
     type: this.formBuilder.control<OpportunityEventType>(
       this.manualEventTypes[0].value,
       Validators.required,
@@ -84,14 +93,13 @@ export class Timeline {
     Timeline events can be created directly
     from the opportunity workflow.
   */
-  toggleEventForm(): void {
-    if (this.showEventForm()) {
-      this.closeEventForm();
-
-      return;
-    }
-
+  openEventForm(): void {
     this.editingEventId.set(null);
+
+    this.creationForm.reset({
+      type: this.manualEventTypes[0].value,
+      comment: '',
+    });
 
     this.showEventForm.set(true);
   }
@@ -103,7 +111,7 @@ export class Timeline {
   closeEventForm(): void {
     this.showEventForm.set(false);
 
-    this.form.reset({
+    this.creationForm.reset({
       type: this.manualEventTypes[0].value,
       comment: '',
     });
@@ -114,7 +122,13 @@ export class Timeline {
     so workflow history remains centralized.
   */
   addEvent(): void {
-    const { type, comment } = this.form.getRawValue();
+    if (this.creationForm.invalid) {
+      this.creationForm.markAllAsTouched();
+
+      return;
+    }
+
+    const { type, comment } = this.creationForm.getRawValue();
 
     this.add.emit({
       type,
@@ -131,12 +145,14 @@ export class Timeline {
   startEventEdit(event: OpportunityEvent): void {
     this.closeEventForm();
 
-    this.form.reset({
+    this.editingEventId.set(event.id);
+
+    this.deletingEventId.set(null);
+
+    this.editionForm.reset({
       type: event.type,
       comment: event.comment ?? '',
     });
-
-    this.editingEventId.set(event.id);
   }
 
   /*
@@ -144,7 +160,13 @@ export class Timeline {
     parent remains the source of truth.
   */
   updateEvent(eventId: string): void {
-    const { type, comment } = this.form.getRawValue();
+    if (this.editionForm.invalid) {
+      this.editionForm.markAllAsTouched();
+
+      return;
+    }
+
+    const { type, comment } = this.editionForm.getRawValue();
 
     this.update.emit({
       eventId,
@@ -164,7 +186,7 @@ export class Timeline {
 
     this.editingEventId.set(null);
 
-    this.form.reset({
+    this.editionForm.reset({
       type: this.manualEventTypes[0].value,
       comment: '',
     });

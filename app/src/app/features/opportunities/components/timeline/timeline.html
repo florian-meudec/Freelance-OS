@@ -7,7 +7,7 @@
   <div class="timeline-header">
     <h3>Timeline</h3>
 
-    <button type="button" class="link-button" (click)="toggleEventForm()">
+    <button type="button" class="link-button" (click)="openEventForm()">
       Ajouter un évènement
     </button>
   </div>
@@ -17,7 +17,7 @@
       Inline timeline event creation keeps
       workflow history contextual and lightweight.
     -->
-    <form class="event-form" [formGroup]="form" (ngSubmit)="addEvent()">
+    <form class="event-form" [formGroup]="creationForm" (ngSubmit)="addEvent()">
       <div class="form-field">
         <span class="form-label">Type d'évènement</span>
 
@@ -31,7 +31,11 @@
       </label>
 
       <div class="form-actions">
-        <button type="submit" class="action-button action-button-primary" [disabled]="form.invalid">
+        <button
+          type="submit"
+          class="action-button action-button-primary"
+          [disabled]="creationForm.invalid"
+        >
           Ajouter
         </button>
 
@@ -43,7 +47,7 @@
   <div class="timeline">
     @for (event of sortedEvents(); track event.id) {
       @if (editingEventId() === event.id) {
-        <form class="event-form" [formGroup]="form" (ngSubmit)="updateEvent(event.id)">
+        <form class="event-form" [formGroup]="editionForm" (ngSubmit)="updateEvent(event.id)">
           <div class="form-field">
             <span class="form-label">Type d'évènement</span>
 
@@ -60,7 +64,7 @@
             <button
               type="submit"
               class="action-button action-button-primary"
-              [disabled]="form.invalid"
+              [disabled]="editionForm.invalid"
             >
               Sauvegarder
             </button>
@@ -70,7 +74,9 @@
 
           @if (deletingEventId() === event.id) {
             <div class="delete-confirmation">
-              <p>Confirmer la suppression ?</p>
+              <p>Supprimer définitivement cet évènement ?</p>
+
+              <p>Cette action est irréversible.</p>
 
               <div class="form-actions">
                 <button

@@ -1,4 +1,14 @@
-import { Component, computed, ElementRef, input, output, signal, viewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input,
+  output,
+  signal,
+  viewChild,
+} from '@angular/core';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { DateFormatPipe } from '../../pipes/date-format-pipe';
 
@@ -9,7 +19,7 @@ import { Note } from '../../models/note.model';
 
   standalone: true,
 
-  imports: [DateFormatPipe],
+  imports: [DateFormatPipe, ReactiveFormsModule],
 
   templateUrl: './notes.html',
 
@@ -39,6 +49,18 @@ export class Notes {
 
   readonly noteDelete = output<string>();
 
+  private readonly formBuilder = inject(NonNullableFormBuilder);
+
+  readonly creationForm = this.formBuilder.group({
+    title: ['', Validators.required],
+    content: ['', Validators.required],
+  });
+
+  readonly editionForm = this.formBuilder.group({
+    title: ['', Validators.required],
+    content: ['', Validators.required],
+  });
+
   /*
     Note form visibility stays local to keep
     lightweight interactions contextual.
@@ -61,9 +83,7 @@ export class Notes {
     Form references support lightweight
     scroll and focus interactions.
   */
-  readonly noteForm = viewChild<ElementRef<HTMLDivElement>>('noteForm');
-
-  readonly noteTitleInput = viewChild<ElementRef<HTMLInputElement>>('noteTitleInput');
+  readonly noteFormElement = viewChild<ElementRef<HTMLFormElement>>('noteForm');
 
   /*
     Notes are displayed newest first
@@ -76,57 +96,71 @@ export class Notes {
   );
 
   /*
-    Toggle lightweight note creation without
+    Open lightweight note creation without
     leaving the current business context.
   */
-  toggleNoteForm(): void {
+  openNoteForm(): void {
     this.editingNoteId.set(null);
 
     this.deletingNoteId.set(null);
 
-    const nextValue = !this.showNoteForm();
+    this.creationForm.reset();
 
-    this.showNoteForm.set(nextValue);
+    this.showNoteForm.set(true);
 
-    /*
-      Wait for the form to render before
-      applying focus interactions.
-    */
-    if (nextValue) {
-      requestAnimationFrame(() => {
-        this.noteForm()?.nativeElement.scrollIntoView({
-          behavior: 'smooth',
-          block: 'nearest',
-        });
-
-        this.noteTitleInput()?.nativeElement.focus();
+    requestAnimationFrame(() => {
+      this.noteFormElement()?.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
       });
-    }
+
+      this.noteFormElement()?.nativeElement.querySelector<HTMLInputElement>('input')?.focus();
+    });
+  }
+
+  /*
+    Close the creation workflow and
+    restore its initial state.
+  */
+  closeNoteForm(): void {
+    this.creationForm.reset();
+
+    this.showNoteForm.set(false);
   }
 
   /*
     Emit note creation requests upward so the
     parent remains the source of truth.
   */
-  addNote(title: string, content: string): void {
-    this.noteAdd.emit({
-      title,
-      content,
-    });
+  addNote(): void {
+    if (this.creationForm.invalid) {
+      this.creationForm.markAllAsTouched();
 
-    this.showNoteForm.set(false);
+      return;
+    }
+
+    this.noteAdd.emit(this.creationForm.getRawValue());
+
+    this.closeNoteForm();
   }
 
   /*
     Notes become editable directly inside
     the timeline context for faster workflows.
   */
-  startNoteEdit(noteId: string): void {
+  startNoteEdit(note: Note): void {
     this.showNoteForm.set(false);
 
-    this.editingNoteId.set(noteId);
-
     this.deletingNoteId.set(null);
+
+    this.editingNoteId.set(note.id);
+
+    this.editionForm.reset();
+
+    this.editionForm.patchValue({
+      title: note.title,
+      content: note.content,
+    });
   }
 
   /*
@@ -134,6 +168,8 @@ export class Notes {
     compact note presentation.
   */
   cancelNoteEdit(): void {
+    this.editionForm.reset();
+
     this.editingNoteId.set(null);
 
     this.deletingNoteId.set(null);
@@ -151,11 +187,16 @@ export class Notes {
     Emit note updates upward so the parent
     remains the source of truth.
   */
-  updateNote(noteId: string, title: string, content: string): void {
+  updateNote(noteId: string): void {
+    if (this.editionForm.invalid) {
+      this.editionForm.markAllAsTouched();
+
+      return;
+    }
+
     this.noteUpdate.emit({
       noteId,
-      title,
-      content,
+      ...this.editionForm.getRawValue(),
     });
 
     this.cancelNoteEdit();
@@ -169,15 +210,5 @@ export class Notes {
     this.noteDelete.emit(noteId);
 
     this.cancelNoteEdit();
-  }
-
-  /*
-    Public trigger allows external quick actions
-    to open the lightweight note workflow.
-  */
-  openNoteForm(): void {
-    if (!this.showNoteForm()) {
-      this.toggleNoteForm();
-    }
   }
 }

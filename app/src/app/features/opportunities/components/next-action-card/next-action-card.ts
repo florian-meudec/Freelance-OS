@@ -8,7 +8,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { SelectMenu } from '../../../../shared/components/select-menu/select-menu';
 import { DateFormatPipe } from '../../../../shared/pipes/date-format-pipe';
@@ -34,7 +34,7 @@ import { OpportunityEventType, OpportunityStatus } from '../../types/opportunity
   styleUrl: './next-action-card.scss',
 })
 export class NextActionCard {
-  readonly nextAction = input<NextAction | null>();
+  readonly nextAction = input<NextAction | null>(null);
 
   readonly pendingStatus = input<OpportunityStatus | null>();
 
@@ -62,23 +62,17 @@ export class NextActionCard {
     OPPORTUNITY_EVENT_TYPES.MEETING,
   ];
 
-  private readonly formBuilder = inject(FormBuilder);
+  private readonly formBuilder = inject(NonNullableFormBuilder);
 
   readonly form = this.formBuilder.group({
-    type: this.formBuilder.control<OpportunityEventType>(this.manualEventTypes[0].value, {
-      validators: Validators.required,
-      nonNullable: true,
-    }),
+    type: this.formBuilder.control<OpportunityEventType>(
+      this.manualEventTypes[0].value,
+      Validators.required,
+    ),
 
-    label: this.formBuilder.control('', {
-      validators: Validators.required,
-      nonNullable: true,
-    }),
+    label: ['', Validators.required],
 
-    dueDate: this.formBuilder.control('', {
-      validators: Validators.required,
-      nonNullable: true,
-    }),
+    dueDate: ['', Validators.required],
   });
 
   readonly nextActionMode = signal<NextActionMode>('view');
@@ -117,19 +111,25 @@ export class NextActionCard {
 
     this.nextActionMode.set(mode);
 
-    const nextAction = this.nextAction();
-
-    this.form.reset({
-      type: mode === 'edit' && nextAction ? nextAction.type : this.manualEventTypes[0].value,
-      label: mode === 'edit' && nextAction ? nextAction.label : '',
-      dueDate: mode === 'edit' && nextAction ? nextAction.dueDate : '',
-    });
+    this.fillForm(mode === 'edit' ? this.nextAction() : null);
 
     if (mode !== 'status-change') {
       queueMicrotask(() => {
         this.nextActionLabel()?.nativeElement.focus();
       });
     }
+  }
+
+  private fillForm(nextAction: NextAction | null): void {
+    this.form.reset({
+      type: nextAction?.type ?? this.manualEventTypes[0].value,
+      label: nextAction?.label ?? '',
+      dueDate: nextAction?.dueDate ?? '',
+    });
+  }
+
+  private resetForm(): void {
+    this.fillForm(null);
   }
 
   scrollIntoView(): void {
@@ -144,13 +144,9 @@ export class NextActionCard {
       return;
     }
 
-    this.nextActionMode.set('view');
+    this.resetForm();
 
-    this.form.reset({
-      type: this.manualEventTypes[0].value,
-      label: '',
-      dueDate: '',
-    });
+    this.nextActionMode.set('view');
   }
 
   selectNextActionType(type: string): void {
@@ -159,6 +155,8 @@ export class NextActionCard {
 
   save(): void {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
+
       return;
     }
 
@@ -168,11 +166,7 @@ export class NextActionCard {
       dueDate: this.form.controls.dueDate.value,
     });
 
-    this.form.reset({
-      type: this.manualEventTypes[0].value,
-      label: '',
-      dueDate: '',
-    });
+    this.resetForm();
 
     this.nextActionMode.set('view');
   }
@@ -184,18 +178,24 @@ export class NextActionCard {
   }
 
   completeForStatusChangeAction(): void {
+    this.resetForm();
+
     this.nextActionMode.set('view');
 
     this.completeForStatusChange.emit();
   }
 
   deleteForStatusChangeAction(): void {
+    this.resetForm();
+
     this.nextActionMode.set('view');
 
     this.deleteForStatusChange.emit();
   }
 
   cancelStatusChange(): void {
+    this.resetForm();
+
     this.nextActionMode.set('view');
 
     this.statusChangeCancelled.emit();

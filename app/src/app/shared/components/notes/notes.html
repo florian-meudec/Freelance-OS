@@ -2,30 +2,36 @@
   <div class="notes-header">
     <h3>Notes</h3>
 
-    <button type="button" class="link-button" (click)="toggleNoteForm()">Ajouter une note</button>
+    <button type="button" class="link-button" (click)="openNoteForm()">Ajouter une note</button>
   </div>
+
   @if (showNoteForm()) {
     <!--
-        Inline note creation keeps CRM interactions
-        lightweight and contextual.
-      -->
-    <div class="note-form" #noteForm>
-      <input #noteTitleInput type="text" placeholder="Titre" class="form-input" />
+      Inline note creation keeps CRM interactions
+      lightweight and contextual.
+    -->
+    <form #noteForm class="note-form" [formGroup]="creationForm" (ngSubmit)="addNote()">
+      <input type="text" class="form-input" placeholder="Titre" formControlName="title" />
 
-      <textarea #noteContent rows="4" placeholder="Contenu" class="form-textarea"></textarea>
+      <textarea
+        rows="4"
+        class="form-textarea"
+        placeholder="Contenu"
+        formControlName="content"
+      ></textarea>
 
       <div class="form-actions">
         <button
-          type="button"
+          type="submit"
           class="action-button action-button-primary"
-          (click)="addNote(noteTitleInput.value, noteContent.value)"
+          [disabled]="creationForm.invalid"
         >
           Ajouter
         </button>
 
-        <button type="button" class="action-button" (click)="toggleNoteForm()">Annuler</button>
+        <button type="button" class="action-button" (click)="closeNoteForm()">Annuler</button>
       </div>
-    </div>
+    </form>
   }
 
   <div class="notes-list">
@@ -36,16 +42,16 @@
             Inline note editing preserves context
             while keeping CRM interactions lightweight.
           -->
-          <div class="note-form">
-            <input #editTitle type="text" class="form-input" [value]="note.title" />
+          <form class="note-form" [formGroup]="editionForm" (ngSubmit)="updateNote(note.id)">
+            <input type="text" class="form-input" formControlName="title" />
 
-            <textarea #editContent rows="4" class="form-textarea" [value]="note.content"></textarea>
+            <textarea rows="4" class="form-textarea" formControlName="content"></textarea>
 
             <div class="form-actions">
               <button
-                type="button"
+                type="submit"
                 class="action-button action-button-primary"
-                (click)="updateNote(note.id, editTitle.value, editContent.value)"
+                [disabled]="editionForm.invalid"
               >
                 Sauvegarder
               </button>
@@ -57,7 +63,9 @@
 
             @if (deletingNoteId() === note.id) {
               <div class="delete-confirmation">
-                <p>Confirmer suppression ?</p>
+                <p>Supprimer définitivement cette note ?</p>
+
+                <p>Cette action est irréversible.</p>
 
                 <div class="form-actions">
                   <button
@@ -82,12 +90,12 @@
                 Supprimer
               </button>
             }
-          </div>
+          </form>
         } @else {
           <button
             type="button"
             class="note-card note-card-interactive"
-            (click)="startNoteEdit(note.id)"
+            (click)="startNoteEdit(note)"
             aria-label="Modifier la note"
           >
             <div class="note-header">
@@ -112,7 +120,7 @@
 
         <p>Conservez ici les échanges, informations ou remarques concernant cette opportunité.</p>
 
-        <button type="button" class="action-button" (click)="toggleNoteForm()">
+        <button type="button" class="action-button" (click)="openNoteForm()">
           Ajouter une note
         </button>
       </div>
