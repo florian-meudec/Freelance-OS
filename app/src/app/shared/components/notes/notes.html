@@ -7,8 +7,8 @@
 
   @if (showNoteForm()) {
     <!--
-      Inline note creation keeps CRM interactions
-      lightweight and contextual.
+      Inline note creation preserves context
+      while protecting unsaved modifications.
     -->
     <form #noteForm class="note-form" [formGroup]="creationForm" (ngSubmit)="addNote()">
       <input type="text" class="form-input" placeholder="Titre" formControlName="title" />
@@ -29,7 +29,9 @@
           Ajouter
         </button>
 
-        <button type="button" class="action-button" (click)="closeNoteForm()">Annuler</button>
+        <button type="button" class="action-button" (click)="requestCloseNoteForm()">
+          Annuler
+        </button>
       </div>
     </form>
   }
@@ -39,8 +41,8 @@
       @for (note of sortedNotes(); track note.id) {
         @if (editingNoteId() === note.id) {
           <!--
-            Inline note editing preserves context
-            while keeping CRM interactions lightweight.
+            Inline note editing stays contextual
+            while protecting unsaved modifications.
           -->
           <form class="note-form" [formGroup]="editionForm" (ngSubmit)="updateNote(note.id)">
             <input type="text" class="form-input" formControlName="title" />
@@ -56,7 +58,7 @@
                 Sauvegarder
               </button>
 
-              <button type="button" class="action-button" (click)="cancelNoteEdit()">
+              <button type="button" class="action-button" (click)="requestCancelNoteEdit()">
                 Annuler
               </button>
             </div>
@@ -76,7 +78,7 @@
                     Supprimer
                   </button>
 
-                  <button type="button" class="action-button" (click)="deletingNoteId.set(null)">
+                  <button type="button" class="action-button" (click)="cancelNoteDelete()">
                     Annuler
                   </button>
                 </div>
@@ -127,3 +129,10 @@
     }
   </div>
 </div>
+
+@if (showDiscardChangesModal()) {
+  <app-discard-changes-modal
+    (confirmed)="confirmDiscardChanges()"
+    (cancelled)="cancelDiscardChanges()"
+  />
+}

@@ -13,19 +13,21 @@ import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angula
 import { DateFormatPipe } from '../../pipes/date-format-pipe';
 
 import { Note } from '../../models/note.model';
+import { DiscardChangesModal } from '../discard-changes-modal/discard-changes-modal';
+import { FormInteractionHandler } from '../../utils/form-interaction-handler';
 
 @Component({
   selector: 'app-notes',
 
   standalone: true,
 
-  imports: [DateFormatPipe, ReactiveFormsModule],
+  imports: [DateFormatPipe, ReactiveFormsModule, DiscardChangesModal],
 
   templateUrl: './notes.html',
 
   styleUrl: './notes.scss',
 })
-export class Notes {
+export class Notes extends FormInteractionHandler {
   /*
     Shared notes remain reusable across
     multiple business entities and screens.
@@ -100,32 +102,32 @@ export class Notes {
     leaving the current business context.
   */
   openNoteForm(): void {
-    this.editingNoteId.set(null);
+    if (
+      this.editingNoteId() !== null &&
+      !this.executeOrConfirm(this.editionForm.dirty, () => this.openCreationForm())
+    ) {
+      return;
+    }
 
-    this.deletingNoteId.set(null);
+    this.openCreationForm();
+  }
 
-    this.creationForm.reset();
-
-    this.showNoteForm.set(true);
-
-    requestAnimationFrame(() => {
-      this.noteFormElement()?.nativeElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-      });
-
-      this.noteFormElement()?.nativeElement.querySelector<HTMLInputElement>('input')?.focus();
-    });
+  /*
+    Request creation form closure while
+    protecting unsaved modifications.
+  */
+  requestCloseNoteForm(): void {
+    this.executeOrConfirm(this.creationForm.dirty, () => this.closeNoteForm());
   }
 
   /*
     Close the creation workflow and
     restore its initial state.
   */
-  closeNoteForm(): void {
-    this.creationForm.reset();
-
+  private closeNoteForm(): void {
     this.showNoteForm.set(false);
+
+    this.creationForm.reset();
   }
 
   /*
@@ -149,30 +151,42 @@ export class Notes {
     the timeline context for faster workflows.
   */
   startNoteEdit(note: Note): void {
-    this.showNoteForm.set(false);
+    if (
+      this.showNoteForm() &&
+      !this.executeOrConfirm(this.creationForm.dirty, () => this.openEditionForm(note))
+    ) {
+      return;
+    }
 
-    this.deletingNoteId.set(null);
+    if (
+      this.editingNoteId() !== null &&
+      this.editingNoteId() !== note.id &&
+      !this.executeOrConfirm(this.editionForm.dirty, () => this.openEditionForm(note))
+    ) {
+      return;
+    }
 
-    this.editingNoteId.set(note.id);
+    this.openEditionForm(note);
+  }
 
-    this.editionForm.reset();
-
-    this.editionForm.patchValue({
-      title: note.title,
-      content: note.content,
-    });
+  /*
+    Request edition cancellation while
+    protecting unsaved modifications.
+  */
+  requestCancelNoteEdit(): void {
+    this.executeOrConfirm(this.editionForm.dirty, () => this.cancelNoteEdit());
   }
 
   /*
     Cancel inline editing and restore
     compact note presentation.
   */
-  cancelNoteEdit(): void {
-    this.editionForm.reset();
-
+  private cancelNoteEdit(): void {
     this.editingNoteId.set(null);
 
     this.deletingNoteId.set(null);
+
+    this.editionForm.reset();
   }
 
   /*
@@ -210,5 +224,41 @@ export class Notes {
     this.noteDelete.emit(noteId);
 
     this.cancelNoteEdit();
+  }
+
+  cancelNoteDelete(): void {
+    this.deletingNoteId.set(null);
+  }
+
+  private openCreationForm(): void {
+    this.editingNoteId.set(null);
+
+    this.deletingNoteId.set(null);
+
+    this.creationForm.reset();
+
+    this.showNoteForm.set(true);
+
+    requestAnimationFrame(() => {
+      this.noteFormElement()?.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+      });
+
+      this.noteFormElement()?.nativeElement.querySelector<HTMLInputElement>('input')?.focus();
+    });
+  }
+
+  private openEditionForm(note: Note): void {
+    this.showNoteForm.set(false);
+
+    this.deletingNoteId.set(null);
+
+    this.editingNoteId.set(note.id);
+
+    this.editionForm.reset({
+      title: note.title,
+      content: note.content,
+    });
   }
 }
