@@ -121,16 +121,6 @@ export class Notes extends FormInteractionHandler {
   }
 
   /*
-    Close the creation workflow and
-    restore its initial state.
-  */
-  private closeNoteForm(): void {
-    this.showNoteForm.set(false);
-
-    this.creationForm.reset();
-  }
-
-  /*
     Emit note creation requests upward so the
     parent remains the source of truth.
   */
@@ -178,26 +168,6 @@ export class Notes extends FormInteractionHandler {
   }
 
   /*
-    Cancel inline editing and restore
-    compact note presentation.
-  */
-  private cancelNoteEdit(): void {
-    this.editingNoteId.set(null);
-
-    this.deletingNoteId.set(null);
-
-    this.editionForm.reset();
-  }
-
-  /*
-    Destructive actions require explicit
-    confirmation to avoid accidental loss.
-  */
-  confirmNoteDelete(noteId: string): void {
-    this.deletingNoteId.set(noteId);
-  }
-
-  /*
     Emit note updates upward so the parent
     remains the source of truth.
   */
@@ -217,6 +187,22 @@ export class Notes extends FormInteractionHandler {
   }
 
   /*
+    Destructive actions require explicit
+    confirmation to avoid accidental loss.
+  */
+  confirmNoteDelete(noteId: string): void {
+    this.deletingNoteId.set(noteId);
+  }
+
+  /*
+    Cancel deletion confirmation while
+    preserving the current edition state.
+  */
+  cancelNoteDelete(): void {
+    this.deletingNoteId.set(null);
+  }
+
+  /*
     Note deletions stay centralized to keep
     business state synchronized.
   */
@@ -226,10 +212,10 @@ export class Notes extends FormInteractionHandler {
     this.cancelNoteEdit();
   }
 
-  cancelNoteDelete(): void {
-    this.deletingNoteId.set(null);
-  }
-
+  /*
+    Initialize the creation workflow
+    and focus the first editable field.
+  */
   private openCreationForm(): void {
     this.editingNoteId.set(null);
 
@@ -240,25 +226,53 @@ export class Notes extends FormInteractionHandler {
     this.showNoteForm.set(true);
 
     requestAnimationFrame(() => {
-      this.noteFormElement()?.nativeElement.scrollIntoView({
+      const form = this.noteFormElement()?.nativeElement;
+
+      form?.scrollIntoView({
         behavior: 'smooth',
         block: 'nearest',
       });
 
-      this.noteFormElement()?.nativeElement.querySelector<HTMLInputElement>('input')?.focus();
+      form?.querySelector<HTMLInputElement>('input')?.focus();
     });
   }
 
+  /*
+    Close the creation workflow and
+    restore its initial state.
+  */
+  private closeNoteForm(): void {
+    this.creationForm.reset();
+
+    this.showNoteForm.set(false);
+  }
+
+  /*
+    Initialize inline edition from
+    the selected note.
+  */
   private openEditionForm(note: Note): void {
     this.showNoteForm.set(false);
 
-    this.deletingNoteId.set(null);
-
     this.editingNoteId.set(note.id);
+
+    this.deletingNoteId.set(null);
 
     this.editionForm.reset({
       title: note.title,
       content: note.content,
     });
+  }
+
+  /*
+    Cancel inline editing and restore
+    compact note presentation.
+  */
+  private cancelNoteEdit(): void {
+    this.editingNoteId.set(null);
+
+    this.deletingNoteId.set(null);
+
+    this.editionForm.reset();
   }
 }

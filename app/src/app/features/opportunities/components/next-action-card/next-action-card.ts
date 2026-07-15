@@ -92,6 +92,10 @@ export class NextActionCard extends FormInteractionHandler {
     }
   });
 
+  /*
+    Open creation or edition depending
+    on the current workflow state.
+  */
   open(): void {
     if (this.nextAction()) {
       this.openEditionForm();
@@ -102,39 +106,48 @@ export class NextActionCard extends FormInteractionHandler {
     this.openCreationForm();
   }
 
-  isBlocking(): boolean {
-    return this.nextActionMode() === 'mandatory' || this.nextActionMode() === 'status-change';
-  }
+  /*
+    Open the mandatory follow-up workflow
+    after completing the current action.
+  */
+  openMandatory(): void {
+    this.scrollIntoView();
 
-  private fillForm(nextAction: NextAction | null | undefined): void {
-    this.form.reset({
-      type: nextAction?.type ?? this.manualEventTypes[0].value,
-      label: nextAction?.label ?? '',
-      dueDate: nextAction?.dueDate ?? '',
-    });
-  }
-
-  private resetForm(): void {
-    this.fillForm(null);
-  }
-
-  scrollIntoView(): void {
-    this.container()?.nativeElement.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center',
-    });
-  }
-
-  close(): void {
     this.resetForm();
 
-    this.nextActionMode.set('view');
+    this.nextActionMode.set('mandatory');
+
+    this.focusForm();
   }
 
-  selectNextActionType(type: string): void {
-    this.form.controls.type.setValue(type as OpportunityEventType);
+  /*
+    Open the status change workflow
+    requiring a decision on the action.
+  */
+  openStatusChange(): void {
+    this.scrollIntoView();
+
+    this.resetForm();
+
+    this.nextActionMode.set('status-change');
   }
 
+  /*
+    Request workflow closure while
+    protecting unsaved modifications.
+  */
+  requestClose(): void {
+    if (this.isBlocking()) {
+      return;
+    }
+
+    this.executeOrConfirm(this.form.dirty, () => this.close());
+  }
+
+  /*
+    Emit next action updates upward so the
+    parent remains the source of truth.
+  */
   save(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -151,36 +164,94 @@ export class NextActionCard extends FormInteractionHandler {
     this.close();
   }
 
+  /*
+    Complete the current action before
+    requesting the mandatory follow-up.
+  */
   completeAction(): void {
     this.complete.emit();
 
     this.openMandatory();
   }
 
+  /*
+    Complete the current action before
+    applying the pending status change.
+  */
   completeForStatusChangeAction(): void {
     this.close();
 
     this.completeForStatusChange.emit();
   }
 
+  /*
+    Remove the current action before
+    applying the pending status change.
+  */
   deleteForStatusChangeAction(): void {
     this.close();
 
     this.deleteForStatusChange.emit();
   }
 
+  /*
+    Cancel the pending status change
+    and restore the previous workflow.
+  */
   cancelStatusChange(): void {
     this.close();
 
     this.statusChangeCancelled.emit();
   }
 
+  /*
+    Mandatory workflows cannot be
+    dismissed until completed.
+  */
+  isBlocking(): boolean {
+    return this.nextActionMode() === 'mandatory' || this.nextActionMode() === 'status-change';
+  }
+
+  /*
+    Populate the form from the current
+    next action or reset to defaults.
+  */
+  private fillForm(nextAction: NextAction | null | undefined): void {
+    this.form.reset({
+      type: nextAction?.type ?? this.manualEventTypes[0].value,
+      label: nextAction?.label ?? '',
+      dueDate: nextAction?.dueDate ?? '',
+    });
+  }
+
+  /*
+    Restore the default form state.
+  */
+  private resetForm(): void {
+    this.fillForm(null);
+  }
+
+  scrollIntoView(): void {
+    this.container()?.nativeElement.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+    });
+  }
+
+  /*
+    Focus the first editable field once
+    the form has been rendered.
+  */
   private focusForm(): void {
     queueMicrotask(() => {
       this.nextActionLabel()?.nativeElement.focus();
     });
   }
 
+  /*
+    Initialize the creation workflow
+    and focus the first editable field.
+  */
   private openCreationForm(): void {
     this.scrollIntoView();
 
@@ -191,6 +262,10 @@ export class NextActionCard extends FormInteractionHandler {
     this.focusForm();
   }
 
+  /*
+    Initialize edition from the current
+    next action and focus the first field.
+  */
   private openEditionForm(): void {
     this.scrollIntoView();
 
@@ -201,29 +276,13 @@ export class NextActionCard extends FormInteractionHandler {
     this.focusForm();
   }
 
-  openMandatory(): void {
-    this.scrollIntoView();
-
+  /*
+    Close the current workflow and
+    restore its initial state.
+  */
+  close(): void {
     this.resetForm();
 
-    this.nextActionMode.set('mandatory');
-
-    this.focusForm();
-  }
-
-  openStatusChange(): void {
-    this.scrollIntoView();
-
-    this.resetForm();
-
-    this.nextActionMode.set('status-change');
-  }
-
-  requestClose(): void {
-    if (this.isBlocking()) {
-      return;
-    }
-
-    this.executeOrConfirm(this.form.dirty, () => this.close());
+    this.nextActionMode.set('view');
   }
 }

@@ -189,8 +189,8 @@ export class Timeline extends FormInteractionHandler {
   }
 
   /*
-    Cancel deletion confirmation while
-    preserving the current edition state.
+    Destructive actions require explicit
+    confirmation to avoid accidental loss.
   */
   confirmEventDelete(eventId: string): void {
     this.deletingEventId.set(eventId);
@@ -198,12 +198,16 @@ export class Timeline extends FormInteractionHandler {
 
   /*
     Cancel deletion confirmation while
-    preserving the current edit state.
+    preserving the current edition state.
   */
   cancelEventDelete(): void {
     this.deletingEventId.set(null);
   }
 
+  /*
+    Event deletions stay centralized to keep
+    business state synchronized.
+  */
   deleteEvent(eventId: string): void {
     this.delete.emit(eventId);
 
@@ -235,6 +239,10 @@ export class Timeline extends FormInteractionHandler {
     );
   }
 
+  /*
+    Initialize the creation workflow
+    with its default state.
+  */
   private openCreationForm(): void {
     this.deletingEventId.set(null);
 
@@ -255,14 +263,18 @@ export class Timeline extends FormInteractionHandler {
   private closeCreationForm(): void {
     this.deletingEventId.set(null);
 
-    this.showEventForm.set(false);
-
     this.creationForm.reset({
       type: this.manualEventTypes[0].value,
       comment: '',
     });
+
+    this.showEventForm.set(false);
   }
 
+  /*
+    Initialize inline edition from
+    the selected timeline event.
+  */
   private openEditionForm(event: OpportunityEvent): void {
     this.showEventForm.set(false);
 
@@ -280,11 +292,10 @@ export class Timeline extends FormInteractionHandler {
     Cancel inline editing and restore
     the compact timeline presentation.
   */
-
   private closeEditionForm(): void {
-    this.deletingEventId.set(null);
-
     this.editingEventId.set(null);
+
+    this.deletingEventId.set(null);
 
     this.editionForm.reset({
       type: this.manualEventTypes[0].value,
