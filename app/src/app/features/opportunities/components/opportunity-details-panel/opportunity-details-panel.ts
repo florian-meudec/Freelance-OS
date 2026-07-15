@@ -127,37 +127,26 @@ export class OpportunityDetailsPanel {
   */
   readonly emailCopied = signal(false);
 
+  private copyFeedbackTimeout?: ReturnType<typeof setTimeout>;
+
   readonly confirmingDeletion = signal(false);
 
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
   readonly statusForm = this.formBuilder.group({
-    status: [''],
+    status: this.formBuilder.control<OpportunityStatus | ''>(''),
   });
 
-  private copyFeedbackTimeout?: ReturnType<typeof setTimeout>;
-
   constructor() {
-    effect(() => {
-      this.statusForm.patchValue(
-        {
-          status: this.opportunity().status,
-        },
-        {
-          emitEvent: false,
-        },
-      );
-    });
+    this.initializeStatusForm();
 
-    this.statusForm.controls.status.valueChanges.subscribe((status) => {
-      if (!status || status === this.opportunity().status) {
-        return;
-      }
-
-      this.statusChange.emit(status as OpportunityStatus);
-    });
+    this.initializeStatusListener();
   }
 
+  /*
+    Close the details panel when
+    no blocking workflow is active.
+  */
   closePanel(): void {
     if (!this.canClose()) {
       return;
@@ -175,10 +164,10 @@ export class OpportunityDetailsPanel {
   }
 
   /*
-    Delegate the workflow opening to the
-    dedicated next action component.
+    Bring the next action workflow
+    into the user's viewport.
   */
-  scrollToNextAction(): void {
+  showNextAction(): void {
     this.nextActionComponent()?.scrollIntoView();
   }
 
@@ -190,18 +179,34 @@ export class OpportunityDetailsPanel {
     return !this.nextActionComponent()?.isBlocking();
   }
 
+  /*
+    Delegate the status change workflow
+    to the next action component.
+  */
   openStatusChange(): void {
     this.nextActionComponent()?.openStatusChange();
   }
 
+  /*
+    Request a mandatory follow-up action
+    after completing the current one.
+  */
   openMandatoryNextAction(): void {
     this.nextActionComponent()?.openMandatory();
   }
 
-  closeStatusChange(): void {
+  /*
+    Close the delegated next action
+    workflow when it is dismissible.
+  */
+  closeNextAction(): void {
     this.nextActionComponent()?.close();
   }
 
+  /*
+    Copy the contact email and
+    display temporary feedback.
+  */
   copyEmail(): void {
     const email = this.opportunity().contactEmail;
 
@@ -227,17 +232,60 @@ export class OpportunityDetailsPanel {
     this.edit.emit();
   }
 
+  /*
+    Request confirmation before
+    deleting the opportunity.
+  */
   confirmDeletion(): void {
     this.confirmingDeletion.set(true);
   }
 
+  /*
+    Cancel the deletion confirmation
+    workflow.
+  */
   cancelDeletion(): void {
     this.confirmingDeletion.set(false);
   }
 
+  /*
+    Emit the deletion request and
+    close the confirmation workflow.
+  */
   deleteOpportunity(): void {
     this.delete.emit();
 
     this.confirmingDeletion.set(false);
+  }
+
+  /*
+    Keep the status selector synchronized
+    with the selected opportunity.
+  */
+  private initializeStatusForm(): void {
+    effect(() => {
+      this.statusForm.patchValue(
+        {
+          status: this.opportunity().status,
+        },
+        {
+          emitEvent: false,
+        },
+      );
+    });
+  }
+
+  /*
+    Forward user status changes to the
+    board container component.
+  */
+  private initializeStatusListener(): void {
+    this.statusForm.controls.status.valueChanges.subscribe((status) => {
+      if (!status || status === this.opportunity().status) {
+        return;
+      }
+
+      this.statusChange.emit(status as OpportunityStatus);
+    });
   }
 }

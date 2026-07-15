@@ -566,7 +566,7 @@ export class OpportunitiesBoard {
   onStatusChangeCancelled(): void {
     this.pendingStatus.set(null);
 
-    this.detailsPanel()?.closeStatusChange();
+    this.detailsPanel()?.closeNextAction();
   }
 
   private removeNextAction(): void {
