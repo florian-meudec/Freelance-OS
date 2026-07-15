@@ -23,6 +23,7 @@ import { Opportunity } from '../../models/opportunity.model';
 import { OpportunityEventType } from '../../types/opportunity.type';
 
 import { DiscardChangesModal } from '../../../../shared/components/discard-changes-modal/discard-changes-modal';
+import { FormInteractionHandler } from '../../../../shared/utils/form-interaction-handler';
 
 @Component({
   selector: 'app-opportunity-form',
@@ -31,7 +32,7 @@ import { DiscardChangesModal } from '../../../../shared/components/discard-chang
   templateUrl: './opportunity-form.html',
   styleUrl: './opportunity-form.scss',
 })
-export class OpportunityForm {
+export class OpportunityForm extends FormInteractionHandler {
   readonly opportunity = input<Opportunity | null>(null);
 
   readonly isEditMode = computed(() => this.opportunity() !== null);
@@ -66,51 +67,10 @@ export class OpportunityForm {
     OPPORTUNITY_EVENT_TYPES.MEETING,
   ];
 
-  readonly showDiscardChangesModal = signal(false);
-
   constructor() {
-    effect(() => {
-      const opportunity = this.opportunity();
+    super();
 
-      if (!opportunity) {
-        this.form.controls.nextAction.enable({ emitEvent: false });
-
-        this.resetForm();
-
-        return;
-      }
-
-      this.form.controls.nextAction.disable({ emitEvent: false });
-
-      this.form.patchValue({
-        companyName: opportunity.companyName,
-        companyType: opportunity.companyType ?? '',
-        industry: opportunity.industry ?? '',
-        source: opportunity.source,
-
-        contactName: opportunity.contactName ?? '',
-        contactRole: opportunity.contactRole ?? '',
-        contactEmail: opportunity.contactEmail ?? '',
-
-        missionTitle: opportunity.missionTitle,
-        description: opportunity.description ?? '',
-
-        tjm: opportunity.tjm,
-        workload: opportunity.workload,
-
-        modality: opportunity.modality ?? '',
-        location: opportunity.location ?? '',
-
-        estimatedStartDate: opportunity.estimatedStartDate ?? '',
-
-        durationValue: opportunity.durationValue,
-        durationUnit: opportunity.durationUnit ?? '',
-
-        seniority: opportunity.seniority ?? '',
-
-        stack: opportunity.stack.join(', '),
-      });
-    });
+    this.initializeForm();
   }
 
   readonly form = this.formBuilder.group({
@@ -148,13 +108,7 @@ export class OpportunityForm {
   });
 
   requestClose(): void {
-    if (this.canClose()) {
-      this.closed.emit();
-
-      return;
-    }
-
-    this.showDiscardChangesModal.set(true);
+    this.executeOrConfirm(this.form.dirty, () => this.closed.emit());
   }
 
   submit(): void {
@@ -196,13 +150,11 @@ export class OpportunityForm {
   }
 
   /*
-    Restore the form to its initial
-    creation state.
+    Restore the default creation state
+    and clear all form interactions.
   */
   private resetForm(): void {
-    this.form.reset();
-
-    this.form.patchValue({
+    this.form.reset({
       companyType: '',
       modality: '',
       durationUnit: '',
@@ -252,7 +204,7 @@ export class OpportunityForm {
     Extract business data shared by
     creation and update workflows.
   */
-  private buildOpportunityData() {
+  private buildOpportunityData(): Omit<CreateOpportunityCommand, 'nextAction'> {
     const value = this.form.getRawValue();
 
     return {
@@ -288,17 +240,51 @@ export class OpportunityForm {
     };
   }
 
-  cancelDiscardChanges(): void {
-    this.showDiscardChangesModal.set(false);
-  }
+  private initializeForm(): void {
+    effect(() => {
+      const opportunity = this.opportunity();
 
-  confirmDiscardChanges(): void {
-    this.showDiscardChangesModal.set(false);
+      if (!opportunity) {
+        this.form.controls.nextAction.enable({ emitEvent: false });
 
-    this.closed.emit();
-  }
+        this.resetForm();
 
-  private canClose(): boolean {
-    return this.form.pristine;
+        return;
+      }
+
+      this.form.controls.nextAction.disable({ emitEvent: false });
+
+      this.form.reset({
+        companyName: opportunity.companyName,
+        companyType: opportunity.companyType ?? '',
+        industry: opportunity.industry ?? '',
+        source: opportunity.source,
+
+        contactName: opportunity.contactName ?? '',
+        contactRole: opportunity.contactRole ?? '',
+        contactEmail: opportunity.contactEmail ?? '',
+
+        missionTitle: opportunity.missionTitle,
+        description: opportunity.description ?? '',
+
+        tjm: opportunity.tjm,
+        workload: opportunity.workload,
+
+        modality: opportunity.modality ?? '',
+        location: opportunity.location ?? '',
+
+        estimatedStartDate: opportunity.estimatedStartDate ?? '',
+
+        durationValue: opportunity.durationValue,
+        durationUnit: opportunity.durationUnit ?? '',
+
+        seniority: opportunity.seniority ?? '',
+
+        stack: opportunity.stack.join(', '),
+      });
+
+      this.form.markAsPristine();
+      this.form.markAsUntouched();
+    });
   }
 }
