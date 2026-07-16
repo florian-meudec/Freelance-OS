@@ -16,6 +16,7 @@ import { OpportunityEventType, OpportunityStatus } from '../../types/opportunity
 import { NextAction } from '../../models/next-action.model';
 import { OpportunityForm } from '../../components/opportunity-form/opportunity-form';
 import { OpportunityQuickViews } from '../../components/opportunity-quick-views/opportunity-quick-views';
+import { SearchInput } from '../../../../shared/components/search-input/search-input';
 
 /*
   Columns act as drop zones for kanban interactions.
@@ -30,6 +31,7 @@ import { OpportunityQuickViews } from '../../components/opportunity-quick-views/
     OpportunityDetailsPanel,
     OpportunityForm,
     OpportunityQuickViews,
+    SearchInput,
   ],
   templateUrl: './opportunities-board.html',
   styleUrl: './opportunities-board.scss',
@@ -123,21 +125,26 @@ export class OpportunitiesBoard {
 
   readonly selectedQuickView = signal<OpportunityQuickView>(OPPORTUNITY_QUICK_VIEWS.TODO.value);
 
+  readonly search = signal('');
+
   /*
     Visible opportunities depend on
     the selected quick view.
   */
   readonly visibleOpportunities = computed(() => {
+    let opportunities = this.opportunities();
+
     switch (this.selectedQuickView()) {
       case OPPORTUNITY_QUICK_VIEWS.TODO.value:
-        return this.opportunities().filter((opportunity) => this.isTodo(opportunity));
+        opportunities = opportunities.filter((opportunity) => this.isTodo(opportunity));
+        break;
 
       case OPPORTUNITY_QUICK_VIEWS.PREPARE.value:
-        return this.opportunities().filter((opportunity) => this.isPreparation(opportunity));
-
-      default:
-        return this.opportunities();
+        opportunities = opportunities.filter((opportunity) => this.isPreparation(opportunity));
+        break;
     }
+
+    return opportunities.filter((opportunity) => this.matchesSearch(opportunity));
   });
 
   private readonly preparationStatuses: OpportunityStatus[] = [
@@ -618,6 +625,38 @@ export class OpportunitiesBoard {
     );
 
     this.selectedOpportunity.set(updatedOpportunity);
+  }
+
+  /*
+    Match an opportunity against the current
+    search query across its main metadata.
+  */
+  private matchesSearch(opportunity: Opportunity): boolean {
+    const search = this.search().trim().toLowerCase();
+
+    if (!search) {
+      return true;
+    }
+
+    const searchableValues = [
+      opportunity.companyName,
+      opportunity.missionTitle,
+
+      opportunity.contactName,
+      opportunity.contactRole,
+      opportunity.contactEmail,
+
+      opportunity.location,
+      opportunity.source,
+      opportunity.industry,
+      opportunity.description,
+
+      ...opportunity.stack,
+    ];
+
+    return searchableValues
+      .filter((value): value is string => Boolean(value))
+      .some((value) => value.toLowerCase().includes(search));
   }
 
   /*

@@ -1,0 +1,102 @@
+@use '../../../../styles/foundations/colors' as *;
+@use '../../../../styles/foundations/layout' as *;
+@use '../../../../styles/foundations/radius' as *;
+@use '../../../../styles/foundations/spacing' as *;
+@use '../../../../styles/foundations/typography' as *;
+
+/*
+  Shared search field provides a
+  consistent filtering experience.
+*/
+.search-input {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+
+  width: $board-column-width;
+  min-height: 36px;
+
+  padding: 0 $spacing-sm;
+
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+
+  background: $surface-primary;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &:focus-within {
+    border-color: $interactive-primary;
+
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+  }
+
+  input {
+    flex: 1;
+
+    min-width: 0;
+
+    padding: $spacing-xs;
+
+    border: none;
+
+    background: transparent;
+
+    color: $text-primary;
+
+    font: inherit;
+    font-size: $text-sm;
+
+    outline: none;
+
+    &::placeholder {
+      color: $text-secondary;
+    }
+  }
+}
+
+.search-icon {
+  width: 18px;
+  height: 18px;
+
+  margin-right: $spacing-xs;
+
+  color: $text-secondary;
+
+  user-select: none;
+}
+
+.clear-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 24px;
+  height: 24px;
+
+  padding: 0;
+  margin-left: $spacing-xs;
+
+  border: none;
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: $text-secondary;
+
+  cursor: pointer;
+
+  font: inherit;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+
+  &:hover {
+    background: $surface-secondary;
+
+    color: $text-primary;
+  }
+}

@@ -1,0 +1,21 @@
+<div class="search-input">
+  <img src="icons/search.svg" alt="" class="search-icon" />
+  <input
+    #input
+    type="text"
+    [value]="value()"
+    [placeholder]="placeholder()"
+    (input)="updateValue(input.value)"
+  />
+
+  @if (value()) {
+    <button
+      type="button"
+      class="clear-button"
+      (click)="updateValue('')"
+      aria-label="Effacer la recherche"
+    >
+      ✕
+    </button>
+  }
+</div>

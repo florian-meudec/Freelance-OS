@@ -6,13 +6,21 @@
   <div class="page-header-content">
     <h1>Opportunités</h1>
 
-    <app-opportunity-quick-views
-      [selected]="selectedQuickView()"
-      [todoCount]="todoCount()"
-      [preparationCount]="preparationCount()"
-      [totalCount]="totalCount()"
-      (selectedChange)="selectedQuickView.set($event)"
-    />
+    <div class="page-actions">
+      <app-opportunity-quick-views
+        [selected]="selectedQuickView()"
+        [todoCount]="todoCount()"
+        [preparationCount]="preparationCount()"
+        [totalCount]="totalCount()"
+        (selectedChange)="selectedQuickView.set($event)"
+      />
+
+      <app-search-input
+        [value]="search()"
+        placeholder="Rechercher une opportunité..."
+        (valueChange)="search.set($event)"
+      />
+    </div>
   </div>
 
   <button type="button" class="action-button action-button-primary" (click)="openOpportunityForm()">

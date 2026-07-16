@@ -1,5 +1,6 @@
 @use '../../../../../styles/foundations/colors' as *;
 @use '../../../../../styles/foundations/font-weights' as *;
+@use '../../../../../styles/foundations/layout' as *;
 @use '../../../../../styles/foundations/radius' as *;
 @use '../../../../../styles/foundations/shadows' as *;
 @use '../../../../../styles/foundations/spacing' as *;
@@ -37,7 +38,7 @@
     Fixed column width keeps the board visually stable
     regardless of the number of opportunities.
   */
-  flex: 0 0 320px;
+  flex: 0 0 $board-column-width;
 
   gap: $spacing-md;
 
@@ -206,4 +207,11 @@
 
 .page-header .action-button {
   width: auto;
+}
+
+.page-actions {
+  display: flex;
+  align-items: center;
+
+  gap: $spacing-md;
 }
