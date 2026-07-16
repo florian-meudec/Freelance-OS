@@ -52,13 +52,25 @@ export class OpportunitiesBoard {
     so the board structure stays configuration-driven.
   */
   readonly columns = computed(() => {
-    return this.statuses.map((status) => ({
-      status: status.value,
-      label: status.label,
-      opportunities: this.visibleOpportunities().filter(
+    return this.statuses.map((status) => {
+      const totalOpportunities = this.opportunities().filter(
         (opportunity) => opportunity.status === status.value,
-      ),
-    }));
+      );
+
+      const visibleOpportunities = this.visibleOpportunities().filter(
+        (opportunity) => opportunity.status === status.value,
+      );
+
+      return {
+        status: status.value,
+        label: status.label,
+
+        opportunities: visibleOpportunities,
+
+        visibleCount: visibleOpportunities.length,
+        totalCount: totalOpportunities.length,
+      };
+    });
   });
 
   /*
@@ -251,6 +263,32 @@ export class OpportunitiesBoard {
   }
 
   /*
+    Determine whether the next action
+    is due within the provided range.
+  */
+  private isDueWithin(opportunity: Opportunity, minDays: number, maxDays: number): boolean {
+    const nextAction = opportunity.nextAction;
+
+    if (!nextAction) {
+      return false;
+    }
+
+    const today = new Date();
+
+    today.setHours(0, 0, 0, 0);
+
+    const dueDate = new Date(nextAction.dueDate);
+
+    dueDate.setHours(0, 0, 0, 0);
+
+    const differenceInDays = Math.floor(
+      (dueDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
+    );
+
+    return differenceInDays >= minDays && differenceInDays <= maxDays;
+  }
+
+  /*
     Status changes triggered from the details
     panel reuse the centralized workflow logic.
   */
@@ -286,6 +324,20 @@ export class OpportunitiesBoard {
     }
 
     this.updateOpportunityStatus(selected.id, status);
+  }
+
+  private applyPendingStatus(): void {
+    const selected = this.selectedOpportunity();
+
+    const status = this.pendingStatus();
+
+    if (!selected || !status) {
+      return;
+    }
+
+    this.updateOpportunityStatus(selected.id, status);
+
+    this.pendingStatus.set(null);
   }
 
   /*
@@ -343,37 +395,20 @@ export class OpportunitiesBoard {
     remains the single source of truth.
   */
   onOpportunityNoteAdd(note: { title: string; content: string }): void {
-    const selected = this.selectedOpportunity();
-
-    if (!selected) {
-      return;
-    }
-
-    const updatedOpportunity = {
-      ...selected,
+    this.updateSelectedOpportunity((opportunity) => ({
+      ...opportunity,
 
       notes: [
-        ...selected.notes,
+        ...opportunity.notes,
 
         {
           id: crypto.randomUUID(),
-
           title: note.title,
-
           content: note.content,
-
           createdAt: new Date().toISOString(),
         },
       ],
-    };
-
-    this.opportunities.update((opportunities) =>
-      opportunities.map((opportunity) =>
-        opportunity.id === updatedOpportunity.id ? updatedOpportunity : opportunity,
-      ),
-    );
-
-    this.selectedOpportunity.set(updatedOpportunity);
+    }));
   }
 
   /*
@@ -381,35 +416,19 @@ export class OpportunitiesBoard {
     opportunity mutations share the same flow.
   */
   onOpportunityNoteUpdate(note: { noteId: string; title: string; content: string }): void {
-    const selected = this.selectedOpportunity();
+    this.updateSelectedOpportunity((opportunity) => ({
+      ...opportunity,
 
-    if (!selected) {
-      return;
-    }
-
-    const updatedOpportunity = {
-      ...selected,
-
-      notes: selected.notes.map((item) =>
-        item.id === note.noteId
+      notes: opportunity.notes.map((currentNote) =>
+        currentNote.id === note.noteId
           ? {
-              ...item,
-
+              ...currentNote,
               title: note.title,
-
               content: note.content,
             }
-          : item,
+          : currentNote,
       ),
-    };
-
-    this.opportunities.update((opportunities) =>
-      opportunities.map((opportunity) =>
-        opportunity.id === updatedOpportunity.id ? updatedOpportunity : opportunity,
-      ),
-    );
-
-    this.selectedOpportunity.set(updatedOpportunity);
+    }));
   }
 
   /*
@@ -417,25 +436,11 @@ export class OpportunitiesBoard {
     board state synchronized across the UI.
   */
   onOpportunityNoteDelete(noteId: string): void {
-    const selected = this.selectedOpportunity();
+    this.updateSelectedOpportunity((opportunity) => ({
+      ...opportunity,
 
-    if (!selected) {
-      return;
-    }
-
-    const updatedOpportunity = {
-      ...selected,
-
-      notes: selected.notes.filter((note) => note.id !== noteId),
-    };
-
-    this.opportunities.update((opportunities) =>
-      opportunities.map((opportunity) =>
-        opportunity.id === updatedOpportunity.id ? updatedOpportunity : opportunity,
-      ),
-    );
-
-    this.selectedOpportunity.set(updatedOpportunity);
+      notes: opportunity.notes.filter((note) => note.id !== noteId),
+    }));
   }
 
   /*
@@ -443,37 +448,20 @@ export class OpportunitiesBoard {
     opportunity history remains synchronized.
   */
   onOpportunityEventAdd(event: { type: OpportunityEventType; comment?: string }): void {
-    const selected = this.selectedOpportunity();
-
-    if (!selected) {
-      return;
-    }
-
-    const updatedOpportunity = {
-      ...selected,
+    this.updateSelectedOpportunity((opportunity) => ({
+      ...opportunity,
 
       events: [
-        ...selected.events,
+        ...opportunity.events,
 
         {
           id: crypto.randomUUID(),
-
-          type: event.type,
-
-          comment: event.comment,
-
           createdAt: new Date().toISOString(),
+          type: event.type,
+          comment: event.comment,
         },
       ],
-    };
-
-    this.opportunities.update((opportunities) =>
-      opportunities.map((opportunity) =>
-        opportunity.id === updatedOpportunity.id ? updatedOpportunity : opportunity,
-      ),
-    );
-
-    this.selectedOpportunity.set(updatedOpportunity);
+    }));
   }
 
   onOpportunityEventUpdate(event: {
@@ -481,115 +469,47 @@ export class OpportunitiesBoard {
     type: OpportunityEventType;
     comment?: string;
   }): void {
-    const selected = this.selectedOpportunity();
+    this.updateSelectedOpportunity((opportunity) => ({
+      ...opportunity,
 
-    if (!selected) {
-      return;
-    }
-
-    const updatedOpportunity = {
-      ...selected,
-
-      events: selected.events.map((item) =>
-        item.id === event.eventId
+      events: opportunity.events.map((currentEvent) =>
+        currentEvent.id === event.eventId
           ? {
-              ...item,
-
+              ...currentEvent,
               type: event.type,
-
               comment: event.comment,
             }
-          : item,
+          : currentEvent,
       ),
-    };
-
-    this.opportunities.update((opportunities) =>
-      opportunities.map((opportunity) =>
-        opportunity.id === updatedOpportunity.id ? updatedOpportunity : opportunity,
-      ),
-    );
-
-    this.selectedOpportunity.set(updatedOpportunity);
+    }));
   }
 
   onOpportunityEventDelete(eventId: string): void {
-    const selected = this.selectedOpportunity();
+    this.updateSelectedOpportunity((opportunity) => ({
+      ...opportunity,
 
-    if (!selected) {
-      return;
-    }
-
-    const updatedOpportunity = {
-      ...selected,
-
-      events: selected.events.filter((event) => event.id !== eventId),
-    };
-
-    this.opportunities.update((opportunities) =>
-      opportunities.map((opportunity) =>
-        opportunity.id === updatedOpportunity.id ? updatedOpportunity : opportunity,
-      ),
-    );
-
-    this.selectedOpportunity.set(updatedOpportunity);
+      events: opportunity.events.filter((event) => event.id !== eventId),
+    }));
   }
 
   completeNextAction(): void {
-    const selected = this.selectedOpportunity();
-
-    if (!selected?.nextAction) {
+    if (!this.selectedOpportunity()?.nextAction) {
       return;
     }
 
-    const updatedOpportunity = {
-      ...selected,
+    this.updateSelectedOpportunity((opportunity) => ({
+      ...opportunity,
 
       nextAction: null,
-
-      events: [
-        ...selected.events,
-
-        {
-          id: crypto.randomUUID(),
-
-          type: selected.nextAction.type,
-
-          comment: selected.nextAction.label,
-
-          createdAt: new Date().toISOString(),
-        },
-      ],
-    };
-
-    this.opportunities.update((opportunities) =>
-      opportunities.map((opportunity) =>
-        opportunity.id === updatedOpportunity.id ? updatedOpportunity : opportunity,
-      ),
-    );
-
-    this.selectedOpportunity.set(updatedOpportunity);
+    }));
   }
 
   onNextActionUpdate(nextAction: NextAction): void {
-    const selected = this.selectedOpportunity();
-
-    if (!selected) {
-      return;
-    }
-
-    const updatedOpportunity = {
-      ...selected,
+    this.updateSelectedOpportunity((opportunity) => ({
+      ...opportunity,
 
       nextAction,
-    };
-
-    this.opportunities.update((opportunities) =>
-      opportunities.map((opportunity) =>
-        opportunity.id === updatedOpportunity.id ? updatedOpportunity : opportunity,
-      ),
-    );
-
-    this.selectedOpportunity.set(updatedOpportunity);
+    }));
 
     if (this.pendingStatus()) {
       this.applyPendingStatus();
@@ -608,46 +528,22 @@ export class OpportunitiesBoard {
     this.applyPendingStatus();
   }
 
-  private applyPendingStatus(): void {
-    const selected = this.selectedOpportunity();
-
-    const status = this.pendingStatus();
-
-    if (!selected || !status) {
-      return;
-    }
-
-    this.updateOpportunityStatus(selected.id, status);
-
-    this.pendingStatus.set(null);
-  }
-
   onStatusChangeCancelled(): void {
     this.pendingStatus.set(null);
 
     this.detailsPanel()?.closeNextAction();
   }
 
+  /*
+    Remove the current next action
+    from the selected opportunity.
+  */
   private removeNextAction(): void {
-    const selected = this.selectedOpportunity();
-
-    if (!selected) {
-      return;
-    }
-
-    const updatedOpportunity = {
-      ...selected,
+    this.updateSelectedOpportunity((opportunity) => ({
+      ...opportunity,
 
       nextAction: null,
-    };
-
-    this.opportunities.update((opportunities) =>
-      opportunities.map((opportunity) =>
-        opportunity.id === updatedOpportunity.id ? updatedOpportunity : opportunity,
-      ),
-    );
-
-    this.selectedOpportunity.set(updatedOpportunity);
+    }));
   }
 
   openOpportunityForm(): void {
@@ -657,10 +553,6 @@ export class OpportunitiesBoard {
   }
 
   openOpportunityEdition(opportunity: Opportunity): void {
-    this.editedOpportunity.set(opportunity);
-
-    this.showOpportunityForm.set(true);
-
     this.closeDetailsPanel();
 
     this.editedOpportunity.set(opportunity);
@@ -685,13 +577,7 @@ export class OpportunitiesBoard {
   }
 
   updateOpportunity(updated: Opportunity): void {
-    this.opportunities.update((opportunities) =>
-      opportunities.map((opportunity) => (opportunity.id === updated.id ? updated : opportunity)),
-    );
-
-    if (this.selectedOpportunity()?.id === updated.id) {
-      this.selectedOpportunity.set(updated);
-    }
+    this.replaceOpportunity(updated);
 
     this.closeOpportunityForm();
   }
@@ -713,28 +599,38 @@ export class OpportunitiesBoard {
   }
 
   /*
-    Determine whether the next action
-    is due within the provided range.
+    Update the selected opportunity while
+    keeping the board state synchronized.
   */
-  private isDueWithin(opportunity: Opportunity, minDays: number, maxDays: number): boolean {
-    const nextAction = opportunity.nextAction;
+  private updateSelectedOpportunity(updater: (opportunity: Opportunity) => Opportunity): void {
+    const selected = this.selectedOpportunity();
 
-    if (!nextAction) {
-      return false;
+    if (!selected) {
+      return;
     }
 
-    const today = new Date();
+    const updatedOpportunity = updater(selected);
 
-    today.setHours(0, 0, 0, 0);
-
-    const dueDate = new Date(nextAction.dueDate);
-
-    dueDate.setHours(0, 0, 0, 0);
-
-    const differenceInDays = Math.floor(
-      (dueDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
+    this.opportunities.update((opportunities) =>
+      opportunities.map((opportunity) =>
+        opportunity.id === updatedOpportunity.id ? updatedOpportunity : opportunity,
+      ),
     );
 
-    return differenceInDays >= minDays && differenceInDays <= maxDays;
+    this.selectedOpportunity.set(updatedOpportunity);
+  }
+
+  /*
+    Replace an existing opportunity while
+    keeping the board state synchronized.
+  */
+  private replaceOpportunity(updated: Opportunity): void {
+    this.opportunities.update((opportunities) =>
+      opportunities.map((opportunity) => (opportunity.id === updated.id ? updated : opportunity)),
+    );
+
+    if (this.selectedOpportunity()?.id === updated.id) {
+      this.selectedOpportunity.set(updated);
+    }
   }
 }

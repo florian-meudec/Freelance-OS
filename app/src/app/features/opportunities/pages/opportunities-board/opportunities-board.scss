@@ -104,7 +104,7 @@
 }
 
 .archived-toggle {
-  margin-top: $spacing-lg;
+  margin-top: $spacing-xl;
 }
 
 .archived-section {
@@ -190,28 +190,20 @@
 .page-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+
+  gap: $spacing-xl;
 
   margin-bottom: $spacing-xl;
-}
-
-.board-create-button {
-  width: auto;
-}
-
-.page-create-button {
-  width: auto;
-}
-
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 2rem;
 }
 
 .page-header-content {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+
+  gap: $spacing-md;
+}
+
+.page-header .action-button {
+  width: auto;
 }
