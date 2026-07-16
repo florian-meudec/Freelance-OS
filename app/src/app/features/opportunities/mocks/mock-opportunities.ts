@@ -5,6 +5,26 @@ import { WORK_MODALITIES } from '../../../shared/constants/work-modality.constan
 import { OPPORTUNITY_EVENT_TYPES, OPPORTUNITY_STATUSES } from '../constants/opportunity.constants';
 import { Opportunity } from '../models/opportunity.model';
 
+const today = new Date();
+
+const formatDate = (date: Date): string => date.toISOString().split('T')[0];
+
+const addDays = (days: number): string => {
+  const date = new Date(today);
+
+  date.setDate(date.getDate() + days);
+
+  return formatDate(date);
+};
+
+const addHours = (hours: number): string => {
+  const date = new Date(today);
+
+  date.setHours(date.getHours() + hours);
+
+  return date.toISOString();
+};
+
 export const MOCK_OPPORTUNITIES: Opportunity[] = [
   {
     id: '1',
@@ -17,17 +37,18 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     contactName: 'Sophie Meier',
     contactRole: 'Engineering Manager',
+    contactEmail: 'sophie.meier@ubs.com',
 
-    missionTitle: 'Angular Migration',
+    missionTitle: 'Migration Angular',
 
     description:
-      'Migration Angular 15 vers Angular 20 avec modernisation de l’architecture frontend.',
+      "Migration d'une application Angular vers la dernière version avec modernisation de l'architecture.",
 
     stack: ['Angular', 'TypeScript', 'Nx', 'Jest'],
 
     seniority: SENIORITIES.SENIOR.value,
 
-    estimatedStartDate: '2026-06-15',
+    estimatedStartDate: addDays(21),
 
     durationValue: 12,
     durationUnit: DURATION_UNITS.MONTHS.value,
@@ -42,8 +63,8 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     nextAction: {
       type: OPPORTUNITY_EVENT_TYPES.EMAIL.value,
-      label: 'Premier contact LinkedIn',
-      dueDate: '2026-06-20',
+      label: 'Relancer par email',
+      dueDate: addDays(0),
     },
 
     events: [
@@ -52,7 +73,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
         type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
 
-        createdAt: '2026-05-10T09:00:00',
+        createdAt: addHours(-48),
       },
 
       {
@@ -62,17 +83,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
         status: OPPORTUNITY_STATUSES.CONTACTED.value,
 
-        createdAt: '2026-05-11T14:00:00',
-      },
-
-      {
-        id: 'event-3',
-
-        type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
-
-        createdAt: '2026-05-15T10:00:00',
-
-        comment: 'Premier message LinkedIn envoyé.',
+        createdAt: addHours(-24),
       },
     ],
 
@@ -80,21 +91,12 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
       {
         id: 'note-1',
 
-        title: 'Validation budget',
+        title: 'Premier échange',
 
-        createdAt: '2026-05-18T14:00:00',
+        createdAt: addHours(-20),
 
-        content: 'Le client semble vouloir démarrer rapidement après validation budget.',
-      },
-
-      {
-        id: 'note-2',
-
-        title: 'Entretien technique',
-
-        createdAt: '2026-05-20T09:30:00',
-
-        content: 'Très bon échange technique avec le lead frontend.',
+        content:
+          "Premier échange très positif avec l'Engineering Manager. Le besoin semble confirmé.",
       },
     ],
   },
@@ -104,7 +106,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     companyName: 'Swisscom',
     companyType: COMPANY_TYPES.CLIENT_FINAL.value,
-    industry: 'Télécom',
+    industry: 'Télécommunications',
 
     source: 'Malt',
 
@@ -112,20 +114,20 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     contactRole: 'Tech Recruiter',
     contactEmail: 'thomas.keller@swisscom.com',
 
-    missionTitle: 'Spring Boot API',
+    missionTitle: 'APIs Spring Boot',
 
-    description: 'Création et maintenance d’APIs Spring Boot pour les services clients internes.',
+    description: "Développement et maintenance d'APIs Spring Boot pour plusieurs équipes internes.",
 
     stack: ['Java', 'Spring Boot', 'PostgreSQL', 'Docker'],
 
     seniority: SENIORITIES.CONFIRMED.value,
 
-    estimatedStartDate: '2026-07-01',
+    estimatedStartDate: addDays(30),
 
     durationValue: 6,
     durationUnit: DURATION_UNITS.MONTHS.value,
 
-    status: OPPORTUNITY_STATUSES.PROPOSAL.value,
+    status: OPPORTUNITY_STATUSES.CONTACTED.value,
 
     tjm: 820,
     workload: 4,
@@ -134,52 +136,22 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     location: 'Berne',
 
     nextAction: {
-      type: OPPORTUNITY_EVENT_TYPES.EMAIL.value,
-      label: 'Envoyer proposition commerciale',
-      dueDate: '2026-06-26',
+      type: OPPORTUNITY_EVENT_TYPES.CALL.value,
+      label: 'Appeler le recruteur',
+      dueDate: addDays(-1),
     },
 
     events: [
       {
-        id: 'event-4',
+        id: 'event-3',
 
         type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
 
-        createdAt: '2026-05-05T08:30:00',
-      },
-
-      {
-        id: 'event-5',
-
-        type: OPPORTUNITY_EVENT_TYPES.CALL.value,
-
-        createdAt: '2026-05-09T16:00:00',
-
-        comment: 'Relance email effectuée.',
-      },
-
-      {
-        id: 'event-6',
-
-        type: OPPORTUNITY_EVENT_TYPES.STATUS_CHANGED.value,
-
-        status: OPPORTUNITY_STATUSES.PROPOSAL.value,
-
-        createdAt: '2026-05-18T11:30:00',
+        createdAt: addHours(-72),
       },
     ],
 
-    notes: [
-      {
-        id: 'note-3',
-
-        title: 'Négociation TJM',
-
-        createdAt: '2026-05-17T18:00:00',
-
-        content: 'Le TJM proposé semble acceptable pour le client.',
-      },
-    ],
+    notes: [],
   },
 
   {
@@ -197,19 +169,18 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     missionTitle: 'Frontend Platform',
 
-    description:
-      'Participation à l’évolution de la plateforme frontend interne et du design system.',
+    description: "Participation à l'évolution de la plateforme frontend et du Design System.",
 
     stack: ['Angular', 'TypeScript', 'Storybook', 'Cypress'],
 
     seniority: SENIORITIES.SENIOR.value,
 
-    estimatedStartDate: '2026-06-20',
+    estimatedStartDate: addDays(28),
 
     durationValue: 9,
     durationUnit: DURATION_UNITS.MONTHS.value,
 
-    status: OPPORTUNITY_STATUSES.NEGOTIATION.value,
+    status: OPPORTUNITY_STATUSES.INTERVIEW.value,
 
     tjm: 850,
     workload: 4,
@@ -218,60 +189,40 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     location: 'Paris',
 
     nextAction: {
-      type: OPPORTUNITY_EVENT_TYPES.EMAIL.value,
-      label: 'Validation budget',
-      dueDate: '2026-06-27',
+      type: OPPORTUNITY_EVENT_TYPES.MEETING.value,
+      label: "Préparer l'entretien technique",
+      dueDate: addDays(1),
     },
 
     events: [
       {
-        id: 'event-7',
+        id: 'event-4',
 
         type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
 
-        createdAt: '2026-05-01T09:00:00',
+        createdAt: addHours(-96),
       },
 
       {
-        id: 'event-8',
+        id: 'event-5',
 
         type: OPPORTUNITY_EVENT_TYPES.STATUS_CHANGED.value,
 
         status: OPPORTUNITY_STATUSES.INTERVIEW.value,
 
-        createdAt: '2026-05-08T15:00:00',
-      },
-
-      {
-        id: 'event-9',
-
-        type: OPPORTUNITY_EVENT_TYPES.STATUS_CHANGED.value,
-
-        status: OPPORTUNITY_STATUSES.NEGOTIATION.value,
-
-        createdAt: '2026-05-15T17:00:00',
+        createdAt: addHours(-36),
       },
     ],
 
     notes: [
       {
-        id: 'note-4',
+        id: 'note-2',
 
-        title: 'Premier entretien',
+        title: 'Entretien RH',
 
-        createdAt: '2026-05-16T11:00:00',
+        createdAt: addHours(-30),
 
-        content: 'Très bon feeling avec l’équipe produit pendant l’entretien.',
-      },
-
-      {
-        id: 'note-5',
-
-        title: 'Process validation',
-
-        createdAt: '2026-05-19T08:45:00',
-
-        content: 'Attention au délai de validation interne qui semble long.',
+        content: "Très bon échange. Le prochain entretien sera technique avec l'équipe Frontend.",
       },
     ],
   },
@@ -292,18 +243,18 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     missionTitle: 'Design System Angular',
 
     description:
-      'Refonte et industrialisation du design system Angular utilisé par plusieurs équipes produit.',
+      'Industrialisation du Design System Angular utilisé par plusieurs équipes produit.',
 
     stack: ['Angular', 'SCSS', 'Storybook', 'Nx'],
 
     seniority: SENIORITIES.LEAD.value,
 
-    estimatedStartDate: '2026-08-01',
+    estimatedStartDate: addDays(35),
 
     durationValue: 18,
     durationUnit: DURATION_UNITS.MONTHS.value,
 
-    status: OPPORTUNITY_STATUSES.INTERVIEW.value,
+    status: OPPORTUNITY_STATUSES.PROPOSAL.value,
 
     tjm: 780,
     workload: 5,
@@ -312,53 +263,44 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     location: 'Lyon',
 
     nextAction: {
-      type: OPPORTUNITY_EVENT_TYPES.CALL.value,
-      label: 'Entretien technique',
-      dueDate: '2026-06-29',
+      type: OPPORTUNITY_EVENT_TYPES.EMAIL.value,
+      label: 'Finaliser la proposition commerciale',
+      dueDate: addDays(3),
     },
 
     events: [
       {
-        id: 'event-10',
+        id: 'event-6',
 
         type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
 
-        createdAt: '2026-05-12T10:00:00',
+        createdAt: addHours(-120),
       },
 
       {
-        id: 'event-11',
-
-        type: OPPORTUNITY_EVENT_TYPES.CALL.value,
-
-        createdAt: '2026-05-14T13:00:00',
-
-        comment: 'Premier call RH effectué.',
-      },
-
-      {
-        id: 'event-12',
+        id: 'event-7',
 
         type: OPPORTUNITY_EVENT_TYPES.STATUS_CHANGED.value,
 
-        status: OPPORTUNITY_STATUSES.INTERVIEW.value,
+        status: OPPORTUNITY_STATUSES.PROPOSAL.value,
 
-        createdAt: '2026-05-16T09:30:00',
+        createdAt: addHours(-60),
       },
     ],
 
     notes: [
       {
-        id: 'note-6',
+        id: 'note-3',
 
-        title: 'Scope technique',
+        title: 'Proposition en cours',
 
-        createdAt: '2026-05-17T12:15:00',
+        createdAt: addHours(-54),
 
-        content: 'Le scope semble très intéressant techniquement.',
+        content: 'Le client attend une proposition détaillée avec le planning et les livrables.',
       },
     ],
   },
+
   {
     id: '5',
 
@@ -374,18 +316,18 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     missionTitle: 'Angular Platform',
 
-    description: 'Mission plateforme frontend.',
+    description: "Accompagnement de l'équipe Platform sur les outils frontend.",
 
-    stack: ['Angular', 'Nx'],
+    stack: ['Angular', 'Nx', 'TypeScript'],
 
     seniority: SENIORITIES.SENIOR.value,
 
-    estimatedStartDate: '2026-07-15',
+    estimatedStartDate: addDays(42),
 
     durationValue: 12,
     durationUnit: DURATION_UNITS.MONTHS.value,
 
-    status: OPPORTUNITY_STATUSES.CONTACTED.value,
+    status: OPPORTUNITY_STATUSES.NEGOTIATION.value,
 
     tjm: 850,
     workload: 5,
@@ -395,13 +337,41 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     nextAction: {
       type: OPPORTUNITY_EVENT_TYPES.CALL.value,
-      label: 'Préparer le premier entretien',
-      dueDate: '2026-07-08',
+      label: 'Préparer la négociation du TJM',
+      dueDate: addDays(6),
     },
 
-    events: [],
+    events: [
+      {
+        id: 'event-8',
 
-    notes: [],
+        type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
+
+        createdAt: addHours(-144),
+      },
+
+      {
+        id: 'event-9',
+
+        type: OPPORTUNITY_EVENT_TYPES.STATUS_CHANGED.value,
+
+        status: OPPORTUNITY_STATUSES.NEGOTIATION.value,
+
+        createdAt: addHours(-72),
+      },
+    ],
+
+    notes: [
+      {
+        id: 'note-4',
+
+        title: 'Budget validé',
+
+        createdAt: addHours(-66),
+
+        content: 'Le budget est validé. Il reste uniquement à finaliser le TJM.',
+      },
+    ],
   },
 
   {
@@ -419,18 +389,18 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     missionTitle: 'Frontend Platform',
 
-    description: 'Mission plateforme.',
+    description: "Participation à l'évolution de la plateforme frontend.",
 
-    stack: ['Angular'],
+    stack: ['Angular', 'TypeScript'],
 
     seniority: SENIORITIES.LEAD.value,
 
-    estimatedStartDate: '2026-07-01',
+    estimatedStartDate: addDays(25),
 
     durationValue: 6,
     durationUnit: DURATION_UNITS.MONTHS.value,
 
-    status: OPPORTUNITY_STATUSES.INTERVIEW.value,
+    status: OPPORTUNITY_STATUSES.CONTACTED.value,
 
     tjm: 900,
     workload: 5,
@@ -439,13 +409,20 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     location: 'Paris',
 
     nextAction: {
-      type: OPPORTUNITY_EVENT_TYPES.MEETING.value,
-      label:
-        'Organiser un atelier de cadrage technique avec le lead frontend et l’équipe architecture afin de préparer la migration Angular',
-      dueDate: '2026-06-18',
+      type: OPPORTUNITY_EVENT_TYPES.EMAIL.value,
+      label: 'Relancer si aucune réponse',
+      dueDate: addDays(5),
     },
 
-    events: [],
+    events: [
+      {
+        id: 'event-10',
+
+        type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
+
+        createdAt: addHours(-168),
+      },
+    ],
 
     notes: [],
   },
@@ -464,13 +441,13 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     missionTitle: 'Angular Lead',
 
-    description: 'Mission Angular.',
+    description: "Accompagnement des équipes frontend sur la refonte de l'application bancaire.",
 
-    stack: ['Angular'],
+    stack: ['Angular', 'TypeScript', 'Nx'],
 
     seniority: SENIORITIES.LEAD.value,
 
-    estimatedStartDate: '2026-08-01',
+    estimatedStartDate: addDays(45),
 
     durationValue: 12,
     durationUnit: DURATION_UNITS.MONTHS.value,
@@ -483,12 +460,25 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     modality: WORK_MODALITIES.HYBRID.value,
     location: 'Paris',
 
-    nextAction: null,
+    nextAction: {
+      type: OPPORTUNITY_EVENT_TYPES.EMAIL.value,
+      label: 'Premier contact LinkedIn',
+      dueDate: addDays(14),
+    },
 
-    events: [],
+    events: [
+      {
+        id: 'event-11',
+
+        type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
+
+        createdAt: addHours(-192),
+      },
+    ],
 
     notes: [],
   },
+
   {
     id: '8',
 
@@ -502,15 +492,15 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     contactRole: 'VP Engineering',
     contactEmail: 'paul.martin@alan.com',
 
-    missionTitle: 'Tech Lead',
+    missionTitle: 'Tech Lead Frontend',
 
-    description: 'Mission Tech Lead.',
+    description: 'Accompagnement de plusieurs équipes Angular sur la plateforme Design System.',
 
-    stack: ['Angular'],
+    stack: ['Angular', 'TypeScript', 'Storybook'],
 
     seniority: SENIORITIES.LEAD.value,
 
-    estimatedStartDate: '2026-06-01',
+    estimatedStartDate: addDays(10),
 
     durationValue: 12,
     durationUnit: DURATION_UNITS.MONTHS.value,
@@ -525,10 +515,39 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     nextAction: null,
 
-    events: [],
+    events: [
+      {
+        id: 'event-12',
 
-    notes: [],
+        type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
+
+        createdAt: addHours(-216),
+      },
+
+      {
+        id: 'event-13',
+
+        type: OPPORTUNITY_EVENT_TYPES.STATUS_CHANGED.value,
+
+        status: OPPORTUNITY_STATUSES.WON.value,
+
+        createdAt: addHours(-24),
+      },
+    ],
+
+    notes: [
+      {
+        id: 'note-5',
+
+        title: 'Mission remportée',
+
+        createdAt: addHours(-20),
+
+        content: 'Contrat signé. Démarrage prévu dans une dizaine de jours.',
+      },
+    ],
   },
+
   {
     id: '9',
 
@@ -544,13 +563,13 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     missionTitle: 'Frontend Expert',
 
-    description: 'Mission Frontend.',
+    description: 'Évolution de la plateforme e-commerce et optimisation des performances.',
 
-    stack: ['Angular'],
+    stack: ['Angular', 'RxJS', 'TypeScript'],
 
     seniority: SENIORITIES.SENIOR.value,
 
-    estimatedStartDate: '2026-06-15',
+    estimatedStartDate: addDays(30),
 
     durationValue: 9,
     durationUnit: DURATION_UNITS.MONTHS.value,
@@ -565,8 +584,36 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
     nextAction: null,
 
-    events: [],
+    events: [
+      {
+        id: 'event-14',
 
-    notes: [],
+        type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
+
+        createdAt: addHours(-240),
+      },
+
+      {
+        id: 'event-15',
+
+        type: OPPORTUNITY_EVENT_TYPES.STATUS_CHANGED.value,
+
+        status: OPPORTUNITY_STATUSES.LOST.value,
+
+        createdAt: addHours(-48),
+      },
+    ],
+
+    notes: [
+      {
+        id: 'note-6',
+
+        title: 'Retour client',
+
+        createdAt: addHours(-44),
+
+        content: 'Le client a finalement retenu un candidat interne pour cette mission.',
+      },
+    ],
   },
 ];

@@ -1,0 +1,69 @@
+@use '../../../../../styles/foundations/colors' as *;
+@use '../../../../../styles/foundations/radius' as *;
+@use '../../../../../styles/foundations/spacing' as *;
+@use '../../../../../styles/foundations/typography' as *;
+@use '../../../../../styles/foundations/font-weights' as *;
+@use '../../../../../styles/components/forms' as *;
+
+.quick-views {
+  display: inline-flex;
+
+  padding: $spacing-2xs;
+
+  border-radius: $radius-lg;
+
+  background: $surface-secondary;
+}
+
+.quick-view {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  padding: $spacing-xs $spacing-md;
+
+  border: none;
+  border-radius: $radius-md;
+
+  background: transparent;
+
+  color: $text-secondary;
+
+  font: inherit;
+  font-size: $text-sm;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.quick-view:hover {
+  background: $surface-primary;
+
+  color: $text-primary;
+}
+
+.quick-view-selected {
+  background: $surface-primary;
+
+  color: $text-primary;
+
+  font-weight: 600;
+}
+
+.quick-view-count {
+  min-width: 20px;
+
+  color: inherit;
+
+  font-size: 0.75rem;
+
+  font-weight: 600;
+
+  text-align: center;
+
+  opacity: 0.75;
+}

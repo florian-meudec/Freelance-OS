@@ -6,13 +6,16 @@ import { OpportunityCard } from '../../components/opportunity-card/opportunity-c
 import { OpportunityDetailsPanel } from '../../components/opportunity-details-panel/opportunity-details-panel';
 import {
   OPPORTUNITY_EVENT_TYPES,
+  OPPORTUNITY_QUICK_VIEWS,
   OPPORTUNITY_STATUSES,
+  OpportunityQuickView,
 } from '../../constants/opportunity.constants';
 
 import { MOCK_OPPORTUNITIES } from '../../mocks/mock-opportunities';
 import { OpportunityEventType, OpportunityStatus } from '../../types/opportunity.type';
 import { NextAction } from '../../models/next-action.model';
 import { OpportunityForm } from '../../components/opportunity-form/opportunity-form';
+import { OpportunityQuickViews } from '../../components/opportunity-quick-views/opportunity-quick-views';
 
 /*
   Columns act as drop zones for kanban interactions.
@@ -26,6 +29,7 @@ import { OpportunityForm } from '../../components/opportunity-form/opportunity-f
     OpportunityCard,
     OpportunityDetailsPanel,
     OpportunityForm,
+    OpportunityQuickViews,
   ],
   templateUrl: './opportunities-board.html',
   styleUrl: './opportunities-board.scss',
@@ -51,7 +55,7 @@ export class OpportunitiesBoard {
     return this.statuses.map((status) => ({
       status: status.value,
       label: status.label,
-      opportunities: this.opportunities().filter(
+      opportunities: this.visibleOpportunities().filter(
         (opportunity) => opportunity.status === status.value,
       ),
     }));
@@ -104,6 +108,41 @@ export class OpportunitiesBoard {
   readonly showOpportunityForm = signal(false);
 
   readonly detailsPanel = viewChild<OpportunityDetailsPanel>('detailsPanel');
+
+  readonly selectedQuickView = signal<OpportunityQuickView>(OPPORTUNITY_QUICK_VIEWS.TODO.value);
+
+  /*
+    Visible opportunities depend on
+    the selected quick view.
+  */
+  readonly visibleOpportunities = computed(() => {
+    switch (this.selectedQuickView()) {
+      case OPPORTUNITY_QUICK_VIEWS.TODO.value:
+        return this.opportunities().filter((opportunity) => this.isTodo(opportunity));
+
+      case OPPORTUNITY_QUICK_VIEWS.PREPARE.value:
+        return this.opportunities().filter((opportunity) => this.isPreparation(opportunity));
+
+      default:
+        return this.opportunities();
+    }
+  });
+
+  private readonly preparationStatuses: OpportunityStatus[] = [
+    OPPORTUNITY_STATUSES.INTERVIEW.value,
+    OPPORTUNITY_STATUSES.PROPOSAL.value,
+    OPPORTUNITY_STATUSES.NEGOTIATION.value,
+  ];
+
+  readonly todoCount = computed(
+    () => this.opportunities().filter((opportunity) => this.isTodo(opportunity)).length,
+  );
+
+  readonly preparationCount = computed(
+    () => this.opportunities().filter((opportunity) => this.isPreparation(opportunity)).length,
+  );
+
+  readonly totalCount = computed(() => this.opportunities().length);
 
   constructor() {
     /*
@@ -189,6 +228,26 @@ export class OpportunitiesBoard {
     }
 
     return targetStatus !== 'won' && targetStatus !== 'lost';
+  }
+
+  /*
+    Determine whether the next action
+    requires immediate attention.
+  */
+  private isTodo(opportunity: Opportunity): boolean {
+    return this.isDueWithin(opportunity, Number.MIN_SAFE_INTEGER, 0);
+  }
+
+  /*
+    Determine whether the opportunity
+    requires preparation this week.
+  */
+  private isPreparation(opportunity: Opportunity): boolean {
+    if (!this.isDueWithin(opportunity, 1, 7)) {
+      return false;
+    }
+
+    return this.preparationStatuses.includes(opportunity.status);
   }
 
   /*
@@ -651,5 +710,31 @@ export class OpportunitiesBoard {
     this.closeOpportunityForm();
 
     this.closeDetailsPanel();
+  }
+
+  /*
+    Determine whether the next action
+    is due within the provided range.
+  */
+  private isDueWithin(opportunity: Opportunity, minDays: number, maxDays: number): boolean {
+    const nextAction = opportunity.nextAction;
+
+    if (!nextAction) {
+      return false;
+    }
+
+    const today = new Date();
+
+    today.setHours(0, 0, 0, 0);
+
+    const dueDate = new Date(nextAction.dueDate);
+
+    dueDate.setHours(0, 0, 0, 0);
+
+    const differenceInDays = Math.floor(
+      (dueDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
+    );
+
+    return differenceInDays >= minDays && differenceInDays <= maxDays;
   }
 }

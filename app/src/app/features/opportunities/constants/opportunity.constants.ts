@@ -101,3 +101,23 @@ export const OPPORTUNITY_EVENT_TYPES = {
     label: 'Entretien',
   },
 } as const;
+
+export const OPPORTUNITY_QUICK_VIEWS = {
+  TODO: {
+    value: 'todo',
+    label: 'À traiter',
+  },
+
+  PREPARE: {
+    value: 'prepare',
+    label: 'À préparer',
+  },
+
+  ALL: {
+    value: 'all',
+    label: 'Toutes',
+  },
+} as const;
+
+export type OpportunityQuickView =
+  (typeof OPPORTUNITY_QUICK_VIEWS)[keyof typeof OPPORTUNITY_QUICK_VIEWS]['value'];

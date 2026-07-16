@@ -1,0 +1,30 @@
+<div class="quick-views">
+  @for (quickView of quickViews; track quickView.value) {
+    <button
+      type="button"
+      class="quick-view"
+      [class.quick-view-selected]="selected() === quickView.value"
+      (click)="select(quickView.value)"
+    >
+      <span>
+        {{ quickView.label }}
+      </span>
+
+      <span class="quick-view-count">
+        @switch (quickView.value) {
+          @case ('todo') {
+            {{ todoCount() }}
+          }
+
+          @case ('prepare') {
+            {{ preparationCount() }}
+          }
+
+          @default {
+            {{ totalCount() }}
+          }
+        }
+      </span>
+    </button>
+  }
+</div>

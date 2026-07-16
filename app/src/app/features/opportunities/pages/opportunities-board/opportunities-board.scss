@@ -202,3 +202,16 @@
 .page-create-button {
   width: auto;
 }
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.page-header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

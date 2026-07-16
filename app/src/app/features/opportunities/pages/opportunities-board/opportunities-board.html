@@ -3,7 +3,17 @@
   actions available on the opportunity board.
 -->
 <div class="page-header">
-  <h1>Opportunités</h1>
+  <div class="page-header-content">
+    <h1>Opportunités</h1>
+
+    <app-opportunity-quick-views
+      [selected]="selectedQuickView()"
+      [todoCount]="todoCount()"
+      [preparationCount]="preparationCount()"
+      [totalCount]="totalCount()"
+      (selectedChange)="selectedQuickView.set($event)"
+    />
+  </div>
 
   <button type="button" class="action-button action-button-primary" (click)="openOpportunityForm()">
     Nouvelle opportunité
