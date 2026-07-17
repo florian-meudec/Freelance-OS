@@ -235,8 +235,9 @@
     </div>
 
     <div class="form-footer">
-      <button type="button" class="action-button" (click)="requestClose()">Annuler</button>
-
+      <button type="button" class="action-button action-button-secondary" (click)="requestClose()">
+        Annuler
+      </button>
       <button type="submit" class="action-button action-button-primary" [disabled]="form.invalid">
         {{ submitLabel() }}
       </button>

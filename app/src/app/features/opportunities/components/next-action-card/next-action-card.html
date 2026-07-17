@@ -33,7 +33,13 @@
         </button>
 
         @if (!isBlocking()) {
-          <button type="button" class="action-button" (click)="requestClose()">Annuler</button>
+          <button
+            type="button"
+            class="action-button action-button-secondary"
+            (click)="requestClose()"
+          >
+            Annuler
+          </button>
         }
       </div>
     </form>
@@ -72,7 +78,13 @@
       </div>
 
       <div class="form-actions form-actions-center">
-        <button type="button" class="action-button" (click)="cancelStatusChange()">Annuler</button>
+        <button
+          type="button"
+          class="action-button action-button-secondary"
+          (click)="cancelStatusChange()"
+        >
+          Annuler
+        </button>
       </div>
     </div>
   } @else if (nextAction(); as nextAction) {
@@ -86,7 +98,9 @@
       </span>
 
       <div class="form-actions">
-        <button type="button" class="action-button" (click)="open()">Modifier</button>
+        <button type="button" class="action-button action-button-secondary" (click)="open()">
+          Modifier
+        </button>
 
         <button
           type="button"

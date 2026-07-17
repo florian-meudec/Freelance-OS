@@ -5,6 +5,11 @@
 @use '../../../../styles/foundations/spacing' as *;
 @use '../../../../styles/foundations/typography' as *;
 
+:host {
+  display: block;
+  width: 100%;
+}
+
 /*
   Select menus encapsulate lightweight
   workflow choices across the application.
@@ -87,4 +92,8 @@
 
 .status-option:disabled {
   opacity: 1;
+}
+
+.action-button {
+  width: 100%;
 }

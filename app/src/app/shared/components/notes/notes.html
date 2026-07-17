@@ -29,7 +29,11 @@
           Ajouter
         </button>
 
-        <button type="button" class="action-button" (click)="requestCloseNoteForm()">
+        <button
+          type="button"
+          class="action-button action-button-secondary"
+          (click)="requestCloseNoteForm()"
+        >
           Annuler
         </button>
       </div>
@@ -58,7 +62,11 @@
                 Sauvegarder
               </button>
 
-              <button type="button" class="action-button" (click)="requestCancelNoteEdit()">
+              <button
+                type="button"
+                class="action-button action-button-secondary"
+                (click)="cancelNoteDelete()"
+              >
                 Annuler
               </button>
             </div>
@@ -78,7 +86,11 @@
                     Supprimer
                   </button>
 
-                  <button type="button" class="action-button" (click)="cancelNoteDelete()">
+                  <button
+                    type="button"
+                    class="action-button action-button-secondary"
+                    (click)="cancelNoteDelete()"
+                  >
                     Annuler
                   </button>
                 </div>
@@ -122,7 +134,11 @@
 
         <p>Conservez ici les échanges, informations ou remarques concernant cette opportunité.</p>
 
-        <button type="button" class="action-button" (click)="openNoteForm()">
+        <button
+          type="button"
+          class="action-button action-button-secondary"
+          (click)="openNoteForm()"
+        >
           Ajouter une note
         </button>
       </div>

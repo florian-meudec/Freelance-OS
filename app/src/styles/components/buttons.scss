@@ -135,3 +135,12 @@
     background: $surface-danger-muted;
   }
 }
+
+.action-button-icon {
+  padding: $spacing-xs;
+
+  min-width: 36px;
+  width: 36px;
+
+  aspect-ratio: 1;
+}
