@@ -5,6 +5,7 @@ import { Opportunity } from '../../models/opportunity.model';
 import { OpportunityCard } from '../../components/opportunity-card/opportunity-card';
 import { OpportunityDetailsPanel } from '../../components/opportunity-details-panel/opportunity-details-panel';
 import {
+  DEFAULT_OPPORTUNITY_FILTERS,
   OPPORTUNITY_EVENT_TYPES,
   OPPORTUNITY_QUICK_VIEWS,
   OPPORTUNITY_STATUSES,
@@ -14,6 +15,7 @@ import {
 import { MOCK_OPPORTUNITIES } from '../../mocks/mock-opportunities';
 import { OpportunityEventType, OpportunityStatus } from '../../types/opportunity.type';
 import { NextAction } from '../../models/next-action.model';
+import { OpportunityFiltersComponent } from '../../components/opportunity-filters/opportunity-filters';
 import { OpportunityForm } from '../../components/opportunity-form/opportunity-form';
 import { OpportunityQuickViews } from '../../components/opportunity-quick-views/opportunity-quick-views';
 import { SearchInput } from '../../../../shared/components/search-input/search-input';
@@ -29,6 +31,7 @@ import { SearchInput } from '../../../../shared/components/search-input/search-i
     CdkDropListGroup,
     OpportunityCard,
     OpportunityDetailsPanel,
+    OpportunityFiltersComponent,
     OpportunityForm,
     OpportunityQuickViews,
     SearchInput,
@@ -127,6 +130,14 @@ export class OpportunitiesBoard {
 
   readonly search = signal('');
 
+  readonly filtersExpanded = signal(false);
+
+  readonly filters = signal(structuredClone(DEFAULT_OPPORTUNITY_FILTERS));
+
+  readonly availableSources = computed(() =>
+    [...new Set(this.opportunities().map((opportunity) => opportunity.source))].sort(),
+  );
+
   /*
     Visible opportunities depend on
     the selected quick view.
@@ -144,7 +155,9 @@ export class OpportunitiesBoard {
         break;
     }
 
-    return opportunities.filter((opportunity) => this.matchesSearch(opportunity));
+    return opportunities
+      .filter((opportunity) => this.matchesSearch(opportunity))
+      .filter((opportunity) => this.matchesFilters(opportunity));
   });
 
   private readonly preparationStatuses: OpportunityStatus[] = [
@@ -162,6 +175,18 @@ export class OpportunitiesBoard {
   );
 
   readonly totalCount = computed(() => this.opportunities().length);
+
+  readonly activeFiltersCount = computed(() => {
+    const filters = this.filters();
+
+    return (
+      filters.modalities.length +
+      filters.seniorities.length +
+      filters.companyTypes.length +
+      filters.sources.length +
+      (filters.minimumDailyRate !== null ? 1 : 0)
+    );
+  });
 
   constructor() {
     /*
@@ -201,6 +226,10 @@ export class OpportunitiesBoard {
   */
   toggleArchived(): void {
     this.showArchived.update((value) => !value);
+  }
+
+  toggleFilters(): void {
+    this.filtersExpanded.update((expanded) => !expanded);
   }
 
   selectOpportunity(opportunity: Opportunity): void {
@@ -657,6 +686,41 @@ export class OpportunitiesBoard {
     return searchableValues
       .filter((value): value is string => Boolean(value))
       .some((value) => value.toLowerCase().includes(search));
+  }
+
+  private matchesFilters(opportunity: Opportunity): boolean {
+    const filters = this.filters();
+
+    if (
+      filters.modalities.length > 0 &&
+      (!opportunity.modality || !filters.modalities.includes(opportunity.modality))
+    ) {
+      return false;
+    }
+
+    if (
+      filters.seniorities.length > 0 &&
+      (!opportunity.seniority || !filters.seniorities.includes(opportunity.seniority))
+    ) {
+      return false;
+    }
+
+    if (
+      filters.companyTypes.length > 0 &&
+      (!opportunity.companyType || !filters.companyTypes.includes(opportunity.companyType))
+    ) {
+      return false;
+    }
+
+    if (filters.sources.length > 0 && !filters.sources.includes(opportunity.source)) {
+      return false;
+    }
+
+    if (filters.minimumDailyRate !== null && (opportunity.tjm ?? 0) < filters.minimumDailyRate) {
+      return false;
+    }
+
+    return true;
   }
 
   /*

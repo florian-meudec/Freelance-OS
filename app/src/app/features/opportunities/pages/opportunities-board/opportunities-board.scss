@@ -200,9 +200,27 @@
 
 .page-header-content {
   display: flex;
+  flex: 1;
   flex-direction: column;
 
   gap: $spacing-md;
+  min-width: 0;
+}
+
+.page-tools {
+  display: flex;
+  flex-direction: column;
+
+  gap: $spacing-md;
+
+  width: 100%;
+}
+
+app-opportunity-filters {
+  display: block;
+  width: 100%;
+
+  margin-bottom: $spacing-xl;
 }
 
 .page-header .action-button {

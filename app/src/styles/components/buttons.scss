@@ -1,4 +1,5 @@
 @use '../foundations/colors' as *;
+@use '../foundations/font-weights' as *;
 @use '../foundations/radius' as *;
 @use '../foundations/spacing' as *;
 @use '../foundations/typography' as *;
@@ -8,12 +9,14 @@
   interactions across the CRM.
 */
 .action-button {
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
+  gap: $spacing-xs;
 
-  width: 100%;
-  min-height: 32px;
+  width: auto;
+  min-width: 36px;
+  min-height: 36px;
 
   padding: $spacing-xs $spacing-sm;
 
@@ -22,10 +25,11 @@
 
   background: $surface-primary;
 
-  color: inherit;
+  color: $text-primary;
 
   font: inherit;
   font-size: $text-sm;
+  font-weight: $font-weight-medium;
   text-align: center;
   white-space: nowrap;
 
@@ -36,15 +40,43 @@
   transition:
     background 0.15s ease,
     border-color 0.15s ease,
-    color 0.15s ease;
+    color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.1s ease;
 
   &:hover {
+    border-color: $interactive-primary-muted;
+
     background: $surface-secondary;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  &:active {
+    transform: translateY(1px);
   }
 
   &:focus-visible {
     outline: 2px solid $interactive-primary;
     outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+
+    box-shadow: none;
+
+    cursor: not-allowed;
+  }
+
+  &:disabled:hover {
+    border-color: $border-color;
+
+    background: $surface-primary;
+
+    box-shadow: none;
+
+    transform: none;
   }
 }
 
@@ -60,9 +92,31 @@
   color: white;
 
   &:hover {
+    border-color: $interactive-primary;
+
     background: $interactive-primary;
 
-    opacity: 0.95;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+/*
+  Secondary actions stay visible while remaining
+  less prominent than primary actions.
+*/
+.action-button-secondary {
+  background: $surface-secondary;
+
+  color: $text-primary;
+
+  &:hover {
+    border-color: $interactive-primary-muted;
+
+    background: $interactive-primary-muted;
   }
 }
 
@@ -76,6 +130,8 @@
   color: $urgency-late;
 
   &:hover {
+    border-color: $urgency-late;
+
     background: $surface-danger-muted;
   }
 }

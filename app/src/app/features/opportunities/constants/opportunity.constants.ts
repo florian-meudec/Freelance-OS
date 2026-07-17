@@ -1,3 +1,5 @@
+import { OpportunityFilters } from '../models/opportunity-filters';
+
 /*
   Kanban statuses define both the business workflow
   and the visual order of board columns.
@@ -121,3 +123,11 @@ export const OPPORTUNITY_QUICK_VIEWS = {
 
 export type OpportunityQuickView =
   (typeof OPPORTUNITY_QUICK_VIEWS)[keyof typeof OPPORTUNITY_QUICK_VIEWS]['value'];
+
+export const DEFAULT_OPPORTUNITY_FILTERS: OpportunityFilters = {
+  modalities: [],
+  seniorities: [],
+  companyTypes: [],
+  sources: [],
+  minimumDailyRate: null,
+};

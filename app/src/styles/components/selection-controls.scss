@@ -1,0 +1,18 @@
+@use '../foundations/spacing' as *;
+@use '../foundations/typography' as *;
+
+.checkbox,
+.radio {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  cursor: pointer;
+
+  font-size: $text-sm;
+}
+
+.checkbox input,
+.radio input {
+  cursor: pointer;
+}

@@ -6,20 +6,39 @@
   <div class="page-header-content">
     <h1>Opportunités</h1>
 
-    <div class="page-actions">
-      <app-opportunity-quick-views
-        [selected]="selectedQuickView()"
-        [todoCount]="todoCount()"
-        [preparationCount]="preparationCount()"
-        [totalCount]="totalCount()"
-        (selectedChange)="selectedQuickView.set($event)"
-      />
+    <div class="page-tools">
+      <div class="page-actions">
+        <app-opportunity-quick-views
+          [selected]="selectedQuickView()"
+          [todoCount]="todoCount()"
+          [preparationCount]="preparationCount()"
+          [totalCount]="totalCount()"
+          (selectedChange)="selectedQuickView.set($event)"
+        />
 
-      <app-search-input
-        [value]="search()"
-        placeholder="Rechercher une opportunité..."
-        (valueChange)="search.set($event)"
-      />
+        <app-search-input
+          [value]="search()"
+          placeholder="Rechercher une opportunité..."
+          (valueChange)="search.set($event)"
+        />
+
+        <button
+          type="button"
+          class="filters-toggle action-button action-button-secondary"
+          (click)="toggleFilters()"
+        >
+          <span>
+            {{ filtersExpanded() ? '▼' : '▶' }}
+            Filtres avancés
+          </span>
+
+          @if (activeFiltersCount() > 0) {
+            <span class="filters-count">
+              {{ activeFiltersCount() }}
+            </span>
+          }
+        </button>
+      </div>
     </div>
   </div>
 
@@ -27,6 +46,14 @@
     Nouvelle opportunité
   </button>
 </div>
+
+@if (filtersExpanded()) {
+  <app-opportunity-filters
+    [filters]="filters()"
+    [availableSources]="availableSources()"
+    (filtersChange)="filters.set($event)"
+  />
+}
 
 <!--
   Active opportunities are organized into
@@ -68,7 +95,11 @@
   }
 </div>
 
-<button type="button" class="archived-toggle" (click)="toggleArchived()">
+<button
+  type="button"
+  class="archived-toggle action-button action-button-secondary"
+  (click)="toggleArchived()"
+>
   @if (showArchived()) {
     Masquer les opportunités clôturées
   } @else {

@@ -15,7 +15,7 @@
 }
 
 .sidebar {
-  width: 125px;
+  width: 110px;
 
   padding: $spacing-xl;
 
@@ -60,6 +60,8 @@
   min-width: 0;
 
   overflow: auto;
+
+  scrollbar-gutter: stable;
 
   padding: $spacing-xl;
 }

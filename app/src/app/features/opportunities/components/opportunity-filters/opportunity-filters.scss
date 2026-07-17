@@ -1,0 +1,68 @@
+@use '../../../../../styles/foundations/colors' as *;
+@use '../../../../../styles/foundations/font-weights' as *;
+@use '../../../../../styles/foundations/radius' as *;
+@use '../../../../../styles/foundations/spacing' as *;
+@use '../../../../../styles/foundations/typography' as *;
+
+@use '../../../../../styles/components/buttons' as *;
+@use '../../../../../styles/components/selection-controls' as *;
+
+.filters-panel {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  box-sizing: border-box;
+
+  width: 100%;
+
+  padding: $spacing-lg;
+
+  border: 1px solid $border-color;
+  border-radius: $radius-lg;
+
+  background: $surface-primary;
+}
+
+.filters-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filters-header h2 {
+  margin: 0;
+
+  font-size: $text-md;
+  font-weight: $font-weight-semibold;
+}
+
+.filters-groups {
+  display: flex;
+  gap: $spacing-xl;
+}
+
+.filter-group {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.filter-group h3 {
+  margin: 0;
+  margin-bottom: $spacing-xs;
+
+  color: $text-primary;
+
+  font-size: $text-sm;
+  font-weight: $font-weight-semibold;
+}
+
+.checkbox,
+.radio {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+
+  white-space: nowrap;
+}

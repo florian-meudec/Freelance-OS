@@ -1,0 +1,90 @@
+<div class="filters-panel">
+  <div class="filters-header">
+    <h2>Filtres avancés</h2>
+
+    <button type="button" class="reset-button" (click)="reset()">Réinitialiser</button>
+  </div>
+
+  <div class="filters-groups">
+    <section class="filter-group">
+      <h3>Modalité</h3>
+
+      @for (option of modalityOptions; track option.value) {
+        <label class="checkbox">
+          <input
+            type="checkbox"
+            [checked]="filters().modalities.includes(option.value)"
+            (change)="toggleModality(option.value)"
+          />
+
+          {{ option.label }}
+        </label>
+      }
+    </section>
+
+    <section class="filter-group">
+      <h3>Séniorité</h3>
+
+      @for (option of seniorityOptions; track option.value) {
+        <label class="checkbox">
+          <input
+            type="checkbox"
+            [checked]="filters().seniorities.includes(option.value)"
+            (change)="toggleSeniority(option.value)"
+          />
+
+          {{ option.label }}
+        </label>
+      }
+    </section>
+
+    <section class="filter-group">
+      <h3>Entreprise</h3>
+
+      @for (option of companyTypeOptions; track option.value) {
+        <label class="checkbox">
+          <input
+            type="checkbox"
+            [checked]="filters().companyTypes.includes(option.value)"
+            (change)="toggleCompanyType(option.value)"
+          />
+
+          {{ option.label }}
+        </label>
+      }
+    </section>
+
+    <section class="filter-group">
+      <h3>Source</h3>
+
+      @for (source of availableSources(); track source) {
+        <label class="checkbox">
+          <input
+            type="checkbox"
+            [checked]="filters().sources.includes(source)"
+            (change)="toggleSource(source)"
+          />
+
+          {{ source }}
+        </label>
+      }
+    </section>
+
+    <section class="filter-group">
+      <h3>TJM minimum</h3>
+
+      @for (option of minimumDailyRateOptions; track option.value) {
+        <label class="radio">
+          <input
+            type="radio"
+            name="minimumDailyRate"
+            [checked]="filters().minimumDailyRate === option.value"
+            (change)="setMinimumDailyRate(option.value)"
+          />
+
+          {{ option.label }}
+        </label>
+      }
+    </section>
+  </div>
+</div>
