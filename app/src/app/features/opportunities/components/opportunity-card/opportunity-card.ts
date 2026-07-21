@@ -23,8 +23,8 @@ export class OpportunityCard {
   readonly opportunity = input.required<Opportunity>();
 
   /*
-    Allows the board container to visually highlight
-    the currently opened opportunity.
+    Highlights the currently selected
+    opportunity card.
   */
   readonly selected = input(false);
 
@@ -33,6 +33,12 @@ export class OpportunityCard {
     to preserve historical pipeline integrity.
   */
   readonly draggable = input(true);
+
+  /*
+    The board container handles selection state
+    and panel opening logic.
+  */
+  readonly cardClick = output<Opportunity>();
 
   /*
     Prevent accidental panel openings
@@ -86,12 +92,6 @@ export class OpportunityCard {
     used by the colored card header.
   */
   readonly headerClass = computed(() => `urgency-${this.urgency()}`);
-
-  /*
-    The board container handles selection state
-    and panel opening logic.
-  */
-  readonly cardClick = output<Opportunity>();
 
   onCardClick(): void {
     if (this.isDragging()) {

@@ -3,16 +3,22 @@
 @use '../../../../styles/foundations/shadows' as *;
 @use '../../../../styles/foundations/spacing' as *;
 
+/*
+  Confirmation dialog emphasizes
+  potentially destructive actions.
+*/
 .discard-modal {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+
+  gap: $spacing-md;
 
   padding: $spacing-xl $spacing-2xl;
 }
 
 .discard-modal h2 {
   margin: 0;
+
   padding-bottom: $spacing-md;
 
   border-bottom: 1px solid $border-color;
@@ -25,6 +31,7 @@
 .form-actions {
   display: flex;
   justify-content: flex-end;
+
   gap: $spacing-md;
 }
 

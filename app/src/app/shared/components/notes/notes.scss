@@ -146,14 +146,18 @@
   }
 }
 
+/*
+  Empty state encourages creating
+  the first note for the opportunity.
+*/
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  gap: 0.75rem;
+  gap: $spacing-md;
 
-  padding: 2rem 1rem;
+  padding: $spacing-2xl $spacing-md;
 
   text-align: center;
 
@@ -161,13 +165,13 @@
     margin: 0;
 
     &:first-child {
-      font-weight: 600;
+      font-weight: $font-weight-semibold;
     }
 
     &:last-of-type {
       max-width: 28rem;
 
-      color: var(--color-text-secondary);
+      color: $text-secondary;
     }
   }
 }

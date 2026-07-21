@@ -7,10 +7,16 @@
 @use '../../../../../styles/components/buttons' as *;
 @use '../../../../../styles/components/selection-controls' as *;
 
+/*
+  Advanced filters allow refining the
+  opportunity board using business criteria.
+*/
 .filters-panel {
   display: flex;
   flex-direction: column;
+
   gap: $spacing-lg;
+
   box-sizing: border-box;
 
   width: 100%;
@@ -27,41 +33,47 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  h2 {
+    margin: 0;
+
+    font-size: $text-md;
+    font-weight: $font-weight-semibold;
+  }
 }
 
-.filters-header h2 {
-  margin: 0;
-
-  font-size: $text-md;
-  font-weight: $font-weight-semibold;
-}
-
+/*
+  Filter categories remain visible together
+  to encourage quick multi-criteria searches.
+*/
 .filters-groups {
   display: flex;
-  gap: $spacing-xl;
+
+  gap: $spacing-2xl;
 }
 
 .filter-group {
   display: flex;
   flex: 1;
   flex-direction: column;
+
   gap: $spacing-sm;
-}
 
-.filter-group h3 {
-  margin: 0;
-  margin-bottom: $spacing-xs;
+  h3 {
+    margin: 0 0 $spacing-xs;
 
-  color: $text-primary;
+    color: $text-primary;
 
-  font-size: $text-sm;
-  font-weight: $font-weight-semibold;
+    font-size: $text-sm;
+    font-weight: $font-weight-semibold;
+  }
 }
 
 .checkbox,
 .radio {
   display: flex;
   align-items: center;
+
   gap: $spacing-sm;
 
   white-space: nowrap;

@@ -37,10 +37,18 @@ export class OpportunityForm extends FormInteractionHandler {
 
   readonly isEditMode = computed(() => this.opportunity() !== null);
 
+  /*
+    The dialog adapts its title according
+    to the current workflow.
+  */
   readonly title = computed(() =>
     this.isEditMode() ? 'Modifier une opportunité' : 'Nouvelle opportunité',
   );
 
+  /*
+    Submit actions reflect whether the
+    opportunity is created or updated.
+  */
   readonly submitLabel = computed(() =>
     this.isEditMode() ? 'Enregistrer' : "Créer l'opportunité",
   );
@@ -53,6 +61,10 @@ export class OpportunityForm extends FormInteractionHandler {
 
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
+  /*
+    Select options are centralized through
+    shared business constants.
+  */
   readonly companyTypes = Object.values(COMPANY_TYPES);
 
   readonly modalities = Object.values(WORK_MODALITIES);
@@ -240,6 +252,10 @@ export class OpportunityForm extends FormInteractionHandler {
     };
   }
 
+  /*
+    Keep the form synchronized with the
+    currently edited opportunity.
+  */
   private initializeForm(): void {
     effect(() => {
       const opportunity = this.opportunity();

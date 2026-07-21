@@ -6,8 +6,8 @@
 @use '../../../../../styles/components/forms' as *;
 
 /*
-  Next actions remain visually highlighted
-  to emphasize the current follow-up.
+  The current next action is highlighted to
+  remain immediately visible inside the details panel.
 */
 .next-action-card {
   display: flex;
@@ -20,11 +20,12 @@
   border: 1px solid $border-color;
   border-radius: $radius-lg;
 
-  background: $surface-secondary;
+  background: $surface-primary;
 
   strong {
     font-size: $text-md;
     font-weight: $font-weight-semibold;
+    line-height: 1.4;
   }
 
   span {
@@ -56,16 +57,14 @@
 }
 
 /*
-  Next action forms remain visually
-  separated from the surrounding content.
+  Forms stay visually separated from
+  the surrounding information while editing.
 */
 .event-form {
   display: flex;
   flex-direction: column;
 
   gap: $spacing-md;
-
-  margin-bottom: $spacing-lg;
 
   padding: $spacing-md;
 

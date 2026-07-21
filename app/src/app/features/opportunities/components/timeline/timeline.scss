@@ -36,8 +36,8 @@
 }
 
 /*
-  Timeline event creation remains visually
-  separated from historical activity.
+  Timeline event creation and edition remain
+  visually separated from historical activity.
 */
 .event-form {
   display: flex;
@@ -76,6 +76,10 @@
   gap: $spacing-md;
 }
 
+/*
+  Editable events behave like lightweight
+  cards while preserving timeline alignment.
+*/
 .timeline-event-button {
   display: flex;
 

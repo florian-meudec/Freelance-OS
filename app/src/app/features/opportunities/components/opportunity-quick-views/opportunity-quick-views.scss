@@ -5,6 +5,10 @@
 @use '../../../../../styles/foundations/font-weights' as *;
 @use '../../../../../styles/components/forms' as *;
 
+/*
+  Quick views behave like segmented controls
+  for switching between common board presets.
+*/
 .quick-views {
   display: inline-flex;
 
@@ -18,6 +22,7 @@
 .quick-view {
   display: flex;
   align-items: center;
+
   gap: $spacing-xs;
 
   padding: $spacing-xs $spacing-md;
@@ -31,27 +36,27 @@
 
   font: inherit;
   font-size: $text-sm;
-  font-weight: 500;
+  font-weight: $font-weight-medium;
 
   cursor: pointer;
 
   transition:
     background-color 0.15s ease,
     color 0.15s ease;
-}
 
-.quick-view:hover {
-  background: $surface-primary;
+  &:hover {
+    background: $surface-primary;
 
-  color: $text-primary;
-}
+    color: $text-primary;
+  }
 
-.quick-view-selected {
-  background: $surface-primary;
+  &.quick-view-selected {
+    background: $surface-primary;
 
-  color: $text-primary;
+    color: $text-primary;
 
-  font-weight: 600;
+    font-weight: $font-weight-semibold;
+  }
 }
 
 .quick-view-count {
@@ -60,8 +65,7 @@
   color: inherit;
 
   font-size: 0.75rem;
-
-  font-weight: 600;
+  font-weight: $font-weight-semibold;
 
   text-align: center;
 

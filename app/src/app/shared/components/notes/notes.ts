@@ -43,21 +43,37 @@ export class Notes extends FormInteractionHandler {
     content: string;
   }>();
 
+  /*
+    Emit note updates to keep business
+    state centralized in the parent.
+  */
   readonly noteUpdate = output<{
     noteId: string;
     title: string;
     content: string;
   }>();
 
+  /*
+    Emit note deletion requests while
+    preserving a single source of truth.
+  */
   readonly noteDelete = output<string>();
 
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
+  /*
+    Creation form stays isolated from
+    inline edition interactions.
+  */
   readonly creationForm = this.formBuilder.group({
     title: ['', Validators.required],
     content: ['', Validators.required],
   });
 
+  /*
+    Edition form remains independent
+    from note creation workflow.
+  */
   readonly editionForm = this.formBuilder.group({
     title: ['', Validators.required],
     content: ['', Validators.required],
@@ -268,7 +284,7 @@ export class Notes extends FormInteractionHandler {
     Cancel inline editing and restore
     compact note presentation.
   */
-  private cancelNoteEdit(): void {
+  cancelNoteEdit(): void {
     this.editingNoteId.set(null);
 
     this.deletingNoteId.set(null);

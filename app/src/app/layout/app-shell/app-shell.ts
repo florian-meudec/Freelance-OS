@@ -7,9 +7,4 @@ import { RouterLink, RouterOutlet } from '@angular/router';
   templateUrl: './app-shell.html',
   styleUrl: './app-shell.scss',
 })
-export class AppShell {
-  /*
-    Application shell stays persistent across navigation
-    and hosts the global sidebar layout.
-  */
-}
+export class AppShell {}

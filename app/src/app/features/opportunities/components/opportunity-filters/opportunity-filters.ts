@@ -1,4 +1,4 @@
-import { Component, computed, input, output, signal } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 import { DEFAULT_OPPORTUNITY_FILTERS } from '../../constants/opportunity.constants';
 import {
@@ -22,10 +22,18 @@ import { WorkModality } from '../../../../shared/types/work-modality.type';
 export class OpportunityFiltersComponent {
   readonly filters = input.required<OpportunityFilters>();
 
+  /*
+    Available sources are derived from the
+    current opportunity collection.
+  */
   readonly availableSources = input.required<string[]>();
 
   readonly filtersChange = output<OpportunityFilters>();
 
+  /*
+    Filter options remain centralized to
+    keep UI labels consistent.
+  */
   readonly modalityOptions = MODALITY_OPTIONS;
 
   readonly seniorityOptions = SENIORITY_OPTIONS;
@@ -81,6 +89,10 @@ export class OpportunityFiltersComponent {
     this.filtersChange.emit(structuredClone(DEFAULT_OPPORTUNITY_FILTERS));
   }
 
+  /*
+    Toggle a value inside a filter collection
+    while preserving immutability.
+  */
   private toggleArrayValue<T>(values: T[], value: T): T[] {
     return values.includes(value) ? values.filter((item) => item !== value) : [...values, value];
   }

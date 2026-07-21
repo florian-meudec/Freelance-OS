@@ -2,10 +2,12 @@ import { CompanyType } from '../../../shared/types/company.type';
 import { Seniority } from '../../../shared/types/seniority.type';
 import { WorkModality } from '../../../shared/types/work-modality.type';
 
-export const MODALITY_OPTIONS: {
-  value: WorkModality;
+type FilterOption<T> = {
+  value: T;
   label: string;
-}[] = [
+};
+
+export const MODALITY_OPTIONS: FilterOption<WorkModality>[] = [
   {
     value: 'remote',
     label: 'Télétravail',
@@ -20,10 +22,7 @@ export const MODALITY_OPTIONS: {
   },
 ];
 
-export const SENIORITY_OPTIONS: {
-  value: Seniority;
-  label: string;
-}[] = [
+export const SENIORITY_OPTIONS: FilterOption<Seniority>[] = [
   {
     value: 'junior',
     label: 'Junior',
@@ -42,10 +41,7 @@ export const SENIORITY_OPTIONS: {
   },
 ];
 
-export const COMPANY_TYPE_OPTIONS: {
-  value: CompanyType;
-  label: string;
-}[] = [
+export const COMPANY_TYPE_OPTIONS: FilterOption<CompanyType>[] = [
   {
     value: 'client-final',
     label: 'Client final',
@@ -64,10 +60,7 @@ export const COMPANY_TYPE_OPTIONS: {
   },
 ];
 
-export const MINIMUM_DAILY_RATE_OPTIONS: {
-  value: number | null;
-  label: string;
-}[] = [
+export const MINIMUM_DAILY_RATE_OPTIONS: FilterOption<number | null>[] = [
   {
     value: null,
     label: 'Aucun',

@@ -63,6 +63,8 @@ export class OpportunityDetailsPanel {
 
   readonly statusChange = output<OpportunityStatus>();
 
+  readonly statusChangeCancelled = output<void>();
+
   readonly eventAdd = output<{
     type: OpportunityEventType;
     comment?: string;
@@ -96,8 +98,6 @@ export class OpportunityDetailsPanel {
   readonly nextActionCompleteForStatusChange = output<void>();
 
   readonly nextActionDeleteForStatusChange = output<void>();
-
-  readonly statusChangeCancelled = output<void>();
 
   /*
     Opportunity edition remains controlled
@@ -207,14 +207,14 @@ export class OpportunityDetailsPanel {
     Copy the contact email and
     display temporary feedback.
   */
-  copyEmail(): void {
+  async copyEmail(): Promise<void> {
     const email = this.opportunity().contactEmail;
 
     if (!email) {
       return;
     }
 
-    navigator.clipboard.writeText(email);
+    await navigator.clipboard.writeText(email);
 
     this.emailCopied.set(true);
 
@@ -253,14 +253,14 @@ export class OpportunityDetailsPanel {
     close the confirmation workflow.
   */
   deleteOpportunity(): void {
-    this.delete.emit();
-
     this.confirmingDeletion.set(false);
+
+    this.delete.emit();
   }
 
   /*
-    Keep the status selector synchronized
-    with the selected opportunity.
+    Synchronize the status selector whenever
+    another opportunity becomes selected.
   */
   private initializeStatusForm(): void {
     effect(() => {

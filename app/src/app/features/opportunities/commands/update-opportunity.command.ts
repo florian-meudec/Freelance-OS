@@ -3,6 +3,10 @@ import { DurationUnit } from '../../../shared/types/duration.type';
 import { Seniority } from '../../../shared/types/seniority.type';
 import { WorkModality } from '../../../shared/types/work-modality.type';
 
+/*
+  The next action is intentionally excluded.
+  It is managed by its dedicated workflow.
+*/
 export interface UpdateOpportunityCommand {
   id: string;
 
@@ -41,9 +45,4 @@ export interface UpdateOpportunityCommand {
   modality?: WorkModality;
 
   location?: string;
-
-  /*
-    The next action is intentionally excluded.
-    It is managed by its dedicated workflow.
-  */
 }

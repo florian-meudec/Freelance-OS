@@ -65,13 +65,17 @@
               <button
                 type="button"
                 class="action-button action-button-secondary"
-                (click)="cancelNoteDelete()"
+                (click)="cancelNoteEdit()"
               >
                 Annuler
               </button>
             </div>
 
             @if (deletingNoteId() === note.id) {
+              <!--
+                Destructive actions require
+                an explicit confirmation.
+              -->
               <div class="delete-confirmation">
                 <p>Supprimer définitivement cette note ?</p>
 
@@ -113,18 +117,12 @@
             aria-label="Modifier la note"
           >
             <div class="note-header">
-              <strong>
-                {{ note.title }}
-              </strong>
+              <strong>{{ note.title }}</strong>
 
-              <span>
-                {{ note.createdAt | dateFormat: 'datetime' }}
-              </span>
+              <span>{{ note.createdAt | dateFormat: 'datetime' }}</span>
             </div>
 
-            <p>
-              {{ note.content }}
-            </p>
+            <p>{{ note.content }}</p>
           </button>
         }
       }

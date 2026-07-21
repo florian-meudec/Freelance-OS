@@ -47,6 +47,10 @@
   </button>
 </div>
 
+<!--
+  Advanced filters help narrow the
+  visible opportunities on the board.
+-->
 @if (filtersExpanded()) {
   <app-opportunity-filters
     [filters]="filters()"
@@ -68,7 +72,7 @@
           {{ column.label }}
         </h2>
 
-        <span> {{ column.visibleCount }} / {{ column.totalCount }} </span>
+        <span>{{ column.visibleCount }} / {{ column.totalCount }}</span>
       </div>
 
       <div
@@ -150,6 +154,10 @@
   </div>
 }
 
+<!--
+  Opportunity creation and edition are handled
+  through a shared modal workflow.
+-->
 @if (showOpportunityForm()) {
   <app-opportunity-form
     [opportunity]="editedOpportunity()"

@@ -28,6 +28,7 @@
 
   transition:
     transform 0.15s ease,
+    border-color 0.15s ease,
     box-shadow 0.15s ease;
 
   &:not(.cdk-drag-dragging):hover {
@@ -108,8 +109,8 @@
 }
 
 /*
-  Business information remains compact while
-  preserving quick readability.
+  Displays the key business information
+  using a compact vertical layout.
 */
 .card-content {
   display: flex;
@@ -123,6 +124,8 @@
 .card-section {
   display: flex;
   justify-content: space-between;
+
+  gap: $spacing-md;
 
   font-size: $text-md;
 }

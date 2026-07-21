@@ -1,5 +1,5 @@
 <div class="details-subsection" #container>
-  <h4>Suivi</h4>
+  <h4>Prochaine action</h4>
 
   @if (
     nextActionMode() === 'create' || nextActionMode() === 'edit' || nextActionMode() === 'mandatory'
@@ -46,9 +46,9 @@
   } @else if (nextActionMode() === 'status-change' && nextAction(); as nextAction) {
     <div class="event-form">
       <p>
-        Vous êtes sur le point de passer cette opportunité en
+        Cette opportunité possède déjà une prochaine action. Avant de la passer en
         <strong>{{ pendingStatusLabel() }}</strong
-        >. Que souhaitez-vous faire de cette prochaine action ?
+        >, indiquez ce qu'il faut faire de cette action.
       </p>
 
       <div class="next-action-card">
@@ -73,7 +73,7 @@
           class="action-button action-button-danger"
           (click)="deleteForStatusChangeAction()"
         >
-          Abandonner l'action
+          Supprimer l'action
         </button>
       </div>
 

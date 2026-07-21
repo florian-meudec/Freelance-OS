@@ -2,6 +2,10 @@
 @use '../foundations/typography' as *;
 @use '../foundations/font-weights' as *;
 
+/*
+  Link buttons provide lightweight
+  secondary actions within the UI.
+*/
 .link-button {
   padding: 0;
 

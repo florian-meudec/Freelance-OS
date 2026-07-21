@@ -2,7 +2,6 @@
   Timeline centralizes the opportunity lifecycle
   and important business interactions.
 -->
-
 <div class="details-section">
   <div class="timeline-header">
     <h3>Timeline</h3>
@@ -51,12 +50,16 @@
   }
 
   <!--
-    Inline timeline event editing stays contextual
-    while protecting unsaved modifications.
+    Events are displayed chronologically to
+    reflect the recruitment history.
   -->
   <div class="timeline">
     @for (event of sortedEvents(); track event.id) {
       @if (editingEventId() === event.id) {
+        <!--
+          Inline timeline event editing stays contextual
+          while protecting unsaved modifications.
+        -->
         <form class="event-form" [formGroup]="editionForm" (ngSubmit)="updateEvent(event.id)">
           <div class="form-field">
             <span class="form-label">Type d'évènement</span>
@@ -64,11 +67,11 @@
             <app-select-menu [options]="manualEventTypes" formControlName="type" />
           </div>
 
-          <div class="form-field">
+          <label class="form-field">
             <span class="form-label">Commentaire</span>
 
             <textarea rows="4" class="form-textarea" formControlName="comment"></textarea>
-          </div>
+          </label>
 
           <div class="form-actions">
             <button

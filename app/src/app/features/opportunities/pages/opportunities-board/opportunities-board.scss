@@ -30,6 +30,10 @@
   @include thin-scrollbar;
 }
 
+/*
+  Each column represents a workflow stage
+  with a consistent visual footprint.
+*/
 .column {
   display: flex;
   flex-direction: column;
@@ -108,10 +112,18 @@
   margin-top: $spacing-xl;
 }
 
+/*
+  Archived workflow stages remain visually
+  separated from the active pipeline.
+*/
 .archived-section {
   margin-top: $spacing-xl;
 }
 
+/*
+  Archived opportunities can be expanded
+  or collapsed independently of the board.
+*/
 .archived-title {
   margin: 0 0 $spacing-md;
 
@@ -188,6 +200,10 @@
   }
 }
 
+/*
+  Page header groups the board title,
+  tools and primary actions.
+*/
 .page-header {
   display: flex;
   justify-content: space-between;

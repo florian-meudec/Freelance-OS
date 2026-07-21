@@ -104,6 +104,10 @@ export const OPPORTUNITY_EVENT_TYPES = {
   },
 } as const;
 
+/*
+  Quick views expose the most common
+  board presets for daily workflow.
+*/
 export const OPPORTUNITY_QUICK_VIEWS = {
   TODO: {
     value: 'todo',
@@ -124,6 +128,10 @@ export const OPPORTUNITY_QUICK_VIEWS = {
 export type OpportunityQuickView =
   (typeof OPPORTUNITY_QUICK_VIEWS)[keyof typeof OPPORTUNITY_QUICK_VIEWS]['value'];
 
+/*
+  Default filters restore the board
+  to its unfiltered state.
+*/
 export const DEFAULT_OPPORTUNITY_FILTERS: OpportunityFilters = {
   modalities: [],
   seniorities: [],

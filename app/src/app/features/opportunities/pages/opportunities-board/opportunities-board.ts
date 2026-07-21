@@ -661,9 +661,9 @@ export class OpportunitiesBoard {
     search query across its main metadata.
   */
   private matchesSearch(opportunity: Opportunity): boolean {
-    const search = this.search().trim().toLowerCase();
+    const searchQuery = this.search().trim().toLowerCase();
 
-    if (!search) {
+    if (!searchQuery) {
       return true;
     }
 
@@ -685,7 +685,7 @@ export class OpportunitiesBoard {
 
     return searchableValues
       .filter((value): value is string => Boolean(value))
-      .some((value) => value.toLowerCase().includes(search));
+      .some((value) => value.toLowerCase().includes(searchQuery));
   }
 
   private matchesFilters(opportunity: Opportunity): boolean {

@@ -205,6 +205,16 @@ export class NextActionCard extends FormInteractionHandler {
   }
 
   /*
+    Close the current workflow and
+    restore its initial state.
+  */
+  close(): void {
+    this.resetForm();
+
+    this.nextActionMode.set('view');
+  }
+
+  /*
     Mandatory workflows cannot be
     dismissed until completed.
   */
@@ -216,7 +226,7 @@ export class NextActionCard extends FormInteractionHandler {
     Populate the form from the current
     next action or reset to defaults.
   */
-  private fillForm(nextAction: NextAction | null | undefined): void {
+  private resetFormWithValues(nextAction: NextAction | null | undefined): void {
     this.form.reset({
       type: nextAction?.type ?? this.manualEventTypes[0].value,
       label: nextAction?.label ?? '',
@@ -224,11 +234,8 @@ export class NextActionCard extends FormInteractionHandler {
     });
   }
 
-  /*
-    Restore the default form state.
-  */
   private resetForm(): void {
-    this.fillForm(null);
+    this.resetFormWithValues(null);
   }
 
   scrollIntoView(): void {
@@ -238,10 +245,6 @@ export class NextActionCard extends FormInteractionHandler {
     });
   }
 
-  /*
-    Focus the first editable field once
-    the form has been rendered.
-  */
   private focusForm(): void {
     queueMicrotask(() => {
       this.nextActionLabel()?.nativeElement.focus();
@@ -271,18 +274,8 @@ export class NextActionCard extends FormInteractionHandler {
 
     this.nextActionMode.set('edit');
 
-    this.fillForm(this.nextAction());
+    this.resetFormWithValues(this.nextAction());
 
     this.focusForm();
-  }
-
-  /*
-    Close the current workflow and
-    restore its initial state.
-  */
-  close(): void {
-    this.resetForm();
-
-    this.nextActionMode.set('view');
   }
 }

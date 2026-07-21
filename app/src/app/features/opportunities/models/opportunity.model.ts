@@ -67,6 +67,10 @@ export interface Opportunity {
   modality?: WorkModality;
   location?: string;
 
+  /*
+    Current follow-up driving the next
+    interaction with the opportunity.
+  */
   nextAction: NextAction | null;
 
   /*

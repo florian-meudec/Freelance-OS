@@ -1,10 +1,15 @@
 @use '../foundations/spacing' as *;
 @use '../foundations/typography' as *;
 
+/*
+  Shared checkbox and radio controls
+  keep lightweight form interactions consistent.
+*/
 .checkbox,
 .radio {
   display: flex;
   align-items: center;
+
   gap: $spacing-xs;
 
   cursor: pointer;

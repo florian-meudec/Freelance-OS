@@ -24,10 +24,16 @@ export class DiscardChangesModal {
   */
   readonly confirmed = output<void>();
 
+  /*
+    Keep the current edition workflow active.
+  */
   cancel(): void {
     this.cancelled.emit();
   }
 
+  /*
+    Confirm discarding all pending changes.
+  */
   confirm(): void {
     this.confirmed.emit();
   }

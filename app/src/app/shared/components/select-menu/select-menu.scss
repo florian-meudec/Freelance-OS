@@ -24,6 +24,7 @@
 */
 .status-dropdown {
   position: absolute;
+
   top: calc(100% + $spacing-xs);
   left: 0;
 
@@ -70,6 +71,10 @@
   &:hover {
     background: $surface-secondary;
   }
+
+  &:disabled {
+    opacity: 1;
+  }
 }
 
 /*
@@ -88,10 +93,6 @@
   &:hover {
     background: $surface-secondary;
   }
-}
-
-.status-option:disabled {
-  opacity: 1;
 }
 
 .action-button {

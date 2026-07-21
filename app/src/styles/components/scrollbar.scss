@@ -1,6 +1,10 @@
 @use '../foundations/colors' as *;
 @use '../foundations/radius' as *;
 
+/*
+  Apply a lightweight scrollbar
+  shared across scrollable panels.
+*/
 @mixin thin-scrollbar {
   &::-webkit-scrollbar {
     width: 10px;

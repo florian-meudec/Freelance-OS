@@ -12,6 +12,7 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
+
   gap: $spacing-xs;
 
   width: auto;
@@ -30,6 +31,7 @@
   font: inherit;
   font-size: $text-sm;
   font-weight: $font-weight-medium;
+
   text-align: center;
   white-space: nowrap;
 
@@ -136,11 +138,15 @@
   }
 }
 
+/*
+  Icon buttons preserve square
+  interactive hit areas.
+*/
 .action-button-icon {
-  padding: $spacing-xs;
-
-  min-width: 36px;
   width: 36px;
+  min-width: 36px;
 
   aspect-ratio: 1;
+
+  padding: $spacing-xs;
 }

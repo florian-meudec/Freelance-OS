@@ -21,7 +21,7 @@
   flex-direction: column;
   gap: $spacing-xl;
 
-  width: 420px;
+  width: 440px;
   height: 100vh;
 
   overflow-y: auto;
@@ -38,7 +38,7 @@
 
   z-index: 100;
 
-  animation: slide-in 0.2s ease-out;
+  animation: slide-in 0.25s ease-out;
 
   @include thin-scrollbar;
 }
@@ -195,6 +195,7 @@
 
   padding: $spacing-lg;
 
+  border: 1px solid $border-color;
   border-radius: $radius-lg;
 
   background: $surface-secondary;
@@ -246,6 +247,8 @@
   border-radius: 999px;
 
   background: $surface-secondary;
+
+  white-space: nowrap;
 
   font-size: $text-sm;
   font-weight: $font-weight-medium;

@@ -47,10 +47,9 @@
   readability inside dense business forms.
 */
 .form-label {
-  font-size: $text-sm;
-
   color: $text-secondary;
 
+  font-size: $text-sm;
   font-weight: 500;
 }
 
@@ -71,9 +70,9 @@
   without competing with field labels.
 */
 .form-help {
-  font-size: $text-xs;
-
   color: $text-secondary;
+
+  font-size: $text-xs;
 }
 
 /*
@@ -81,10 +80,9 @@
   remaining clearly distinguishable.
 */
 .form-error {
-  font-size: $text-xs;
-
   color: $danger;
 
+  font-size: $text-xs;
   font-weight: 500;
 }
 
@@ -134,9 +132,9 @@
   p {
     margin: 0;
 
-    font-size: $text-sm;
-
     color: $text-secondary;
+
+    font-size: $text-sm;
   }
 }
 
@@ -160,6 +158,10 @@
   transform: none;
 }
 
+/*
+  Required labels display a visual
+  marker after their text.
+*/
 .form-label-required::after {
   content: ' *';
 

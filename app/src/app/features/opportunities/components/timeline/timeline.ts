@@ -1,18 +1,17 @@
 import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { DateFormatPipe } from '../../../../shared/pipes/date-format-pipe';
+import { DiscardChangesModal } from '../../../../shared/components/discard-changes-modal/discard-changes-modal';
 import { SelectMenu } from '../../../../shared/components/select-menu/select-menu';
-
-import { OpportunityEvent } from '../../models/opportunity-event.model';
-import { OpportunityEventType } from '../../types/opportunity.type';
+import { DateFormatPipe } from '../../../../shared/pipes/date-format-pipe';
+import { FormInteractionHandler } from '../../../../shared/utils/form-interaction-handler';
 
 import {
   OPPORTUNITY_EVENT_TYPES,
   OPPORTUNITY_STATUSES,
 } from '../../constants/opportunity.constants';
-import { FormInteractionHandler } from '../../../../shared/utils/form-interaction-handler';
-import { DiscardChangesModal } from '../../../../shared/components/discard-changes-modal/discard-changes-modal';
+import { OpportunityEvent } from '../../models/opportunity-event.model';
+import { OpportunityEventType } from '../../types/opportunity.type';
 
 @Component({
   selector: 'app-timeline',
@@ -216,6 +215,10 @@ export class Timeline extends FormInteractionHandler {
     this.closeEditionForm();
   }
 
+  /*
+    Only manually created events may
+    be edited from the timeline.
+  */
   isEditableEvent(event: OpportunityEvent): boolean {
     return this.manualEventTypes.some((eventType) => eventType.value === event.type);
   }

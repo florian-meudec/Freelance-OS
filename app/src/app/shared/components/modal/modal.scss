@@ -18,21 +18,25 @@
   z-index: 100;
 }
 
+/*
+  Shared modal container supporting
+  the available size presets.
+*/
 .modal-container {
   position: fixed;
 
   top: 50%;
   left: 50%;
 
-  transform: translate(-50%, -50%);
-
   display: flex;
   flex-direction: column;
 
-  max-height: calc(100vh - #{$spacing-xl * 2});
+  width: 100%;
 
   min-height: 0;
+  max-height: calc(100vh - #{$spacing-xl * 2});
 
+  border: 1px solid $border-color;
   border-radius: $radius-lg;
 
   background: $surface-primary;
@@ -43,11 +47,9 @@
 
   z-index: 101;
 
+  transform: translate(-50%, -50%);
+
   animation: modal-in 0.18s ease-out;
-
-  width: 100%;
-
-  border: 1px solid $border-color;
 
   &.modal-small {
     max-width: 32rem;

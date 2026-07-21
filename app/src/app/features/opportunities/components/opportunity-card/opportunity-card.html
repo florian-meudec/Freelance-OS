@@ -40,12 +40,12 @@
     </div>
 
     <!--
-      The follow-up section highlights the
-      current action and its urgency.
+      Displays the current follow-up or an
+      empty state when no action is planned.
     -->
     <div class="card-follow-up">
       @if (opportunity().nextAction; as nextAction) {
-        <strong [title]="nextAction.label">
+        <strong [title]="'Prochaine action : ' + nextAction.label">
           {{ nextAction.label }}
         </strong>
 
