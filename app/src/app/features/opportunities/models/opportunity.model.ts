@@ -62,7 +62,7 @@ export interface Opportunity {
   status: OpportunityStatus;
 
   tjm?: number;
-  workload?: number;
+  daysPerWeek?: number;
 
   modality?: WorkModality;
   location?: string;

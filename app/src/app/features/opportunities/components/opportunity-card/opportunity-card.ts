@@ -5,7 +5,7 @@ import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 
 import { OpportunityModalityPipe } from '../../../../shared/pipes/opportunity-modality-pipe';
 import { TjmPipe } from '../../../../shared/pipes/tjm-pipe';
-import { WorkloadPipe } from '../../../../shared/pipes/workload-pipe';
+import { DaysPerWeekPipe } from '../../../../shared/pipes/days-per-week-pipe';
 import { calculateOpportunityUrgency } from '../../utils/opportunity-urgency.util';
 
 /*
@@ -15,7 +15,7 @@ import { calculateOpportunityUrgency } from '../../utils/opportunity-urgency.uti
 @Component({
   selector: 'app-opportunity-card',
   standalone: true,
-  imports: [CdkDrag, CdkDragHandle, OpportunityModalityPipe, TjmPipe, WorkloadPipe],
+  imports: [CdkDrag, CdkDragHandle, OpportunityModalityPipe, TjmPipe, DaysPerWeekPipe],
   templateUrl: './opportunity-card.html',
   styleUrl: './opportunity-card.scss',
 })

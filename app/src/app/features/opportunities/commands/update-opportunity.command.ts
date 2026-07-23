@@ -40,7 +40,7 @@ export interface UpdateOpportunityCommand {
 
   tjm?: number;
 
-  workload?: number;
+  daysPerWeek?: number;
 
   modality?: WorkModality;
 

@@ -56,7 +56,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     status: OPPORTUNITY_STATUSES.CONTACTED.value,
 
     tjm: 750,
-    workload: 5,
+    daysPerWeek: 5,
 
     modality: WORK_MODALITIES.HYBRID.value,
     location: 'Zürich',
@@ -130,7 +130,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     status: OPPORTUNITY_STATUSES.CONTACTED.value,
 
     tjm: 820,
-    workload: 4,
+    daysPerWeek: 4,
 
     modality: WORK_MODALITIES.REMOTE.value,
     location: 'Berne',
@@ -183,7 +183,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     status: OPPORTUNITY_STATUSES.INTERVIEW.value,
 
     tjm: 850,
-    workload: 4,
+    daysPerWeek: 4,
 
     modality: WORK_MODALITIES.REMOTE.value,
     location: 'Paris',
@@ -257,7 +257,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     status: OPPORTUNITY_STATUSES.PROPOSAL.value,
 
     tjm: 780,
-    workload: 5,
+    daysPerWeek: 5,
 
     modality: WORK_MODALITIES.HYBRID.value,
     location: 'Lyon',
@@ -330,7 +330,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     status: OPPORTUNITY_STATUSES.NEGOTIATION.value,
 
     tjm: 850,
-    workload: 5,
+    daysPerWeek: 5,
 
     modality: WORK_MODALITIES.HYBRID.value,
     location: 'Stockholm',
@@ -403,7 +403,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     status: OPPORTUNITY_STATUSES.CONTACTED.value,
 
     tjm: 900,
-    workload: 5,
+    daysPerWeek: 5,
 
     modality: WORK_MODALITIES.REMOTE.value,
     location: 'Paris',
@@ -455,7 +455,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     status: OPPORTUNITY_STATUSES.CONTACTED.value,
 
     tjm: 820,
-    workload: 5,
+    daysPerWeek: 5,
 
     modality: WORK_MODALITIES.HYBRID.value,
     location: 'Paris',
@@ -508,7 +508,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     status: OPPORTUNITY_STATUSES.WON.value,
 
     tjm: 900,
-    workload: 5,
+    daysPerWeek: 5,
 
     modality: WORK_MODALITIES.REMOTE.value,
     location: 'Paris',
@@ -577,7 +577,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
     status: OPPORTUNITY_STATUSES.LOST.value,
 
     tjm: 820,
-    workload: 5,
+    daysPerWeek: 5,
 
     modality: WORK_MODALITIES.HYBRID.value,
     location: 'Paris',

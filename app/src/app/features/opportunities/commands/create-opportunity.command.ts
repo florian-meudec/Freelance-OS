@@ -36,7 +36,7 @@ export interface CreateOpportunityCommand {
 
   tjm?: number;
 
-  workload?: number;
+  daysPerWeek?: number;
 
   modality?: WorkModality;
 

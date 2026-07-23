@@ -19,7 +19,7 @@ import { FallbackPipe } from '../../../../shared/pipes/fallback-pipe';
 import { OpportunityModalityPipe } from '../../../../shared/pipes/opportunity-modality-pipe';
 import { OpportunitySeniorityPipe } from '../../../../shared/pipes/opportunity-seniority-pipe';
 import { TjmPipe } from '../../../../shared/pipes/tjm-pipe';
-import { WorkloadPipe } from '../../../../shared/pipes/workload-pipe';
+import { DaysPerWeekPipe } from '../../../../shared/pipes/days-per-week-pipe';
 
 @Component({
   selector: 'app-opportunity-details-panel',
@@ -39,7 +39,7 @@ import { WorkloadPipe } from '../../../../shared/pipes/workload-pipe';
     SelectMenu,
     Timeline,
     TjmPipe,
-    WorkloadPipe,
+    DaysPerWeekPipe,
   ],
 
   templateUrl: './opportunity-details-panel.html',

@@ -99,7 +99,7 @@ export class OpportunityForm extends FormInteractionHandler {
     description: [''],
 
     tjm: [undefined as number | undefined],
-    workload: [undefined as number | undefined],
+    daysPerWeek: [undefined as number | undefined],
     modality: this.formBuilder.control<WorkModality | ''>(''),
     location: [''],
 
@@ -233,7 +233,7 @@ export class OpportunityForm extends FormInteractionHandler {
       description: value.description || undefined,
 
       tjm: value.tjm,
-      workload: value.workload,
+      daysPerWeek: value.daysPerWeek,
 
       modality: value.modality || undefined,
       location: value.location || undefined,
@@ -284,7 +284,7 @@ export class OpportunityForm extends FormInteractionHandler {
         description: opportunity.description ?? '',
 
         tjm: opportunity.tjm,
-        workload: opportunity.workload,
+        daysPerWeek: opportunity.daysPerWeek,
 
         modality: opportunity.modality ?? '',
         location: opportunity.location ?? '',

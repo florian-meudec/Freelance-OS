@@ -1,12 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'workload',
+  name: 'daysPerWeek',
   standalone: true,
 })
-export class WorkloadPipe implements PipeTransform {
+export class DaysPerWeekPipe implements PipeTransform {
   /*
-    Formats weekly workload values using
+    Formats weekly daysPerWeek values using
     the application's freelance business terminology.
   */
   transform(value?: number): string {

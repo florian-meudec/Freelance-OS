@@ -40,7 +40,7 @@ export class OpportunityMapper {
       status: OPPORTUNITY_STATUSES.LEAD.value,
 
       tjm: command.tjm,
-      workload: command.workload,
+      daysPerWeek: command.daysPerWeek,
 
       modality: command.modality,
       location: command.location,
@@ -81,7 +81,7 @@ export class OpportunityMapper {
       durationUnit: command.durationUnit,
 
       tjm: command.tjm,
-      workload: command.workload,
+      daysPerWeek: command.daysPerWeek,
 
       modality: command.modality,
       location: command.location,
