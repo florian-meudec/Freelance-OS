@@ -230,7 +230,7 @@ export class NextActionCard extends FormInteractionHandler {
     this.form.reset({
       type: nextAction?.type ?? this.manualEventTypes[0].value,
       label: nextAction?.label ?? '',
-      dueDate: nextAction?.dueDate ?? '',
+      dueDate: nextAction?.dueDate ?? this.getTomorrow(),
     });
   }
 
@@ -277,5 +277,17 @@ export class NextActionCard extends FormInteractionHandler {
     this.resetFormWithValues(this.nextAction());
 
     this.focusForm();
+  }
+
+  /*
+    Generate tomorrow's date
+    for next action defaults.
+  */
+  private getTomorrow(): string {
+    const tomorrow = new Date();
+
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    return tomorrow.toISOString().split('T')[0];
   }
 }

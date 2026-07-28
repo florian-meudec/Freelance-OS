@@ -535,7 +535,9 @@ export class OpportunitiesBoard {
   }
 
   completeNextAction(): void {
-    if (!this.selectedOpportunity()?.nextAction) {
+    const nextAction = this.selectedOpportunity()?.nextAction;
+
+    if (!nextAction) {
       return;
     }
 
@@ -543,6 +545,19 @@ export class OpportunitiesBoard {
       ...opportunity,
 
       nextAction: null,
+
+      events: [
+        ...opportunity.events,
+        {
+          id: crypto.randomUUID(),
+
+          type: nextAction.type,
+
+          occurredAt: new Date().toISOString().split('T')[0],
+
+          comment: nextAction.label,
+        },
+      ],
     }));
   }
 
