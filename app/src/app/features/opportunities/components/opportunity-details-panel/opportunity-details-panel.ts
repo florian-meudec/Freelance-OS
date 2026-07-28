@@ -67,12 +67,14 @@ export class OpportunityDetailsPanel {
 
   readonly eventAdd = output<{
     type: OpportunityEventType;
+    occurredAt: string;
     comment?: string;
   }>();
 
   readonly eventUpdate = output<{
     eventId: string;
     type: OpportunityEventType;
+    occurredAt: string;
     comment?: string;
   }>();
 

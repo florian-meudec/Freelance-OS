@@ -13,7 +13,7 @@ export class OpportunityMapper {
     initial workflow state and history.
   */
   static toOpportunity(command: CreateOpportunityCommand): Opportunity {
-    const createdAt = new Date().toISOString();
+    const occuredAt = new Date().toISOString();
 
     return {
       id: crypto.randomUUID(),
@@ -47,7 +47,7 @@ export class OpportunityMapper {
 
       nextAction: this.createNextAction(command),
 
-      events: [this.createCreationEvent(createdAt)],
+      events: [this.createCreationEvent(occuredAt)],
 
       notes: [],
     };
@@ -104,13 +104,13 @@ export class OpportunityMapper {
     Every opportunity starts with
     a creation event in its timeline.
   */
-  private static createCreationEvent(createdAt: string): OpportunityEvent {
+  private static createCreationEvent(occuredAt: string): OpportunityEvent {
     return {
       id: crypto.randomUUID(),
 
       type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
 
-      createdAt,
+      occurredAt: occuredAt,
 
       status: OPPORTUNITY_STATUSES.LEAD.value,
     };

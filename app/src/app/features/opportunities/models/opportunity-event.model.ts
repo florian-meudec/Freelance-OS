@@ -15,7 +15,7 @@ export interface OpportunityEvent {
   */
   status?: OpportunityStatus;
 
-  createdAt: string;
+  occurredAt: string;
 
   comment?: string;
 }

@@ -402,7 +402,7 @@ export class OpportunitiesBoard {
 
               status,
 
-              createdAt: new Date().toISOString(),
+              occurredAt: new Date().toISOString(),
             },
           ],
         };
@@ -483,7 +483,11 @@ export class OpportunitiesBoard {
     Timeline events are added centrally so
     opportunity history remains synchronized.
   */
-  onOpportunityEventAdd(event: { type: OpportunityEventType; comment?: string }): void {
+  onOpportunityEventAdd(event: {
+    type: OpportunityEventType;
+    occurredAt: string;
+    comment?: string;
+  }): void {
     this.updateSelectedOpportunity((opportunity) => ({
       ...opportunity,
 
@@ -492,7 +496,7 @@ export class OpportunitiesBoard {
 
         {
           id: crypto.randomUUID(),
-          createdAt: new Date().toISOString(),
+          occurredAt: event.occurredAt,
           type: event.type,
           comment: event.comment,
         },
@@ -503,6 +507,7 @@ export class OpportunitiesBoard {
   onOpportunityEventUpdate(event: {
     eventId: string;
     type: OpportunityEventType;
+    occurredAt: string;
     comment?: string;
   }): void {
     this.updateSelectedOpportunity((opportunity) => ({
@@ -512,6 +517,7 @@ export class OpportunitiesBoard {
         currentEvent.id === event.eventId
           ? {
               ...currentEvent,
+              occurredAt: event.occurredAt,
               type: event.type,
               comment: event.comment,
             }

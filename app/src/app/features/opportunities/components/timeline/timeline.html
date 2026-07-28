@@ -24,6 +24,12 @@
       </div>
 
       <label class="form-field">
+        <span class="form-label">Date de l'évènement</span>
+
+        <input type="date" class="form-input" formControlName="occurredAt" />
+      </label>
+
+      <label class="form-field">
         <span class="form-label">Commentaire</span>
 
         <textarea rows="4" class="form-textarea" formControlName="comment"></textarea>
@@ -66,6 +72,12 @@
 
             <app-select-menu [options]="manualEventTypes" formControlName="type" />
           </div>
+
+          <label class="form-field">
+            <span class="form-label">Date de l'évènement</span>
+
+            <input type="date" class="form-input" formControlName="occurredAt" />
+          </label>
 
           <label class="form-field">
             <span class="form-label">Commentaire</span>
@@ -137,7 +149,7 @@
                 </strong>
 
                 <span>
-                  {{ event.createdAt | dateFormat: 'date' }}
+                  {{ event.occurredAt | dateFormat: 'date' }}
                 </span>
               </div>
 
@@ -159,7 +171,7 @@
                 </strong>
 
                 <span>
-                  {{ event.createdAt | dateFormat: 'date' }}
+                  {{ event.occurredAt | dateFormat: 'date' }}
                 </span>
               </div>
 

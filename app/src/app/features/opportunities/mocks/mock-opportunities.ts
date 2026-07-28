@@ -73,7 +73,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
         type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
 
-        createdAt: addHours(-48),
+        occurredAt: addHours(-48),
       },
 
       {
@@ -83,7 +83,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
         status: OPPORTUNITY_STATUSES.CONTACTED.value,
 
-        createdAt: addHours(-24),
+        occurredAt: addHours(-24),
       },
     ],
 
@@ -147,7 +147,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
         type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
 
-        createdAt: addHours(-72),
+        occurredAt: addHours(-72),
       },
     ],
 
@@ -200,7 +200,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
         type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
 
-        createdAt: addHours(-96),
+        occurredAt: addHours(-96),
       },
 
       {
@@ -210,7 +210,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
         status: OPPORTUNITY_STATUSES.INTERVIEW.value,
 
-        createdAt: addHours(-36),
+        occurredAt: addHours(-36),
       },
     ],
 
@@ -274,7 +274,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
         type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
 
-        createdAt: addHours(-120),
+        occurredAt: addHours(-120),
       },
 
       {
@@ -284,7 +284,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
         status: OPPORTUNITY_STATUSES.PROPOSAL.value,
 
-        createdAt: addHours(-60),
+        occurredAt: addHours(-60),
       },
     ],
 
@@ -347,7 +347,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
         type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
 
-        createdAt: addHours(-144),
+        occurredAt: addHours(-144),
       },
 
       {
@@ -357,7 +357,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
         status: OPPORTUNITY_STATUSES.NEGOTIATION.value,
 
-        createdAt: addHours(-72),
+        occurredAt: addHours(-72),
       },
     ],
 
@@ -420,7 +420,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
         type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
 
-        createdAt: addHours(-168),
+        occurredAt: addHours(-168),
       },
     ],
 
@@ -472,7 +472,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
         type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
 
-        createdAt: addHours(-192),
+        occurredAt: addHours(-192),
       },
     ],
 
@@ -521,7 +521,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
         type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
 
-        createdAt: addHours(-216),
+        occurredAt: addHours(-216),
       },
 
       {
@@ -531,7 +531,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
         status: OPPORTUNITY_STATUSES.WON.value,
 
-        createdAt: addHours(-24),
+        occurredAt: addHours(-24),
       },
     ],
 
@@ -590,7 +590,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
         type: OPPORTUNITY_EVENT_TYPES.CREATED.value,
 
-        createdAt: addHours(-240),
+        occurredAt: addHours(-240),
       },
 
       {
@@ -600,7 +600,7 @@ export const MOCK_OPPORTUNITIES: Opportunity[] = [
 
         status: OPPORTUNITY_STATUSES.LOST.value,
 
-        createdAt: addHours(-48),
+        occurredAt: addHours(-48),
       },
     ],
 

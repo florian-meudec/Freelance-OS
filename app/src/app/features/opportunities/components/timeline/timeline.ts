@@ -29,12 +29,14 @@ export class Timeline extends FormInteractionHandler {
 
   readonly add = output<{
     type: OpportunityEvent['type'];
+    occurredAt: string;
     comment?: string;
   }>();
 
   readonly update = output<{
     eventId: string;
     type: OpportunityEvent['type'];
+    occurredAt: string;
     comment?: string;
   }>();
 
@@ -58,6 +60,8 @@ export class Timeline extends FormInteractionHandler {
       Validators.required,
     ),
 
+    occurredAt: this.formBuilder.control(this.getCurrentDate(), Validators.required),
+
     comment: [''],
   });
 
@@ -66,6 +70,8 @@ export class Timeline extends FormInteractionHandler {
       this.manualEventTypes[0].value,
       Validators.required,
     ),
+
+    occurredAt: this.formBuilder.control(this.getCurrentDate(), Validators.required),
 
     comment: [''],
   });
@@ -76,7 +82,7 @@ export class Timeline extends FormInteractionHandler {
   */
   readonly sortedEvents = computed(() =>
     [...this.events()].sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      (a, b) => new Date(b.occurredAt).getTime() - new Date(a.occurredAt).getTime(),
     ),
   );
 
@@ -124,10 +130,11 @@ export class Timeline extends FormInteractionHandler {
       return;
     }
 
-    const { type, comment } = this.creationForm.getRawValue();
+    const { type, occurredAt, comment } = this.creationForm.getRawValue();
 
     this.add.emit({
       type,
+      occurredAt,
       comment: comment || undefined,
     });
 
@@ -176,11 +183,12 @@ export class Timeline extends FormInteractionHandler {
       return;
     }
 
-    const { type, comment } = this.editionForm.getRawValue();
+    const { type, occurredAt, comment } = this.editionForm.getRawValue();
 
     this.update.emit({
       eventId,
       type,
+      occurredAt,
       comment: comment || undefined,
     });
 
@@ -253,6 +261,7 @@ export class Timeline extends FormInteractionHandler {
 
     this.creationForm.reset({
       type: this.manualEventTypes[0].value,
+      occurredAt: this.getCurrentDate(),
       comment: '',
     });
 
@@ -268,6 +277,7 @@ export class Timeline extends FormInteractionHandler {
 
     this.creationForm.reset({
       type: this.manualEventTypes[0].value,
+      occurredAt: this.getCurrentDate(),
       comment: '',
     });
 
@@ -287,6 +297,7 @@ export class Timeline extends FormInteractionHandler {
 
     this.editionForm.reset({
       type: event.type,
+      occurredAt: event.occurredAt,
       comment: event.comment ?? '',
     });
   }
@@ -302,7 +313,16 @@ export class Timeline extends FormInteractionHandler {
 
     this.editionForm.reset({
       type: this.manualEventTypes[0].value,
+      occurredAt: this.getCurrentDate(),
       comment: '',
     });
+  }
+
+  /*
+    Generate today's date
+    for date form controls.
+  */
+  private getCurrentDate(): string {
+    return new Date().toISOString().split('T')[0];
   }
 }
