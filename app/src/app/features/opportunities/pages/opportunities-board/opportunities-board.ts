@@ -1,4 +1,4 @@
-import { Component, computed, effect, signal, viewChild } from '@angular/core';
+import { Component, computed, effect, inject, signal, viewChild } from '@angular/core';
 import { CdkDragDrop, CdkDropList, CdkDropListGroup } from '@angular/cdk/drag-drop';
 
 import { Opportunity } from '../../models/opportunity.model';
@@ -12,13 +12,13 @@ import {
   OpportunityQuickView,
 } from '../../constants/opportunity.constants';
 
-import { MOCK_OPPORTUNITIES } from '../../mocks/mock-opportunities';
 import { OpportunityEventType, OpportunityStatus } from '../../types/opportunity.type';
 import { NextAction } from '../../models/next-action.model';
 import { OpportunityFiltersComponent } from '../../components/opportunity-filters/opportunity-filters';
 import { OpportunityForm } from '../../components/opportunity-form/opportunity-form';
 import { OpportunityQuickViews } from '../../components/opportunity-quick-views/opportunity-quick-views';
 import { SearchInput } from '../../../../shared/components/search-input/search-input';
+import { OpportunityApiService } from '../../api/opportunity-api.service';
 
 /*
   Columns act as drop zones for kanban interactions.
@@ -40,11 +40,13 @@ import { SearchInput } from '../../../../shared/components/search-input/search-i
   styleUrl: './opportunities-board.scss',
 })
 export class OpportunitiesBoard {
+  private readonly opportunityApi = inject(OpportunityApiService);
+
   /*
     Opportunities are stored in a signal
     so the board can react to drag & drop updates.
   */
-  readonly opportunities = signal([...MOCK_OPPORTUNITIES]);
+  readonly opportunities = signal<Opportunity[]>([]);
 
   /*
     Statuses are sorted once to keep the kanban
@@ -189,6 +191,10 @@ export class OpportunitiesBoard {
   });
 
   constructor() {
+    this.opportunityApi.getAll().subscribe((opportunities) => {
+      this.opportunities.set(opportunities);
+    });
+
     /*
       Lock body scroll and register ESC closing
       while the details panel is opened.
