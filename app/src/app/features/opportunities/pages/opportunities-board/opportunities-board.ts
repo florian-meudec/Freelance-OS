@@ -19,6 +19,7 @@ import { OpportunityForm } from '../../components/opportunity-form/opportunity-f
 import { OpportunityQuickViews } from '../../components/opportunity-quick-views/opportunity-quick-views';
 import { SearchInput } from '../../../../shared/components/search-input/search-input';
 import { OpportunityApiService } from '../../api/opportunity-api.service';
+import { CreateOpportunityCommand } from '../../commands/create-opportunity.command';
 
 /*
   Columns act as drop zones for kanban interactions.
@@ -635,10 +636,14 @@ export class OpportunitiesBoard {
     Add the newly created opportunity
     to the active pipeline.
   */
-  createOpportunity(opportunity: Opportunity): void {
-    this.opportunities.update((opportunities) => [opportunity, ...opportunities]);
+  createOpportunity(command: CreateOpportunityCommand): void {
+    this.opportunityApi.create(command).subscribe({
+      next: (opportunity) => {
+        this.opportunities.update((opportunities) => [opportunity, ...opportunities]);
 
-    this.closeOpportunityForm();
+        this.closeOpportunityForm();
+      },
+    });
   }
 
   updateOpportunity(updated: Opportunity): void {

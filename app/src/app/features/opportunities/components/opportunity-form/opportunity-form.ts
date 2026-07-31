@@ -55,7 +55,7 @@ export class OpportunityForm extends FormInteractionHandler {
 
   readonly closed = output<void>();
 
-  readonly created = output<Opportunity>();
+  readonly created = output<CreateOpportunityCommand>();
 
   readonly updated = output<Opportunity>();
 
@@ -143,11 +143,7 @@ export class OpportunityForm extends FormInteractionHandler {
     Handle opportunity creation workflow.
   */
   private createOpportunity(): void {
-    const command = this.createCommand();
-
-    const opportunity = OpportunityMapperMock.toOpportunity(command);
-
-    this.created.emit(opportunity);
+    this.created.emit(this.createCommand());
   }
 
   /*
