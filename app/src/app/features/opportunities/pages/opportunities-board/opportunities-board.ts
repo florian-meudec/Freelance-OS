@@ -6,7 +6,6 @@ import { OpportunityCard } from '../../components/opportunity-card/opportunity-c
 import { OpportunityDetailsPanel } from '../../components/opportunity-details-panel/opportunity-details-panel';
 import {
   DEFAULT_OPPORTUNITY_FILTERS,
-  OPPORTUNITY_EVENT_TYPES,
   OPPORTUNITY_QUICK_VIEWS,
   OPPORTUNITY_STATUSES,
   OpportunityQuickView,
@@ -391,49 +390,11 @@ export class OpportunitiesBoard {
     interactions share identical business behavior.
   */
   private updateOpportunityStatus(opportunityId: string, status: OpportunityStatus): void {
-    this.opportunities.update((opportunities) =>
-      opportunities.map((opportunity) => {
-        if (opportunity.id !== opportunityId) {
-          return opportunity;
-        }
-
-        return {
-          ...opportunity,
-
-          status,
-
-          events: [
-            ...opportunity.events,
-
-            {
-              id: crypto.randomUUID(),
-
-              type: OPPORTUNITY_EVENT_TYPES.STATUS_CHANGED.value,
-
-              status,
-
-              occurredAt: new Date().toISOString(),
-            },
-          ],
-        };
-      }),
-    );
-
-    /*
-      Keep the details panel synchronized
-      with the updated workflow state.
-    */
-    const updatedOpportunity = this.opportunities().find(
-      (opportunity) => opportunity.id === opportunityId,
-    );
-
-    if (!updatedOpportunity) {
-      return;
-    }
-
-    if (this.selectedOpportunity()?.id === updatedOpportunity.id) {
-      this.selectedOpportunity.set(updatedOpportunity);
-    }
+    this.opportunityApi.updateStatus(opportunityId, status).subscribe({
+      next: (updated) => {
+        this.replaceOpportunity(updated);
+      },
+    });
   }
 
   /*
