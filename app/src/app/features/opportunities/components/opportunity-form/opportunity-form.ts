@@ -18,7 +18,7 @@ import { OPPORTUNITY_EVENT_TYPES } from '../../constants/opportunity.constants';
 
 import { CreateOpportunityCommand } from '../../commands/create-opportunity.command';
 import { UpdateOpportunityCommand } from '../../commands/update-opportunity.command';
-import { OpportunityMapper } from '../../mappers/opportunity.mapper';
+import { OpportunityMapperMock } from '../../mappers/opportunity.mapper.mock';
 import { Opportunity } from '../../models/opportunity.model';
 import { OpportunityEventType } from '../../types/opportunity.type';
 
@@ -145,7 +145,7 @@ export class OpportunityForm extends FormInteractionHandler {
   private createOpportunity(): void {
     const command = this.createCommand();
 
-    const opportunity = OpportunityMapper.toOpportunity(command);
+    const opportunity = OpportunityMapperMock.toOpportunity(command);
 
     this.created.emit(opportunity);
   }
@@ -156,7 +156,7 @@ export class OpportunityForm extends FormInteractionHandler {
   private updateOpportunity(): void {
     const command = this.updateCommand();
 
-    const opportunity = OpportunityMapper.update(this.opportunity()!, command);
+    const opportunity = OpportunityMapperMock.update(this.opportunity()!, command);
 
     this.updated.emit(opportunity);
   }

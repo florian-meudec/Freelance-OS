@@ -23,4 +23,10 @@ export class OpportunityApiService {
       .get<OpportunityResponse[]>(this.apiUrl)
       .pipe(map((responses) => this.mapper.toModelList(responses)));
   }
+
+  getById(id: string): Observable<Opportunity> {
+    return this.http
+      .get<OpportunityResponse>(`${this.apiUrl}/${id}`)
+      .pipe(map((response) => this.mapper.toModel(response)));
+  }
 }

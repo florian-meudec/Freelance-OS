@@ -7,7 +7,7 @@ import { OpportunityEvent } from '../models/opportunity-event.model';
 
 import { OPPORTUNITY_EVENT_TYPES, OPPORTUNITY_STATUSES } from '../constants/opportunity.constants';
 
-export class OpportunityMapper {
+export class OpportunityMapperMock {
   /*
     Build a new opportunity with its
     initial workflow state and history.

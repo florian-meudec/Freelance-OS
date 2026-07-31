@@ -239,7 +239,9 @@ export class OpportunitiesBoard {
   }
 
   selectOpportunity(opportunity: Opportunity): void {
-    this.selectedOpportunity.set(opportunity);
+    this.opportunityApi.getById(opportunity.id).subscribe((opportunity) => {
+      this.selectedOpportunity.set(opportunity);
+    });
   }
 
   closeDetailsPanel(): void {
