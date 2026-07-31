@@ -7,8 +7,9 @@ import { Opportunity } from '../models/opportunity.model';
 import { OpportunityResponse } from '../dto/response/opportunity.response';
 import { OpportunityMapper } from './opportunity.mapper';
 import { API_URL } from '../../../core/config/api.constants';
-import { OpportunityRequestMapper } from '../mappers/OpportunityRequestMapper';
 import { CreateOpportunityCommand } from '../commands/create-opportunity.command';
+import { UpdateOpportunityCommand } from '../commands/update-opportunity.command';
+import { OpportunityRequestMapper } from '../mappers/opportunity-request-mapper';
 
 @Injectable({
   providedIn: 'root',
@@ -38,6 +39,14 @@ export class OpportunityApiService {
 
     return this.http
       .post<OpportunityResponse>(this.apiUrl, request)
+      .pipe(map((response) => this.mapper.toModel(response)));
+  }
+
+  update(id: string, command: UpdateOpportunityCommand): Observable<Opportunity> {
+    const request = this.requestMapper.toUpdateRequest(command);
+
+    return this.http
+      .put<OpportunityResponse>(`${this.apiUrl}/${id}`, request)
       .pipe(map((response) => this.mapper.toModel(response)));
   }
 }

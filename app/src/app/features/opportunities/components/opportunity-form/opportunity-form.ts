@@ -18,7 +18,6 @@ import { OPPORTUNITY_EVENT_TYPES } from '../../constants/opportunity.constants';
 
 import { CreateOpportunityCommand } from '../../commands/create-opportunity.command';
 import { UpdateOpportunityCommand } from '../../commands/update-opportunity.command';
-import { OpportunityMapperMock } from '../../mappers/opportunity.mapper.mock';
 import { Opportunity } from '../../models/opportunity.model';
 import { OpportunityEventType } from '../../types/opportunity.type';
 
@@ -57,7 +56,7 @@ export class OpportunityForm extends FormInteractionHandler {
 
   readonly created = output<CreateOpportunityCommand>();
 
-  readonly updated = output<Opportunity>();
+  readonly updated = output<UpdateOpportunityCommand>();
 
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
@@ -152,9 +151,7 @@ export class OpportunityForm extends FormInteractionHandler {
   private updateOpportunity(): void {
     const command = this.updateCommand();
 
-    const opportunity = OpportunityMapperMock.update(this.opportunity()!, command);
-
-    this.updated.emit(opportunity);
+    this.updated.emit(command);
   }
 
   /*

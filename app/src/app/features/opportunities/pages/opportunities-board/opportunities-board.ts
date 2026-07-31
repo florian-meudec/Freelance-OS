@@ -20,6 +20,7 @@ import { OpportunityQuickViews } from '../../components/opportunity-quick-views/
 import { SearchInput } from '../../../../shared/components/search-input/search-input';
 import { OpportunityApiService } from '../../api/opportunity-api.service';
 import { CreateOpportunityCommand } from '../../commands/create-opportunity.command';
+import { UpdateOpportunityCommand } from '../../commands/update-opportunity.command';
 
 /*
   Columns act as drop zones for kanban interactions.
@@ -646,10 +647,13 @@ export class OpportunitiesBoard {
     });
   }
 
-  updateOpportunity(updated: Opportunity): void {
-    this.replaceOpportunity(updated);
-
-    this.closeOpportunityForm();
+  updateOpportunity(command: UpdateOpportunityCommand): void {
+    this.opportunityApi.update(command.id, command).subscribe({
+      next: (updated) => {
+        this.replaceOpportunity(updated);
+        this.closeOpportunityForm();
+      },
+    });
   }
 
   deleteOpportunity(): void {
