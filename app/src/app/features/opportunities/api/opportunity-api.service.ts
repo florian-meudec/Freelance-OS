@@ -56,4 +56,8 @@ export class OpportunityApiService {
       .patch<OpportunityResponse>(`${this.apiUrl}/${id}/status`, { status })
       .pipe(map((response) => this.mapper.toModel(response)));
   }
+
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }

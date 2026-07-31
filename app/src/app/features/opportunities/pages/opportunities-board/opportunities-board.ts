@@ -624,13 +624,15 @@ export class OpportunitiesBoard {
       return;
     }
 
-    this.opportunities.update((opportunities) =>
-      opportunities.filter((opportunity) => opportunity.id !== selectedOpportunity.id),
-    );
+    this.opportunityApi.delete(selectedOpportunity.id).subscribe({
+      next: () => {
+        this.opportunities.update((opportunities) =>
+          opportunities.filter((opportunity) => opportunity.id !== selectedOpportunity.id),
+        );
 
-    this.closeOpportunityForm();
-
-    this.closeDetailsPanel();
+        this.closeDetailsPanel();
+      },
+    });
   }
 
   /*
