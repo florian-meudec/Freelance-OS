@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-
-import { NextAction } from '../models/next-action.model';
-import { NextActionResponse } from '../dto/response/next-action.response';
+import { NextAction } from '../../models/next-action.model';
+import { NextActionResponse } from '../../dto/response/next-action.response';
 
 @Injectable({
   providedIn: 'root',

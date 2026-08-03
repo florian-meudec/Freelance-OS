@@ -11,8 +11,8 @@ import { NextAction } from '../models/next-action.model';
 import { OpportunityResponse } from '../dto/response/opportunity.response';
 import { NextActionResponse } from '../dto/response/next-action.response';
 
-import { OpportunityMapper } from './opportunity.mapper';
-import { NextActionMapper } from './next-action.mapper';
+import { OpportunityMapper } from './mappers/opportunity.mapper';
+import { NextActionMapper } from './mappers/next-action.mapper';
 
 import { CreateNextActionCommand } from '../commands/create-next-action.command';
 import { UpdateNextActionCommand } from '../commands/update-next-action.command';

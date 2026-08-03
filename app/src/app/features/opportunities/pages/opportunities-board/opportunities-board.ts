@@ -24,6 +24,9 @@ import { NoteApiService } from '../../../notes/api/note-api.service';
 import { CreateNoteCommand } from '../../../notes/commands/create-note.command';
 import { NextActionApiService } from '../../api/next-action-api.service';
 import { CreateNextActionCommand } from '../../commands/create-next-action.command';
+import { OpportunityEventApiService } from '../../api/opportunity-event-api.service';
+import { CreateOpportunityEventCommand } from '../../commands/create-opportunity-event.command';
+import { UpdateOpportunityEventCommand } from '../../commands/update-opportunity-event.command';
 
 /*
   Columns act as drop zones for kanban interactions.
@@ -50,6 +53,8 @@ export class OpportunitiesBoard {
   private readonly noteApi = inject(NoteApiService);
 
   private readonly nextActionApi = inject(NextActionApiService);
+
+  private readonly opportunityEventApi = inject(OpportunityEventApiService);
 
   /*
     Opportunities are stored in a signal
@@ -468,55 +473,63 @@ export class OpportunitiesBoard {
     Timeline events are added centrally so
     opportunity history remains synchronized.
   */
-  onOpportunityEventAdd(event: {
-    type: OpportunityEventType;
-    occurredAt: string;
-    comment?: string;
-  }): void {
-    this.updateSelectedOpportunity((opportunity) => ({
-      ...opportunity,
+  onOpportunityEventAdd(command: CreateOpportunityEventCommand): void {
+    const opportunity = this.selectedOpportunity();
 
-      events: [
-        ...opportunity.events,
+    if (!opportunity) {
+      return;
+    }
 
-        {
-          id: crypto.randomUUID(),
-          occurredAt: event.occurredAt,
-          type: event.type,
-          comment: event.comment,
-        },
-      ],
-    }));
+    this.opportunityEventApi.create(opportunity.id, command).subscribe((createdEvent) => {
+      const updatedOpportunity = {
+        ...opportunity,
+        events: [createdEvent, ...opportunity.events],
+      };
+
+      this.replaceOpportunity(updatedOpportunity);
+    });
   }
 
-  onOpportunityEventUpdate(event: {
-    eventId: string;
-    type: OpportunityEventType;
-    occurredAt: string;
-    comment?: string;
-  }): void {
-    this.updateSelectedOpportunity((opportunity) => ({
-      ...opportunity,
+  onOpportunityEventUpdate(
+    command: UpdateOpportunityEventCommand & {
+      eventId: string;
+    },
+  ): void {
+    const opportunity = this.selectedOpportunity();
 
-      events: opportunity.events.map((currentEvent) =>
-        currentEvent.id === event.eventId
-          ? {
-              ...currentEvent,
-              occurredAt: event.occurredAt,
-              type: event.type,
-              comment: event.comment,
-            }
-          : currentEvent,
-      ),
-    }));
+    if (!opportunity) {
+      return;
+    }
+
+    this.opportunityEventApi
+      .update(opportunity.id, command.eventId, command)
+      .subscribe((updatedEvent) => {
+        const updatedOpportunity = {
+          ...opportunity,
+          events: opportunity.events.map((event) =>
+            event.id === updatedEvent.id ? updatedEvent : event,
+          ),
+        };
+
+        this.replaceOpportunity(updatedOpportunity);
+      });
   }
 
   onOpportunityEventDelete(eventId: string): void {
-    this.updateSelectedOpportunity((opportunity) => ({
-      ...opportunity,
+    const opportunity = this.selectedOpportunity();
 
-      events: opportunity.events.filter((event) => event.id !== eventId),
-    }));
+    if (!opportunity) {
+      return;
+    }
+
+    this.opportunityEventApi.delete(opportunity.id, eventId).subscribe(() => {
+      const updatedOpportunity = {
+        ...opportunity,
+        events: opportunity.events.filter((event) => event.id !== eventId),
+      };
+
+      this.replaceOpportunity(updatedOpportunity);
+    });
   }
 
   completeNextAction(): void {

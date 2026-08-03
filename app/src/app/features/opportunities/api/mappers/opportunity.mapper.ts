@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-
-import { Opportunity } from '../models/opportunity.model';
-import { OpportunityResponse } from '../dto/response/opportunity.response';
-import { STATUS_MAPPING } from './mapping/opportunity-status.mapping';
-import { COMPANY_TYPE_MAPPING } from './mapping/company-type.mapping';
-import { MODALITY_MAPPING } from './mapping/opportunity-modality.mapping';
-import { SENIORITY_MAPPING } from './mapping/seniority.mapping';
-import { DURATION_UNIT_MAPPING } from './mapping/duration-unit.mapping';
+import { OpportunityResponse } from '../../dto/response/opportunity.response';
+import { Opportunity } from '../../models/opportunity.model';
+import { COMPANY_TYPE_MAPPING } from '../mapping/company-type.mapping';
+import { MODALITY_MAPPING } from '../mapping/opportunity-modality.mapping';
+import { SENIORITY_MAPPING } from '../mapping/seniority.mapping';
+import { DURATION_UNIT_MAPPING } from '../mapping/duration-unit.mapping';
+import { STATUS_MAPPING } from '../mapping/opportunity-status.mapping';
 
 @Injectable({
   providedIn: 'root',
