@@ -20,6 +20,8 @@ import { SearchInput } from '../../../../shared/components/search-input/search-i
 import { OpportunityApiService } from '../../api/opportunity-api.service';
 import { CreateOpportunityCommand } from '../../commands/create-opportunity.command';
 import { UpdateOpportunityCommand } from '../../commands/update-opportunity.command';
+import { NoteApiService } from '../../../notes/api/note-api.service';
+import { CreateNoteCommand } from '../../../notes/commands/create-note.command';
 
 /*
   Columns act as drop zones for kanban interactions.
@@ -42,6 +44,8 @@ import { UpdateOpportunityCommand } from '../../commands/update-opportunity.comm
 })
 export class OpportunitiesBoard {
   private readonly opportunityApi = inject(OpportunityApiService);
+
+  private readonly noteApi = inject(NoteApiService);
 
   /*
     Opportunities are stored in a signal
@@ -401,41 +405,40 @@ export class OpportunitiesBoard {
     Notes are added centrally so the board
     remains the single source of truth.
   */
-  onOpportunityNoteAdd(note: { title: string; content: string }): void {
-    this.updateSelectedOpportunity((opportunity) => ({
-      ...opportunity,
+  onOpportunityNoteAdd(command: CreateNoteCommand): void {
+    const opportunity = this.selectedOpportunity();
 
-      notes: [
-        ...opportunity.notes,
+    if (!opportunity) {
+      return;
+    }
 
-        {
-          id: crypto.randomUUID(),
-          title: note.title,
-          content: note.content,
-          createdAt: new Date().toISOString(),
-        },
-      ],
-    }));
+    this.noteApi.create(opportunity.id, command).subscribe((createdNote) => {
+      const updatedOpportunity = {
+        ...opportunity,
+        notes: [createdNote, ...opportunity.notes],
+      };
+
+      this.replaceOpportunity(updatedOpportunity);
+    });
   }
 
   /*
     Note updates stay centralized so all
     opportunity mutations share the same flow.
   */
-  onOpportunityNoteUpdate(note: { noteId: string; title: string; content: string }): void {
-    this.updateSelectedOpportunity((opportunity) => ({
-      ...opportunity,
+  onOpportunityNoteUpdate(event: { noteId: string; title: string; content: string }): void {
+    const opportunity = this.selectedOpportunity();
 
-      notes: opportunity.notes.map((currentNote) =>
-        currentNote.id === note.noteId
-          ? {
-              ...currentNote,
-              title: note.title,
-              content: note.content,
-            }
-          : currentNote,
-      ),
-    }));
+    if (!opportunity) {
+      return;
+    }
+
+    this.noteApi.update(opportunity.id, event.noteId, event).subscribe((updatedNote) => {
+      this.replaceOpportunity({
+        ...opportunity,
+        notes: opportunity.notes.map((note) => (note.id === updatedNote.id ? updatedNote : note)),
+      });
+    });
   }
 
   /*
@@ -443,11 +446,18 @@ export class OpportunitiesBoard {
     board state synchronized across the UI.
   */
   onOpportunityNoteDelete(noteId: string): void {
-    this.updateSelectedOpportunity((opportunity) => ({
-      ...opportunity,
+    const opportunity = this.selectedOpportunity();
 
-      notes: opportunity.notes.filter((note) => note.id !== noteId),
-    }));
+    if (!opportunity) {
+      return;
+    }
+
+    this.noteApi.delete(opportunity.id, noteId).subscribe(() => {
+      this.replaceOpportunity({
+        ...opportunity,
+        notes: opportunity.notes.filter((note) => note.id !== noteId),
+      });
+    });
   }
 
   /*
