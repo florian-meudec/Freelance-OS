@@ -22,6 +22,8 @@ import { CreateOpportunityCommand } from '../../commands/create-opportunity.comm
 import { UpdateOpportunityCommand } from '../../commands/update-opportunity.command';
 import { NoteApiService } from '../../../notes/api/note-api.service';
 import { CreateNoteCommand } from '../../../notes/commands/create-note.command';
+import { NextActionApiService } from '../../api/next-action-api.service';
+import { CreateNextActionCommand } from '../../commands/create-next-action.command';
 
 /*
   Columns act as drop zones for kanban interactions.
@@ -46,6 +48,8 @@ export class OpportunitiesBoard {
   private readonly opportunityApi = inject(OpportunityApiService);
 
   private readonly noteApi = inject(NoteApiService);
+
+  private readonly nextActionApi = inject(NextActionApiService);
 
   /*
     Opportunities are stored in a signal
@@ -516,72 +520,81 @@ export class OpportunitiesBoard {
   }
 
   completeNextAction(): void {
-    const nextAction = this.selectedOpportunity()?.nextAction;
+    const opportunity = this.selectedOpportunity();
 
-    if (!nextAction) {
+    if (!opportunity?.nextAction) {
       return;
     }
 
-    this.updateSelectedOpportunity((opportunity) => ({
-      ...opportunity,
-
-      nextAction: null,
-
-      events: [
-        ...opportunity.events,
-        {
-          id: crypto.randomUUID(),
-
-          type: nextAction.type,
-
-          occurredAt: new Date().toISOString().split('T')[0],
-
-          comment: nextAction.label,
-        },
-      ],
-    }));
+    this.nextActionApi.complete(opportunity.id).subscribe(() => {
+      this.replaceOpportunity({
+        ...opportunity,
+        nextAction: null,
+      });
+    });
   }
 
-  onNextActionUpdate(nextAction: NextAction): void {
-    this.updateSelectedOpportunity((opportunity) => ({
-      ...opportunity,
+  onNextActionUpdate(command: CreateNextActionCommand): void {
+    const opportunity = this.selectedOpportunity();
 
-      nextAction,
-    }));
-
-    if (this.pendingStatus()) {
-      this.applyPendingStatus();
+    if (!opportunity) {
+      return;
     }
+
+    const request$ = opportunity.nextAction
+      ? this.nextActionApi.update(opportunity.id, command)
+      : this.nextActionApi.create(opportunity.id, command);
+
+    request$.subscribe((updatedNextAction) => {
+      this.replaceOpportunity({
+        ...opportunity,
+        nextAction: updatedNextAction,
+      });
+
+      if (this.pendingStatus()) {
+        this.applyPendingStatus();
+      }
+    });
   }
 
   onNextActionCompleteForStatusChange(): void {
-    this.completeNextAction();
+    const opportunity = this.selectedOpportunity();
 
-    this.applyPendingStatus();
+    if (!opportunity?.nextAction) {
+      return;
+    }
+
+    this.nextActionApi.complete(opportunity.id).subscribe(() => {
+      this.replaceOpportunity({
+        ...opportunity,
+        nextAction: null,
+      });
+
+      this.applyPendingStatus();
+    });
   }
 
   onNextActionDeleteForStatusChange(): void {
-    this.removeNextAction();
+    const opportunity = this.selectedOpportunity();
 
-    this.applyPendingStatus();
+    if (!opportunity?.nextAction) {
+      return;
+    }
+
+    this.nextActionApi.delete(opportunity.id).subscribe(() => {
+      this.replaceOpportunity({
+        ...opportunity,
+        nextAction: null,
+      });
+
+      this.applyPendingStatus();
+    });
   }
 
   onStatusChangeCancelled(): void {
     this.pendingStatus.set(null);
 
     this.detailsPanel()?.closeNextAction();
-  }
-
-  /*
-    Remove the current next action
-    from the selected opportunity.
-  */
-  private removeNextAction(): void {
-    this.updateSelectedOpportunity((opportunity) => ({
-      ...opportunity,
-
-      nextAction: null,
-    }));
   }
 
   openOpportunityForm(): void {
@@ -610,10 +623,28 @@ export class OpportunitiesBoard {
   */
   createOpportunity(command: CreateOpportunityCommand): void {
     this.opportunityApi.create(command).subscribe({
-      next: (opportunity) => {
-        this.opportunities.update((opportunities) => [opportunity, ...opportunities]);
+      next: (createdOpportunity) => {
+        if (!command.nextAction) {
+          this.opportunities.update((opportunities) => [createdOpportunity, ...opportunities]);
 
-        this.closeOpportunityForm();
+          this.closeOpportunityForm();
+
+          return;
+        }
+
+        this.nextActionApi
+          .create(createdOpportunity.id, command.nextAction)
+          .subscribe((nextAction) => {
+            this.opportunities.update((opportunities) => [
+              {
+                ...createdOpportunity,
+                nextAction,
+              },
+              ...opportunities,
+            ]);
+
+            this.closeOpportunityForm();
+          });
       },
     });
   }

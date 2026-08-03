@@ -5,9 +5,13 @@ import { OpportunityEventType } from '../types/opportunity.type';
   follow-up planned for an opportunity.
 */
 export interface NextAction {
+  id: string;
+
   type: OpportunityEventType;
 
   label: string;
 
   dueDate: string;
+
+  createdAt: string;
 }

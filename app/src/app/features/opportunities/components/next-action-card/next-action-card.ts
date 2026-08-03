@@ -23,6 +23,7 @@ import { NextAction } from '../../models/next-action.model';
 import { OpportunityEventType, OpportunityStatus } from '../../types/opportunity.type';
 import { FormInteractionHandler } from '../../../../shared/utils/form-interaction-handler';
 import { DiscardChangesModal } from '../../../../shared/components/discard-changes-modal/discard-changes-modal';
+import { CreateNextActionCommand } from '../../commands/create-next-action.command';
 
 @Component({
   selector: 'app-next-action-card',
@@ -40,7 +41,7 @@ export class NextActionCard extends FormInteractionHandler {
 
   readonly pendingStatus = input<OpportunityStatus | null>();
 
-  readonly update = output<NextAction>();
+  readonly update = output<CreateNextActionCommand>();
 
   readonly complete = output<void>();
 

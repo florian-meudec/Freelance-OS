@@ -20,6 +20,7 @@ import { OpportunityModalityPipe } from '../../../../shared/pipes/opportunity-mo
 import { OpportunitySeniorityPipe } from '../../../../shared/pipes/opportunity-seniority-pipe';
 import { TjmPipe } from '../../../../shared/pipes/tjm-pipe';
 import { DaysPerWeekPipe } from '../../../../shared/pipes/days-per-week-pipe';
+import { CreateNextActionCommand } from '../../commands/create-next-action.command';
 
 @Component({
   selector: 'app-opportunity-details-panel',
@@ -93,7 +94,7 @@ export class OpportunityDetailsPanel {
 
   readonly noteDelete = output<string>();
 
-  readonly nextActionUpdate = output<NextAction>();
+  readonly nextActionUpdate = output<CreateNextActionCommand>();
 
   readonly nextActionComplete = output<void>();
 
