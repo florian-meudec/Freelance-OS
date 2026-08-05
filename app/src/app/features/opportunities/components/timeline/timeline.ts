@@ -62,7 +62,7 @@ export class Timeline extends FormInteractionHandler {
 
     occurredAt: this.formBuilder.control(this.getCurrentDate(), Validators.required),
 
-    comment: [''],
+    comment: ['', Validators.maxLength(5000)],
   });
 
   readonly editionForm = this.formBuilder.group({
@@ -73,7 +73,7 @@ export class Timeline extends FormInteractionHandler {
 
     occurredAt: this.formBuilder.control(this.getCurrentDate(), Validators.required),
 
-    comment: [''],
+    comment: ['', Validators.maxLength(5000)],
   });
 
   /*

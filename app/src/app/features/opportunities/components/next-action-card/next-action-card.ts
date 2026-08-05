@@ -24,6 +24,7 @@ import { OpportunityEventType, OpportunityStatus } from '../../types/opportunity
 import { FormInteractionHandler } from '../../../../shared/utils/form-interaction-handler';
 import { DiscardChangesModal } from '../../../../shared/components/discard-changes-modal/discard-changes-modal';
 import { CreateNextActionCommand } from '../../commands/create-next-action.command';
+import { notBlank } from '../../../../shared/validator/not-blank.validator';
 
 @Component({
   selector: 'app-next-action-card',
@@ -73,7 +74,7 @@ export class NextActionCard extends FormInteractionHandler {
       Validators.required,
     ),
 
-    label: ['', Validators.required],
+    label: ['', [Validators.required, Validators.maxLength(200), notBlank()]],
 
     dueDate: ['', Validators.required],
   });

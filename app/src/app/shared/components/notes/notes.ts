@@ -15,6 +15,7 @@ import { DateFormatPipe } from '../../pipes/date-format-pipe';
 import { Note } from '../../models/note.model';
 import { DiscardChangesModal } from '../discard-changes-modal/discard-changes-modal';
 import { FormInteractionHandler } from '../../utils/form-interaction-handler';
+import { notBlank } from '../../validator/not-blank.validator';
 
 @Component({
   selector: 'app-notes',
@@ -66,8 +67,8 @@ export class Notes extends FormInteractionHandler {
     inline edition interactions.
   */
   readonly creationForm = this.formBuilder.group({
-    title: ['', Validators.required],
-    content: ['', Validators.required],
+    title: ['', [Validators.required, Validators.maxLength(100), notBlank()]],
+    content: ['', [Validators.required, Validators.maxLength(5000), notBlank()]],
   });
 
   /*
@@ -75,8 +76,8 @@ export class Notes extends FormInteractionHandler {
     from note creation workflow.
   */
   readonly editionForm = this.formBuilder.group({
-    title: ['', Validators.required],
-    content: ['', Validators.required],
+    title: ['', [Validators.required, Validators.maxLength(100), notBlank()]],
+    content: ['', [Validators.required, Validators.maxLength(5000), notBlank()]],
   });
 
   /*

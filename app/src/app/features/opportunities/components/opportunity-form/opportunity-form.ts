@@ -23,6 +23,9 @@ import { OpportunityEventType } from '../../types/opportunity.type';
 
 import { DiscardChangesModal } from '../../../../shared/components/discard-changes-modal/discard-changes-modal';
 import { FormInteractionHandler } from '../../../../shared/utils/form-interaction-handler';
+import { notBlank } from '../../../../shared/validator/not-blank.validator';
+import { durationValidator } from '../../../../shared/validator/duration.validator';
+import { stackValidator } from '../../../../shared/validator/stack.validator';
 
 @Component({
   selector: 'app-opportunity-form',
@@ -84,39 +87,36 @@ export class OpportunityForm extends FormInteractionHandler {
     this.initializeForm();
   }
 
-  readonly form = this.formBuilder.group({
-    companyName: ['', Validators.required],
-    companyType: this.formBuilder.control<CompanyType | ''>(''),
-    industry: [''],
-    source: ['', Validators.required],
-
-    contactName: [''],
-    contactRole: [''],
-    contactEmail: ['', Validators.email],
-
-    missionTitle: ['', Validators.required],
-    description: [''],
-
-    tjm: [undefined as number | undefined],
-    daysPerWeek: [undefined as number | undefined],
-    modality: this.formBuilder.control<WorkModality | ''>(''),
-    location: [''],
-
-    estimatedStartDate: [''],
-
-    durationValue: [undefined as number | undefined],
-    durationUnit: this.formBuilder.control<DurationUnit | ''>(''),
-
-    seniority: this.formBuilder.control<Seniority | ''>(''),
-
-    stack: [''],
-
-    nextAction: this.formBuilder.group({
-      type: this.formBuilder.control<OpportunityEventType | ''>('', Validators.required),
-      label: ['', Validators.required],
-      dueDate: ['', Validators.required],
-    }),
-  });
+  readonly form = this.formBuilder.group(
+    {
+      companyName: ['', [Validators.required, Validators.maxLength(100), notBlank()]],
+      companyType: this.formBuilder.control<CompanyType | ''>(''),
+      industry: ['', Validators.maxLength(100)],
+      source: ['', [Validators.required, Validators.maxLength(100), notBlank()]],
+      contactName: ['', Validators.maxLength(100)],
+      contactRole: ['', Validators.maxLength(100)],
+      contactEmail: ['', [Validators.email, Validators.maxLength(254)]],
+      missionTitle: ['', [Validators.required, Validators.maxLength(150), notBlank()]],
+      description: [''],
+      tjm: [undefined as number | undefined, Validators.min(0.01)],
+      daysPerWeek: [undefined as number | undefined, [Validators.min(1), Validators.max(7)]],
+      modality: this.formBuilder.control<WorkModality | ''>(''),
+      location: ['', Validators.maxLength(150)],
+      estimatedStartDate: [''],
+      durationValue: [undefined as number | undefined, Validators.min(1)],
+      durationUnit: this.formBuilder.control<DurationUnit | ''>(''),
+      seniority: this.formBuilder.control<Seniority | ''>(''),
+      stack: ['', stackValidator()],
+      nextAction: this.formBuilder.group({
+        type: this.formBuilder.control<OpportunityEventType | ''>('', Validators.required),
+        label: ['', [Validators.required, notBlank()]],
+        dueDate: ['', Validators.required],
+      }),
+    },
+    {
+      validators: durationValidator(),
+    },
+  );
 
   requestClose(): void {
     this.executeOrConfirm(this.form.dirty, () => this.closed.emit());
