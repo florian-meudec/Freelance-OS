@@ -13,18 +13,24 @@
         <span class="form-label">Type d'action</span>
 
         <app-select-menu [options]="manualEventTypes" formControlName="type" />
+
+        <app-form-errors [control]="form.controls.type" />
       </div>
 
       <label class="form-field">
         <span class="form-label">Description</span>
 
         <input #nextActionLabel class="form-input" formControlName="label" />
+
+        <app-form-errors [control]="form.controls.label" />
       </label>
 
       <label class="form-field">
         <span class="form-label">Date</span>
 
         <input type="date" class="form-input" formControlName="dueDate" />
+
+        <app-form-errors [control]="form.controls.dueDate" />
       </label>
 
       <div class="form-actions">

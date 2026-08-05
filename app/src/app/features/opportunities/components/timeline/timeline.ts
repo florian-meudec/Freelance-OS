@@ -12,13 +12,14 @@ import {
 } from '../../constants/opportunity.constants';
 import { OpportunityEvent } from '../../models/opportunity-event.model';
 import { OpportunityEventType } from '../../types/opportunity.type';
+import { FormErrors } from '../../../../shared/components/form-error/form-errors';
 
 @Component({
   selector: 'app-timeline',
 
   standalone: true,
 
-  imports: [DateFormatPipe, ReactiveFormsModule, SelectMenu, DiscardChangesModal],
+  imports: [DateFormatPipe, ReactiveFormsModule, SelectMenu, DiscardChangesModal, FormErrors],
 
   templateUrl: './timeline.html',
 

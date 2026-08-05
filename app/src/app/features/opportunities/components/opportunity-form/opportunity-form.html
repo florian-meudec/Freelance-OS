@@ -35,6 +35,8 @@
               formControlName="companyName"
               autocomplete="organization"
             />
+
+            <app-form-errors [control]="form.controls.companyName" />
           </div>
 
           <div class="form-field">
@@ -47,12 +49,16 @@
             <label for="industry" class="form-label">Secteur</label>
 
             <input id="industry" class="form-input" formControlName="industry" />
+
+            <app-form-errors [control]="form.controls.industry" />
           </div>
 
           <div class="form-field">
             <label for="source" class="form-label form-label-required">Source</label>
 
             <input id="source" class="form-input" formControlName="source" />
+
+            <app-form-errors [control]="form.controls.source" />
           </div>
         </div>
       </div>
@@ -70,12 +76,16 @@
               formControlName="contactName"
               autocomplete="name"
             />
+
+            <app-form-errors [control]="form.controls.contactName" />
           </div>
 
           <div class="form-field">
             <label for="contactRole" class="form-label">Poste</label>
 
             <input id="contactRole" class="form-input" formControlName="contactRole" />
+
+            <app-form-errors [control]="form.controls.contactRole" />
           </div>
 
           <div class="form-field form-grid-full">
@@ -89,6 +99,8 @@
               autocomplete="email"
               placeholder="prenom.nom@entreprise.fr"
             />
+
+            <app-form-errors [control]="form.controls.contactEmail" />
           </div>
         </div>
       </div>
@@ -100,6 +112,8 @@
           <label for="missionTitle" class="form-label form-label-required">Titre</label>
 
           <input id="missionTitle" class="form-input" formControlName="missionTitle" />
+
+          <app-form-errors [control]="form.controls.missionTitle" />
         </div>
 
         <div class="form-field">
@@ -122,6 +136,8 @@
             <label for="tjm" class="form-label">TJM</label>
 
             <input id="tjm" type="number" min="0" class="form-input" formControlName="tjm" />
+
+            <app-form-errors [control]="form.controls.tjm" />
           </div>
 
           <div class="form-field">
@@ -134,6 +150,8 @@
               class="form-input"
               formControlName="daysPerWeek"
             />
+
+            <app-form-errors [control]="form.controls.daysPerWeek" />
           </div>
 
           <div class="form-field">
@@ -146,6 +164,8 @@
             <label for="location" class="form-label">Localisation</label>
 
             <input id="location" class="form-input" formControlName="location" />
+
+            <app-form-errors [control]="form.controls.location" />
           </div>
         </div>
       </div>
@@ -163,6 +183,8 @@
               class="form-input"
               formControlName="estimatedStartDate"
             />
+
+            <app-form-errors [control]="form.controls.durationValue" />
           </div>
 
           <div class="form-field">
@@ -179,6 +201,8 @@
 
               <app-select-menu [options]="durationUnits" formControlName="durationUnit" />
             </div>
+
+            <app-form-errors [control]="form" />
           </div>
         </div>
       </div>
@@ -202,6 +226,8 @@
               formControlName="stack"
               placeholder="Angular, Spring Boot, PostgreSQL..."
             />
+
+            <app-form-errors [control]="form.controls.stack" />
           </div>
         </div>
       </div>
@@ -225,6 +251,8 @@
               <label for="nextActionDate" class="form-label form-label-required"> Date </label>
 
               <input id="nextActionDate" type="date" class="form-input" formControlName="dueDate" />
+
+              <app-form-errors [control]="form.controls.nextAction.controls.dueDate" />
             </div>
 
             <div class="form-field form-grid-full">
@@ -233,6 +261,8 @@
               </label>
 
               <input id="nextActionLabel" class="form-input" formControlName="label" />
+
+              <app-form-errors [control]="form.controls.nextAction.controls.label" />
             </div>
           </div>
         </div>

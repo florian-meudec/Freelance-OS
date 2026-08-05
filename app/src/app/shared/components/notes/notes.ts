@@ -16,13 +16,14 @@ import { Note } from '../../models/note.model';
 import { DiscardChangesModal } from '../discard-changes-modal/discard-changes-modal';
 import { FormInteractionHandler } from '../../utils/form-interaction-handler';
 import { notBlank } from '../../validator/not-blank.validator';
+import { FormErrors } from '../form-error/form-errors';
 
 @Component({
   selector: 'app-notes',
 
   standalone: true,
 
-  imports: [DateFormatPipe, ReactiveFormsModule, DiscardChangesModal],
+  imports: [DateFormatPipe, ReactiveFormsModule, DiscardChangesModal, FormErrors],
 
   templateUrl: './notes.html',
 

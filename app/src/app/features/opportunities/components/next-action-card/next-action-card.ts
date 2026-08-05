@@ -25,13 +25,14 @@ import { FormInteractionHandler } from '../../../../shared/utils/form-interactio
 import { DiscardChangesModal } from '../../../../shared/components/discard-changes-modal/discard-changes-modal';
 import { CreateNextActionCommand } from '../../commands/create-next-action.command';
 import { notBlank } from '../../../../shared/validator/not-blank.validator';
+import { FormErrors } from '../../../../shared/components/form-error/form-errors';
 
 @Component({
   selector: 'app-next-action-card',
 
   standalone: true,
 
-  imports: [DateFormatPipe, ReactiveFormsModule, SelectMenu, DiscardChangesModal],
+  imports: [DateFormatPipe, ReactiveFormsModule, SelectMenu, DiscardChangesModal, FormErrors],
 
   templateUrl: './next-action-card.html',
 

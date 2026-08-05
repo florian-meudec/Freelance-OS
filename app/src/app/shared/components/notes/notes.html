@@ -13,12 +13,16 @@
     <form #noteForm class="note-form" [formGroup]="creationForm" (ngSubmit)="addNote()">
       <input type="text" class="form-input" placeholder="Titre" formControlName="title" />
 
+      <app-form-errors [control]="creationForm.controls.title" />
+
       <textarea
         rows="4"
         class="form-textarea"
         placeholder="Contenu"
         formControlName="content"
       ></textarea>
+
+      <app-form-errors [control]="creationForm.controls.content" />
 
       <div class="form-actions">
         <button
@@ -51,7 +55,11 @@
           <form class="note-form" [formGroup]="editionForm" (ngSubmit)="updateNote(note.id)">
             <input type="text" class="form-input" formControlName="title" />
 
+            <app-form-errors [control]="editionForm.controls.title" />
+
             <textarea rows="4" class="form-textarea" formControlName="content"></textarea>
+
+            <app-form-errors [control]="editionForm.controls.content" />
 
             <div class="form-actions">
               <button

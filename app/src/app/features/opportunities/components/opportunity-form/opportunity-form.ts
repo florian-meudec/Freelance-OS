@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, output } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Modal } from '../../../../shared/components/modal/modal';
@@ -26,11 +26,12 @@ import { FormInteractionHandler } from '../../../../shared/utils/form-interactio
 import { notBlank } from '../../../../shared/validator/not-blank.validator';
 import { durationValidator } from '../../../../shared/validator/duration.validator';
 import { stackValidator } from '../../../../shared/validator/stack.validator';
+import { FormErrors } from '../../../../shared/components/form-error/form-errors';
 
 @Component({
   selector: 'app-opportunity-form',
   standalone: true,
-  imports: [Modal, ReactiveFormsModule, SelectMenu, DiscardChangesModal],
+  imports: [Modal, ReactiveFormsModule, SelectMenu, DiscardChangesModal, FormErrors],
   templateUrl: './opportunity-form.html',
   styleUrl: './opportunity-form.scss',
 })
