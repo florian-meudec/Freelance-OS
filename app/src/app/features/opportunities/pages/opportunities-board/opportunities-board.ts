@@ -11,8 +11,7 @@ import {
   OpportunityQuickView,
 } from '../../constants/opportunity.constants';
 
-import { OpportunityEventType, OpportunityStatus } from '../../types/opportunity.type';
-import { NextAction } from '../../models/next-action.model';
+import { OpportunityStatus } from '../../types/opportunity.type';
 import { OpportunityFiltersComponent } from '../../components/opportunity-filters/opportunity-filters';
 import { OpportunityForm } from '../../components/opportunity-form/opportunity-form';
 import { OpportunityQuickViews } from '../../components/opportunity-quick-views/opportunity-quick-views';
@@ -684,7 +683,8 @@ export class OpportunitiesBoard {
           opportunities.filter((opportunity) => opportunity.id !== selectedOpportunity.id),
         );
 
-        this.closeDetailsPanel();
+        this.selectedOpportunity.set(null);
+        this.pendingStatus.set(null);
       },
     });
   }
