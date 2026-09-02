@@ -38,6 +38,7 @@ export interface Opportunity {
   contactName?: string;
   contactRole?: string;
   contactEmail?: string;
+  contactPhone?: string;
 
   /*
     Technical and organizational details

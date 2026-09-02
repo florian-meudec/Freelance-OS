@@ -88,7 +88,7 @@
             <app-form-errors [control]="form.controls.contactRole" />
           </div>
 
-          <div class="form-field form-grid-full">
+          <div class="form-field">
             <label for="contactEmail" class="form-label">Email</label>
 
             <input
@@ -101,6 +101,20 @@
             />
 
             <app-form-errors [control]="form.controls.contactEmail" />
+          </div>
+
+          <div class="form-field">
+            <label for="contactPhone" class="form-label">Téléphone</label>
+
+            <input
+              id="contactPhone"
+              type="tel"
+              class="form-input"
+              formControlName="contactPhone"
+              autocomplete="tel"
+            />
+
+            <app-form-errors [control]="form.controls.contactPhone" />
           </div>
         </div>
       </div>

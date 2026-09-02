@@ -729,6 +729,7 @@ export class OpportunitiesBoard {
       opportunity.contactName,
       opportunity.contactRole,
       opportunity.contactEmail,
+      opportunity.contactPhone,
 
       opportunity.location,
       opportunity.source,

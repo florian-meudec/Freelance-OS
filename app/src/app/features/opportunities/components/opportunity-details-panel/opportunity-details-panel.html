@@ -144,6 +144,14 @@
             }
           </div>
         </div>
+
+        <div>
+          <span class="form-label">Téléphone</span>
+
+          <strong>
+            {{ opportunity().contactPhone | fallback }}
+          </strong>
+        </div>
       </div>
     </div>
   </div>

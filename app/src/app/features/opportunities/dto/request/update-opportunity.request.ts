@@ -18,6 +18,8 @@ export interface UpdateOpportunityRequest {
 
   contactEmail?: string;
 
+  contactPhone?: string;
+
   missionTitle: string;
 
   description?: string;

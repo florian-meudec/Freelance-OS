@@ -20,6 +20,8 @@ export interface CreateOpportunityCommand {
 
   contactEmail?: string;
 
+  contactPhone?: string;
+
   missionTitle: string;
 
   description?: string;

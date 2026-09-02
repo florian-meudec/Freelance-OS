@@ -32,6 +32,7 @@ export class OpportunityMapper {
       contactName: response.contactName ?? undefined,
       contactRole: response.contactRole ?? undefined,
       contactEmail: response.contactEmail ?? undefined,
+      contactPhone: response.contactPhone ?? undefined,
       location: response.location ?? undefined,
       tjm: response.tjm ?? undefined,
       durationValue: response.durationValue ?? undefined,

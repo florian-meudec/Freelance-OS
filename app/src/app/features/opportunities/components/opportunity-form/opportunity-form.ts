@@ -97,6 +97,7 @@ export class OpportunityForm extends FormInteractionHandler {
       contactName: ['', Validators.maxLength(100)],
       contactRole: ['', Validators.maxLength(100)],
       contactEmail: ['', [Validators.email, Validators.maxLength(254)]],
+      contactPhone: ['', Validators.maxLength(30)],
       missionTitle: ['', [Validators.required, Validators.maxLength(150), notBlank()]],
       description: [''],
       tjm: [undefined as number | undefined, Validators.min(0.01)],
@@ -222,6 +223,7 @@ export class OpportunityForm extends FormInteractionHandler {
       contactName: value.contactName || undefined,
       contactRole: value.contactRole || undefined,
       contactEmail: value.contactEmail || undefined,
+      contactPhone: value.contactPhone || undefined,
 
       missionTitle: value.missionTitle,
       description: value.description || undefined,
@@ -273,6 +275,7 @@ export class OpportunityForm extends FormInteractionHandler {
         contactName: opportunity.contactName ?? '',
         contactRole: opportunity.contactRole ?? '',
         contactEmail: opportunity.contactEmail ?? '',
+        contactPhone: opportunity.contactPhone ?? '',
 
         missionTitle: opportunity.missionTitle,
         description: opportunity.description ?? '',

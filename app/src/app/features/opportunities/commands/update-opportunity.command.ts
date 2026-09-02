@@ -24,6 +24,8 @@ export interface UpdateOpportunityCommand {
 
   contactEmail?: string;
 
+  contactPhone?: string;
+
   missionTitle: string;
 
   description?: string;

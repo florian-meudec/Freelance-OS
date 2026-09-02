@@ -21,6 +21,7 @@ export class OpportunityRequestMapper {
       contactName: command.contactName,
       contactRole: command.contactRole,
       contactEmail: command.contactEmail,
+      contactPhone: command.contactPhone,
 
       missionTitle: command.missionTitle,
       description: command.description,
@@ -57,6 +58,7 @@ export class OpportunityRequestMapper {
       contactName: command.contactName,
       contactRole: command.contactRole,
       contactEmail: command.contactEmail,
+      contactPhone: command.contactPhone,
       missionTitle: command.missionTitle,
       description: command.description,
       stack: command.stack,

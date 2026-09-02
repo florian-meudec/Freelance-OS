@@ -13,6 +13,8 @@ export interface CreateOpportunityRequest {
 
   contactEmail?: string;
 
+  contactPhone?: string;
+
   missionTitle: string;
 
   description?: string;
