@@ -55,6 +55,7 @@
   <app-opportunity-filters
     [filters]="filters()"
     [availableSources]="availableSources()"
+    [nextActionDueCounts]="nextActionDueCounts()"
     (filtersChange)="filters.set($event)"
   />
 }

@@ -148,4 +148,5 @@ export const DEFAULT_OPPORTUNITY_FILTERS: OpportunityFilters = {
   companyTypes: [],
   sources: [],
   minimumDailyRate: null,
+  nextActionDueInDays: [],
 };

@@ -26,6 +26,8 @@ import { CreateNextActionCommand } from '../../commands/create-next-action.comma
 import { OpportunityEventApiService } from '../../api/opportunity-event-api.service';
 import { CreateOpportunityEventCommand } from '../../commands/create-opportunity-event.command';
 import { UpdateOpportunityEventCommand } from '../../commands/update-opportunity-event.command';
+import { getCalendarDayDifference } from '../../utils/opportunity-urgency.util';
+import { NEXT_ACTION_DUE_OPTIONS } from '../../constants/opportunity-filter-options.constants';
 
 /*
   Columns act as drop zones for kanban interactions.
@@ -67,6 +69,10 @@ export class OpportunitiesBoard {
   */
   readonly statuses = Object.values(OPPORTUNITY_STATUSES).sort((a, b) => a.order - b.order);
 
+  readonly activeOpportunities = computed(() =>
+    this.opportunities().filter((opportunity) => this.isActive(opportunity)),
+  );
+
   /*
     Build kanban columns dynamically from statuses
     so the board structure stays configuration-driven.
@@ -74,7 +80,7 @@ export class OpportunitiesBoard {
   readonly columns = computed(() => {
     return this.statuses.map((status) => {
       const totalOpportunities = this.opportunities().filter(
-        (opportunity) => opportunity.status === status.value,
+        (opportunity) => opportunity.status === status.value && this.isActive(opportunity),
       );
 
       const visibleOpportunities = this.visibleOpportunities().filter(
@@ -99,9 +105,7 @@ export class OpportunitiesBoard {
   */
   readonly activeColumns = computed(() => {
     return this.columns().filter(
-      (column) =>
-        column.status !== OPPORTUNITY_STATUSES.WON.value &&
-        column.status !== OPPORTUNITY_STATUSES.LOST.value,
+      (column) => !this.isArchivedStatus(column.status),
     );
   });
 
@@ -158,7 +162,24 @@ export class OpportunitiesBoard {
     the selected quick view.
   */
   readonly visibleOpportunities = computed(() => {
-    let opportunities = this.opportunities();
+    return this.opportunitiesMatchingBaseFilters().filter((opportunity) =>
+      this.matchesNextActionDueFilter(opportunity),
+    );
+  });
+
+  readonly nextActionDueCounts = computed(() =>
+    Object.fromEntries(
+      NEXT_ACTION_DUE_OPTIONS.map((option) => [
+        String(option.value),
+        this.opportunitiesMatchingBaseFilters().filter((opportunity) =>
+          this.matchesNextActionDueFilter(opportunity, [option.value]),
+        ).length,
+      ]),
+    ),
+  );
+
+  private readonly opportunitiesMatchingBaseFilters = computed(() => {
+    let opportunities = this.activeOpportunities();
 
     switch (this.selectedQuickView()) {
       case OPPORTUNITY_QUICK_VIEWS.TODO.value:
@@ -172,7 +193,7 @@ export class OpportunitiesBoard {
 
     return opportunities
       .filter((opportunity) => this.matchesSearch(opportunity))
-      .filter((opportunity) => this.matchesFilters(opportunity));
+      .filter((opportunity) => this.matchesFilters(opportunity, false));
   });
 
   private readonly preparationStatuses: OpportunityStatus[] = [
@@ -182,14 +203,15 @@ export class OpportunitiesBoard {
   ];
 
   readonly todoCount = computed(
-    () => this.opportunities().filter((opportunity) => this.isTodo(opportunity)).length,
+    () => this.activeOpportunities().filter((opportunity) => this.isTodo(opportunity)).length,
   );
 
   readonly preparationCount = computed(
-    () => this.opportunities().filter((opportunity) => this.isPreparation(opportunity)).length,
+    () =>
+      this.activeOpportunities().filter((opportunity) => this.isPreparation(opportunity)).length,
   );
 
-  readonly totalCount = computed(() => this.opportunities().length);
+  readonly totalCount = computed(() => this.activeOpportunities().length);
 
   readonly activeFiltersCount = computed(() => {
     const filters = this.filters();
@@ -199,7 +221,8 @@ export class OpportunitiesBoard {
       filters.seniorities.length +
       filters.companyTypes.length +
       filters.sources.length +
-      (filters.minimumDailyRate !== null ? 1 : 0)
+      (filters.minimumDailyRate !== null ? 1 : 0) +
+      filters.nextActionDueInDays.length
     );
   });
 
@@ -288,15 +311,19 @@ export class OpportunitiesBoard {
 
     const targetStatus = drop.id.replace('column-', '');
 
-    const isArchived =
-      opportunity.status === OPPORTUNITY_STATUSES.WON.value ||
-      opportunity.status === OPPORTUNITY_STATUSES.LOST.value;
-
-    if (isArchived) {
+    if (!this.isActive(opportunity)) {
       return false;
     }
 
     return targetStatus !== 'won' && targetStatus !== 'lost';
+  }
+
+  private isActive(opportunity: Opportunity): boolean {
+    return !this.isArchivedStatus(opportunity.status);
+  }
+
+  private isArchivedStatus(status: OpportunityStatus): boolean {
+    return status === OPPORTUNITY_STATUSES.WON.value || status === OPPORTUNITY_STATUSES.LOST.value;
   }
 
   /*
@@ -330,17 +357,11 @@ export class OpportunitiesBoard {
       return false;
     }
 
-    const today = new Date();
+    const differenceInDays = getCalendarDayDifference(nextAction.dueDate);
 
-    today.setHours(0, 0, 0, 0);
-
-    const dueDate = new Date(nextAction.dueDate);
-
-    dueDate.setHours(0, 0, 0, 0);
-
-    const differenceInDays = Math.floor(
-      (dueDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
-    );
+    if (differenceInDays === null) {
+      return false;
+    }
 
     return differenceInDays >= minDays && differenceInDays <= maxDays;
   }
@@ -744,7 +765,7 @@ export class OpportunitiesBoard {
       .some((value) => value.toLowerCase().includes(searchQuery));
   }
 
-  private matchesFilters(opportunity: Opportunity): boolean {
+  private matchesFilters(opportunity: Opportunity, includeNextActionDueFilter = true): boolean {
     const filters = this.filters();
 
     if (
@@ -776,7 +797,29 @@ export class OpportunitiesBoard {
       return false;
     }
 
+    if (includeNextActionDueFilter && !this.matchesNextActionDueFilter(opportunity)) {
+      return false;
+    }
+
     return true;
+  }
+
+  private matchesNextActionDueFilter(
+    opportunity: Opportunity,
+    selectedDays = this.filters().nextActionDueInDays,
+  ): boolean {
+
+    if (selectedDays.length === 0) {
+      return true;
+    }
+
+    const dueInDays = getCalendarDayDifference(opportunity.nextAction?.dueDate);
+
+    return selectedDays.some((selectedDay) =>
+      selectedDay === '7-plus'
+        ? dueInDays !== null && dueInDays > 7
+        : dueInDays === selectedDay,
+    );
   }
 
   /*

@@ -6,7 +6,10 @@ import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { OpportunityModalityPipe } from '../../../../shared/pipes/opportunity-modality-pipe';
 import { TjmPipe } from '../../../../shared/pipes/tjm-pipe';
 import { DaysPerWeekPipe } from '../../../../shared/pipes/days-per-week-pipe';
-import { calculateOpportunityUrgency } from '../../utils/opportunity-urgency.util';
+import {
+  calculateOpportunityUrgency,
+  getCalendarDayDifference,
+} from '../../utils/opportunity-urgency.util';
 
 /*
   Cards are draggable to support kanban-style
@@ -69,11 +72,11 @@ export class OpportunityCard {
           return '';
         }
 
-        const today = new Date();
+        const diffDays = getCalendarDayDifference(dueDate);
 
-        const target = new Date(dueDate);
-
-        const diffDays = Math.ceil((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+        if (diffDays === null) {
+          return '';
+        }
 
         if (diffDays === 1) {
           return 'Demain';

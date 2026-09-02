@@ -7,12 +7,32 @@ import { OpportunityUrgency } from '../types/opportunity.type';
 */
 const MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
 
-/*
-  Removes time information from dates so urgency
-  calculations stay consistent across the whole app.
-*/
-const normalizeDateOnly = (date: Date): Date => {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+export const getCalendarDayDifference = (
+  dateOnly?: string,
+  referenceDate = new Date(),
+): number | null => {
+  if (!dateOnly) {
+    return null;
+  }
+
+  const [year, month, day] = dateOnly.split('-').map(Number);
+  const parsedDate = new Date(Date.UTC(year, month - 1, day));
+  const referenceDateOnly = new Date(
+    Date.UTC(referenceDate.getFullYear(), referenceDate.getMonth(), referenceDate.getDate()),
+  );
+
+  if (
+    !Number.isInteger(year) ||
+    !Number.isInteger(month) ||
+    !Number.isInteger(day) ||
+    parsedDate.getUTCFullYear() !== year ||
+    parsedDate.getUTCMonth() !== month - 1 ||
+    parsedDate.getUTCDate() !== day
+  ) {
+    return null;
+  }
+
+  return Math.round((parsedDate.getTime() - referenceDateOnly.getTime()) / MILLISECONDS_IN_DAY);
 };
 
 /*
@@ -24,13 +44,11 @@ export const calculateOpportunityUrgency = (nextActionDate?: string): Opportunit
     return OPPORTUNITY_URGENCIES.WAITING.value;
   }
 
-  const nextActionDateNormalized = normalizeDateOnly(new Date(nextActionDate));
+  const diffInDays = getCalendarDayDifference(nextActionDate);
 
-  const today = normalizeDateOnly(new Date());
-
-  const diffInMs = nextActionDateNormalized.getTime() - today.getTime();
-
-  const diffInDays = Math.ceil(diffInMs / MILLISECONDS_IN_DAY);
+  if (diffInDays === null) {
+    return OPPORTUNITY_URGENCIES.WAITING.value;
+  }
 
   if (diffInDays < OPPORTUNITY_URGENCIES.LATE.threshold) {
     return OPPORTUNITY_URGENCIES.LATE.value;

@@ -88,5 +88,21 @@
         </label>
       }
     </section>
+
+    <section class="filter-group">
+      <h3>Date de la prochaine action</h3>
+
+      @for (option of nextActionDueOptions; track option.value) {
+        <label class="checkbox">
+          <input
+            type="checkbox"
+            [checked]="filters().nextActionDueInDays.includes(option.value)"
+            (change)="toggleNextActionDueInDays(option.value)"
+          />
+
+          {{ option.label }} ({{ getNextActionDueCount(option.value) }})
+        </label>
+      }
+    </section>
   </div>
 </div>

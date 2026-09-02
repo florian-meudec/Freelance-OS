@@ -5,9 +5,10 @@ import {
   COMPANY_TYPE_OPTIONS,
   MINIMUM_DAILY_RATE_OPTIONS,
   MODALITY_OPTIONS,
+  NEXT_ACTION_DUE_OPTIONS,
   SENIORITY_OPTIONS,
 } from '../../constants/opportunity-filter-options.constants';
-import { OpportunityFilters } from '../../models/opportunity-filters';
+import { NextActionDueInDays, OpportunityFilters } from '../../models/opportunity-filters';
 import { CompanyType } from '../../../../shared/types/company.type';
 import { Seniority } from '../../../../shared/types/seniority.type';
 import { WorkModality } from '../../../../shared/types/work-modality.type';
@@ -21,6 +22,8 @@ import { WorkModality } from '../../../../shared/types/work-modality.type';
 })
 export class OpportunityFiltersComponent {
   readonly filters = input.required<OpportunityFilters>();
+
+  readonly nextActionDueCounts = input<Record<string, number>>({});
 
   /*
     Available sources are derived from the
@@ -41,6 +44,12 @@ export class OpportunityFiltersComponent {
   readonly companyTypeOptions = COMPANY_TYPE_OPTIONS;
 
   readonly minimumDailyRateOptions = MINIMUM_DAILY_RATE_OPTIONS;
+
+  readonly nextActionDueOptions = NEXT_ACTION_DUE_OPTIONS;
+
+  getNextActionDueCount(value: NextActionDueInDays): number {
+    return this.nextActionDueCounts()[String(value)] ?? 0;
+  }
 
   toggleModality(modality: WorkModality): void {
     const filters = this.filters();
@@ -82,6 +91,15 @@ export class OpportunityFiltersComponent {
     this.filtersChange.emit({
       ...this.filters(),
       minimumDailyRate,
+    });
+  }
+
+  toggleNextActionDueInDays(nextActionDueInDays: NextActionDueInDays): void {
+    const filters = this.filters();
+
+    this.filtersChange.emit({
+      ...filters,
+      nextActionDueInDays: this.toggleArrayValue(filters.nextActionDueInDays, nextActionDueInDays),
     });
   }
 
