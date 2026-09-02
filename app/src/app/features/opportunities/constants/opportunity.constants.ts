@@ -102,6 +102,16 @@ export const OPPORTUNITY_EVENT_TYPES = {
     value: 'meeting',
     label: 'Entretien',
   },
+
+  INFORMATION: {
+    value: 'information',
+    label: 'Renseignement',
+  },
+
+  SMS: {
+    value: 'sms',
+    label: 'SMS',
+  },
 } as const;
 
 /*

@@ -80,6 +80,8 @@ export class OpportunityForm extends FormInteractionHandler {
     OPPORTUNITY_EVENT_TYPES.CALL,
     OPPORTUNITY_EVENT_TYPES.EMAIL,
     OPPORTUNITY_EVENT_TYPES.MEETING,
+    OPPORTUNITY_EVENT_TYPES.INFORMATION,
+    OPPORTUNITY_EVENT_TYPES.SMS,
   ];
 
   constructor() {
